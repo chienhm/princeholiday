@@ -1,0 +1,10 @@
+<html>
+<head>
+<title>LoadFromApplet</title>
+<head>
+<body>
+利用Java Applet从本地加载图像Miss.jpg,并且显示该图像。<br>
+<applet codebase="." code="LoadFromApplet.class" width ="500" height="400" align="middle">
+</applet>
+</body>
+</html>

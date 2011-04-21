@@ -1,0 +1,10 @@
+[Adblock Plus 1.1]
+! Checksum: F1ETpumbFwwT0HiSVhtswQ
+||a.tbcdn.cn/*.js^
+|http://img.uu1001.cn/*.swf^
+|http://www.taobao.com/index_inc/2010c/includes/get-services.php
+||dsc.taobaocdn.com^
+|http://a.tbcdn.cn/*.css^
+||baoxian.taobao.com/thwy/*
+||buy.taobao.com/auction/json/shopPromotionInfo.htm?*
+||img.alimama.cn/*.swf
