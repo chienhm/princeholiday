@@ -18,11 +18,11 @@
 // ==/UserScript==
 
 var MS_VALID_TIME = -2 * 1000;	//time delay after seckill starts
-var MS_AHEAD_TIME = 1 * 50;	//the last time interval before seckill starts
+var MS_AHEAD_TIME = 1 * 100;	//the last time interval before seckill starts
 var REFRESH_INTERVAL = 5 * 60 * 1000;	//refresh time interval
 var RAPID_REFRESH = 20; //rapid refresh interval at the end
-var MS_START_TIME = "04 17, 2011 17:00:00";
-var ITEM_ID = "9973427168"; //item id
+var MS_START_TIME = "04 22, 2011 11:00:00";
+var ITEM_ID = "9995686670"; //item id
 
 /* Automation Config */
 var SKUID = ""; //style selection
@@ -61,7 +61,7 @@ var GOOD_ATTR = [
 	["容量", ""]
 ];
 
-var NOTE = ""; //附言
+var NOTE = "黑色"; //附言
 /* Address and User Info */
 var PROVINCE = "310000";
 var CITY = "310100";
@@ -358,6 +358,12 @@ function fastInput() {
 				}
 			}
 			answerObj.value = tone;
+		}
+		
+		// 西安是哪个省的省会？（答案两个字）(item_31.htm)
+		if(answerObj.value=="" && question.indexOf("省")!=-1 
+				&& (question.indexOf("省会")!=-1 || question.indexOf("缩写")!=-1 || question.indexOf("简称")!=-1)) {
+			answerObj.value = getCity(question);
 		}
 		// If the question is an expression, or go to baidu to search this answer !!!!!!!!!!!!!!
 		if(answerObj.value=="") {
