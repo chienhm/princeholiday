@@ -61,7 +61,7 @@ var GOOD_ATTR = [
 	["容量", ""]
 ];
 
-var NOTE = "黑色"; //附言
+var NOTE = ""; //附言
 /* Address and User Info */
 var PROVINCE = "310000";
 var CITY = "310100";

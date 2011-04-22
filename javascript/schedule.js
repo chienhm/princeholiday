@@ -2,6 +2,8 @@ javascript:var now = new Date();var atTime = new Date(now.getFullYear(),now.getM
 
 javascript:var now = new Date();var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 16, 0, 0, 0);document.title=atTime.toString();setTimeout(function(){document.getElementById("performSubmit").click();}, atTime.getTime()-now.getTime());void(0);
 
+javascript:var now = new Date();var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 16, 0, 0, 0);document.title=atTime.toString();setTimeout(function(){location.reload();}, atTime.getTime()-now.getTime());void(0);
+
 /**
  * At time execute func
  * time: Date

@@ -2,9 +2,10 @@
 
 function getHint(question) {
 	var hint = null;
-	var pos = question.lastIndexOf("（");
-	if(pos!=-1) {
-		hint = question.substring(pos+1, question.lastIndexOf("）"));
+	var pl = question.lastIndexOf("（");
+	var pr = question.lastIndexOf("）");	//parenthesis
+	if(pl!=-1 && pr==question.length-1) {
+		hint = question.substring(pl+1, question.lastIndexOf("）"));
 	}
 	return hint;
 }
