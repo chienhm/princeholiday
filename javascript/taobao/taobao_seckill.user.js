@@ -288,7 +288,7 @@ function fastInput() {
 		//question = "请在“馨赏家官方旗舰店”中选一字填入"; // used for test
 		/*------------------------------------------------ Answer Engine ------------------------------------------------*/
 		// 请在5-20之间选一个数字填入/请任意输入1-20内一个数字(item_54.htm)
-		if(answerObj.value=="" && question.indexOf("一个数字")!=-1) {
+		if(answerObj.value=="" && question.indexOf("一个数")!=-1) {
 			var range = getNumRange(question);
 			if(range) {
 				if(GM_getValue("answerindex")) {
