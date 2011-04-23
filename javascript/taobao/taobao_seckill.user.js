@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.0
+// @version	  4.2
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -364,6 +364,10 @@ function fastInput() {
 		if(answerObj.value=="" && question.indexOf("省")!=-1 
 				&& (question.indexOf("省会")!=-1 || question.indexOf("缩写")!=-1 || question.indexOf("简称")!=-1)) {
 			answerObj.value = getCity(question);
+		}
+		// 韩国的首都是什么城市？如：釜山(item_64.htm)
+		if(answerObj.value=="" && question.indexOf("首都")!=-1) {
+			answerObj.value = getCapi(question);
 		}
 		// If the question is an expression, or go to baidu to search this answer !!!!!!!!!!!!!!
 		if(answerObj.value=="") {
