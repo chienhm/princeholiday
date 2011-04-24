@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.2
+// @version	  4.3
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -369,6 +369,10 @@ function fastInput() {
 		if(answerObj.value=="" && question.indexOf("首都")!=-1) {
 			answerObj.value = getCapi(question);
 		}
+		// 
+		if(answerObj.value=="" && question.indexOf("哪一天")!=-1) {
+			answerObj.value = getDate(question);
+		}
 		// If the question is an expression, or go to baidu to search this answer !!!!!!!!!!!!!!
 		if(answerObj.value=="") {
 			var expr = parseExpr(question);
@@ -380,7 +384,7 @@ function fastInput() {
 				}
 			}
 		}
-		// If the answer is given, such as "（答案：娄林）"
+		// If the answer is given, such as "（答案：XX）"
 		if(answerObj.value=="" && question.lastIndexOf("（")!=-1) { 
 				var answer = getGivenAnswer(question);
 				if(answer!=null) answerObj.value = answer;
