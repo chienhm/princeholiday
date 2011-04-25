@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.3
+// @version	  4.4
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -372,6 +372,10 @@ function fastInput() {
 		// 
 		if(answerObj.value=="" && question.indexOf("哪一天")!=-1) {
 			answerObj.value = getDate(question);
+		}
+		// 
+		if(answerObj.value=="" && question.indexOf("反义词")!=-1) {
+			answerObj.value = getAntonym(question);
 		}
 		// If the question is an expression, or go to baidu to search this answer !!!!!!!!!!!!!!
 		if(answerObj.value=="") {
