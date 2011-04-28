@@ -286,7 +286,7 @@ function fastInput() {
 		getAnswer(answerObj); // get answer from server
 		
 		var question = GM_getValue("question").trim();
-		question = "“朱”字有多少划"; // used for test
+		//question = "“朱”字有多少划"; // used for test
 		/*------------------------------------------------ Answer Engine ------------------------------------------------*/
 		// 请在5-20之间选一个数字填入/请任意输入1-20内一个数字(item_54.htm)
 		if(answerObj.value=="" && question.indexOf("一个数")!=-1) {
