@@ -138,8 +138,8 @@ function getAntonym(question) {
 	return answer;
 }
 
-function getStrokeCount(question) {
-	var charstr = newArray();
+function getStrokeCount(str) {
+	var charstr = new Array();
 	charstr[0] = '';
 	charstr[1] = '一乙';
 	charstr[2] = '丁七乃九了二人儿入八几刀刁力十卜厂又';
@@ -167,15 +167,6 @@ function getStrokeCount(question) {
 	charstr[24] = '矗';
 
 	var answer = 0;
-	var keywords = ["笔画", "笔划", "多少划", "多少画", "几划", "几画"];
-	var p = 0;
-	for (var i=0; i<keywords.length; i++) {
-		p = question.indexOf(keywords[i]);
-		if (p != -1) {
-			break;
-		}
-	}
-	var str = question.substring(0,p);
 	for (i=0; i<str.length; i++) {
 		for (j=1; j<charstr.length; j++) {
 			if (charstr[j].indexOf(str.charAt(i)) > 0) {

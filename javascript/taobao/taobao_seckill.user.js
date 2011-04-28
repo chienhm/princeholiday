@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.5
+// @version	  4.6
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -22,7 +22,7 @@ var MS_VALID_TIME = -2 * 1000;	//time delay after seckill starts
 var MS_AHEAD_TIME = 1 * 100;	//the last time interval before seckill starts
 var REFRESH_INTERVAL = 5 * 60 * 1000;	//refresh time interval
 var RAPID_REFRESH = 20; //rapid refresh interval at the end
-var MS_START_TIME = "04 22, 2011 11:00:00";
+var MS_START_TIME = "04 29, 2011 15:00:00";
 var ITEM_ID = "9995686670"; //item id
 
 /* Automation Config */
@@ -286,7 +286,7 @@ function fastInput() {
 		getAnswer(answerObj); // get answer from server
 		
 		var question = GM_getValue("question").trim();
-		//question = "请在“馨赏家官方旗舰店”中选一字填入"; // used for test
+		question = "“朱”字有多少划"; // used for test
 		/*------------------------------------------------ Answer Engine ------------------------------------------------*/
 		// 请在5-20之间选一个数字填入/请任意输入1-20内一个数字(item_54.htm)
 		if(answerObj.value=="" && question.indexOf("一个数")!=-1) {
@@ -379,7 +379,9 @@ function fastInput() {
 			answerObj.value = getAntonym(question);
 		}
 		if(answerObj.value=="" && (question.indexOf("笔画")!=-1 || question.indexOf("笔划")!=-1 || question.indexOf("多少划")!=-1 || question.indexOf("多少画")!=-1 || question.indexOf("几划")!=-1 || question.indexOf("几画")!=-1)) {
-            answerObj.value = getStrokeCount(question);
+			var word = getQuotedString(question);
+			var number = getStrokeCount(word);
+			if(number!=0) answerObj.value = number;
         }
 		// If the question is an expression, or go to baidu to search this answer !!!!!!!!!!!!!!
 		if(answerObj.value=="") {

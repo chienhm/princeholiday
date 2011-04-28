@@ -42,9 +42,16 @@ String.prototype.trim = function() {
 
 function getQuotedString(str) {
 	var lp = str.indexOf("“");
-	var rp = str.indexOf("”");
-	var word = str.substring(lp+1, rp);
-	if(word) word = word.trim();
+	var word = "";
+	if(lp==-1) lp = str.indexOf("\"");
+	if(lp!=-1) {
+		var rp = str.indexOf("”", lp+1);
+		if(rp==-1) rp = str.indexOf("\"", lp+1);
+		if(rp!=-1) {
+			word = str.substring(lp+1, rp);
+			if(word) word = word.trim();
+		}
+	}
 	return word;
 }
 
