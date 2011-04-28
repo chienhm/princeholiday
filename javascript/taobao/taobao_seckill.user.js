@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.4
+// @version	  4.5
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -10,6 +10,7 @@
 // @include	  http://item.tmall.com/*
 // @include	  http://e.morntea.com/*
 // @include	  http://127.0.0.1:8080/*
+// @include	  http://cnrdloull1c:8080/*
 // @include	  https://cashier.alipay.com/standard/payment/cashier.htm*
 // @require   util.js
 // @require   encode.js
