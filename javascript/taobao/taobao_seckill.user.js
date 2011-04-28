@@ -370,13 +370,16 @@ function fastInput() {
 			answerObj.value = getCapi(question);
 		}
 		// 
-		if(answerObj.value=="" && question.indexOf("哪一天")!=-1) {
+		if(answerObj.value=="" && (question.indexOf("哪一天")!=-1) || (question.indexOf("哪天")!=-1)) {
 			answerObj.value = getDate(question);
 		}
 		// 
 		if(answerObj.value=="" && question.indexOf("反义词")!=-1) {
 			answerObj.value = getAntonym(question);
 		}
+		if(answerObj.value=="" && (question.indexOf("笔画")!=-1 || question.indexOf("笔划")!=-1 || question.indexOf("多少划")!=-1 || question.indexOf("多少画")!=-1 || question.indexOf("几划")!=-1 || question.indexOf("几画")!=-1)) {
+            answerObj.value = getStrokeCount(question);
+        }
 		// If the question is an expression, or go to baidu to search this answer !!!!!!!!!!!!!!
 		if(answerObj.value=="") {
 			var expr = parseExpr(question);
