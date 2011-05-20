@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.7
+// @version	  4.8
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -378,7 +378,7 @@ function fastInput() {
 		if(answerObj.value=="" && question.indexOf("反义词")!=-1) {
 			answerObj.value = getAntonym(question);
 		}
-		// 
+		// 2011年的中国情人节“七夕节”是在星期几？（如：星期五）(item_77.htm)
 		if(answerObj.value=="" && question.indexOf("星期")!=-1) {
 			var word = getQuotedString(question);
 			getWeek(word, function(answer){answerObj.value = answer;});
