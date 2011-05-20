@@ -378,6 +378,11 @@ function fastInput() {
 		if(answerObj.value=="" && question.indexOf("反义词")!=-1) {
 			answerObj.value = getAntonym(question);
 		}
+		// 
+		if(answerObj.value=="" && question.indexOf("星期")!=-1) {
+			var word = getQuotedString(question);
+			getWeek(word, function(answer){answerObj.value = answer;});
+		}
 		// “淘”字有几划？ 如：9划(item_65.htm)
 		if(answerObj.value=="" && (question.indexOf("笔画")!=-1 || question.indexOf("笔划")!=-1 || question.indexOf("多少划")!=-1 || question.indexOf("多少画")!=-1 || question.indexOf("几划")!=-1 || question.indexOf("几画")!=-1)) {
 			var word = getQuotedString(question);
