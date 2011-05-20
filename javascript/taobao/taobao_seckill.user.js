@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.6
+// @version	  4.7
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -22,7 +22,7 @@ var MS_VALID_TIME = -2 * 1000;	//time delay after seckill starts
 var MS_AHEAD_TIME = 1 * 100;	//the last time interval before seckill starts
 var REFRESH_INTERVAL = 5 * 60 * 1000;	//refresh time interval
 var RAPID_REFRESH = 20; //rapid refresh interval at the end
-var MS_START_TIME = "04 29, 2011 15:00:00";
+var MS_START_TIME = "05 20, 2011 15:00:00";
 var ITEM_ID = "9995686670"; //item id
 
 /* Automation Config */
@@ -259,8 +259,8 @@ function fastInput() {
 		verifyCode.style.imeMode = "disabled";
 		verifyCode.focus();
 		verifyCode.setAttribute("onblur", 
-		"var f=document.forms['mainform'];" + 
-		"if(f['J_checkCodeInput'].value.length==4 && !f['_fma.b._0.sec']){document.forms['mainform'].submit();}");
+		"var f=document.forms['nameform'];" + 
+		"if(f['J_checkCodeInput'].value.length==4 && !f['_fma.b._0.sec']){document.forms['nameform'].submit();}");
 		var nextCode = $("J_nextcheckCode");
 		nextCode.setAttribute("onclick", "var vc=document.getElementById('checkCodeImg');vc.src=vc.src+'&'+Math.random();return false;");
 	}
@@ -278,8 +278,8 @@ function fastInput() {
 		answerObj.tabIndex = 21;
 		// can be used to switch between answer and checkcode
 		answerObj.setAttribute("onblur", 
-		"var f=document.forms['mainform'];var ci=f['J_checkCodeInput'];" + 
-		"if((!ci||ci.value.length==4) && f['"+ANSWER_INPUT_NAME+"'].value!=''){document.forms['mainform'].submit();}" + 
+		"var f=document.forms['nameform'];var ci=f['J_checkCodeInput'];" + 
+		"if((!ci||ci.value.length==4) && f['"+ANSWER_INPUT_NAME+"'].value!=''){document.forms['nameform'].submit();}" + 
 		"ci.focus();"); 
 		if(ANSWER!="") answerObj.value = ANSWER;
 		
@@ -492,7 +492,7 @@ function fastInput() {
 		newDiv.appendChild(document.createTextNode(tail));
 		answerObj.parentNode.appendChild(newDiv);
 		
-		if(question.indexOf("反")!=-1 || question.indexOf("倒")!=-1){var button = document.createElement("input");button.setAttribute("type","button");button.setAttribute("value","Reverse");button.setAttribute("onclick","function reverse(str){var rt='';for(var i=str.length-1;i>=0;i--) {rt+=str[i];}return rt;} var a=document.forms['mainform']['"+ANSWER_INPUT_NAME+"'];a.value=reverse(a.value);");answerObj.parentNode.appendChild(button);}//Reverse The Answer
+		if(question.indexOf("反")!=-1 || question.indexOf("倒")!=-1){var button = document.createElement("input");button.setAttribute("type","button");button.setAttribute("value","Reverse");button.setAttribute("onclick","function reverse(str){var rt='';for(var i=str.length-1;i>=0;i--) {rt+=str[i];}return rt;} var a=document.forms['nameform']['"+ANSWER_INPUT_NAME+"'];a.value=reverse(a.value);");answerObj.parentNode.appendChild(button);}//Reverse The Answer
 		
 		answerObj.parentNode.appendChild(createBlock("文本问题："+question));
 		if(good_name!=null) {answerObj.parentNode.appendChild(createBlock("宝贝名称："+good_name));}
@@ -510,7 +510,7 @@ function fastInput() {
 		log("问题：" + GM_getValue("question"));
 		var action = getFormElementByName("action");
 		if( getFormElementByName("item_id_num").value==ITEM_ID || (action!=null && action.value.indexOf("secKill")!=-1) ) { //buynow/secKillBuyNowAction
-			$("performSubmit").click(); //document.forms["mainform"].submit();
+			$("performSubmit").click(); //document.forms["nameform"].submit();
 			$("J_OrderForm").submit();
 		}
 	}
