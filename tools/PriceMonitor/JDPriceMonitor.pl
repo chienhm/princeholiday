@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+ï»¿#!/usr/bin/perl
 
 #============================
 # Head File.
@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 use Encode;
-use encoding 'gb2312' , STDIN => 'gb2312', STDOUT => 'gb2312';
+use encoding 'utf8' , STDIN => 'gb2312', STDOUT => 'gb2312';
 use LWP;
 
 #============================
@@ -22,6 +22,14 @@ my $Discount_Threshold = 0.5; #50% cut off
 #============================
 my %bookDiscountPrice;
 my %bookName;
+
+#
+# Constant Varible.
+#
+my $BOOK_NAME_REX = "<title>ã€Š(.*)ã€‹ï¼ˆ(.*)ï¼‰.*</title>";
+my $ORG_PRICE_REX = "<li>å®š&nbsp;&nbsp;&nbsp;&nbsp;ä»·ï¼š<del>ï¿¥([0-9\.]+)</del></li>";
+my $PRICE_URL_REX = "src=\"(http:\/\/price\.360buy\.com\/price-b-[^\"]+)\"";
+my $DIS_PRICE_REX = "\"\\\\uFFE5([0-9\.]+)\"";
 
 
 #============================
@@ -71,6 +79,7 @@ sub monitorBookPrice
     my $page;
     my $bookID;
     my $orgPrice;
+	my $lastPrice;
     my $discountPriceURL;
     my $discountPrice;
     foreach $bookID (keys %bookDiscountPrice)
@@ -80,26 +89,27 @@ sub monitorBookPrice
         if ($response->is_success)
         {
             $page = $response->decoded_content;
-            if ($page =~ m&<title>¡¶(.*)¡·£¨(.*)£©.*</title>&)
+            if ($page =~ m/$BOOK_NAME_REX/)
             {
                 $bookName{$bookID} = $1."(".$2.")";
-                if ($page =~ m=<li>¶¨&nbsp;&nbsp;&nbsp;&nbsp;¼Û£º<del>£¤([0-9\.]+)</del></li>=)
+                if ($page =~ m/$ORG_PRICE_REX/)
                 {
                     $orgPrice = $1;
-                    if ($page =~ m/src=\"(http:\/\/price\.360buy\.com\/price-b-[^\"]+)\"/)
+                    if ($page =~ m/$PRICE_URL_REX/)
                     {
                         $discountPriceURL = $1;
                         $response = $userAgent->get($discountPriceURL);
                         $page = $response->decoded_content;
-                        if ($page =~ m/\"\\uFFE5([0-9\.]+)\"/)
+                        if ($page =~ m/$DIS_PRICE_REX/)
                         {
                             $discountPrice = $1;
-                            $bookDiscountPrice{$bookID} = $discountPrice;
-                            if (($discountPrice < $bookDiscountPrice{$bookID}) 
-                                && ($discountPrice/$orgPrice <= $Discount_Threshold))
-                            {                           
+							$lastPrice = $bookDiscountPrice{$bookID};
+							$bookDiscountPrice{$bookID} = $discountPrice;
+                            if (($discountPrice/$orgPrice <= $Discount_Threshold) 
+                                && ($discountPrice < $lastPrice))
+                            {
                                 notifyBookPrice($bookID, $bookName{$bookID}, $orgPrice, $discountPrice);
-                            }
+                            }							
                         }
                     }
                 }
@@ -115,7 +125,7 @@ sub writeBookList
     open(BOOKLIST, ">$filePath");
     foreach $bookID (keys %bookDiscountPrice)
     {
-        print BOOKLIST encode("gb2312", "# $bookName{$bookID}\n");
+        print BOOKLIST encode("utf8", "# $bookName{$bookID}\n");
         print BOOKLIST "$bookID $bookDiscountPrice{$bookID}\n";
     }
     close(BOOKLIST);
