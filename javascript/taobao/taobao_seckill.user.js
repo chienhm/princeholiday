@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  4.8
+// @version	  5.0
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -22,7 +22,7 @@ var MS_VALID_TIME = -2 * 1000;	//time delay after seckill starts
 var MS_AHEAD_TIME = 1 * 100;	//the last time interval before seckill starts
 var REFRESH_INTERVAL = 5 * 60 * 1000;	//refresh time interval
 var RAPID_REFRESH = 20; //rapid refresh interval at the end
-var MS_START_TIME = "05 20, 2011 15:00:00";
+var MS_START_TIME = "05 28, 2011 15:00:00";
 var ITEM_ID = "9995686670"; //item id
 
 /* Automation Config */
@@ -260,13 +260,13 @@ function fastInput() {
 		verifyCode.focus();
 		verifyCode.setAttribute("onblur", 
 		"var f=document.forms['nameform'];" + 
-		"if(f['J_checkCodeInput'].value.length==4 && !f['_fma.b._0.sec']){document.forms['nameform'].submit();}");
+		"if(f['J_checkCodeInput'].value.length==4 && !f['_fm.g._0.s']){document.forms['nameform'].submit();}");
 		var nextCode = $("J_nextcheckCode");
 		nextCode.setAttribute("onclick", "var vc=document.getElementById('checkCodeImg');vc.src=vc.src+'&'+Math.random();return false;");
 	}
 	
 	/* The following code helps to answer question */
-	var ANSWER_INPUT_NAME = "_fma.b._0.sec";
+	var ANSWER_INPUT_NAME = "_fm.g._0.s";
 	var answerObj = getFormElementByName(ANSWER_INPUT_NAME); // sometimes the answer input name is _fma.b._0.se
 	if(answerObj==null){
 		ANSWER_INPUT_NAME = "_fma.b._0.se";
@@ -282,6 +282,8 @@ function fastInput() {
 		"if((!ci||ci.value.length==4) && f['"+ANSWER_INPUT_NAME+"'].value!=''){document.forms['nameform'].submit();}" + 
 		"ci.focus();"); 
 		if(ANSWER!="") answerObj.value = ANSWER;
+		
+		function setAnswer(answer){answerObj.value = answer;}
 		
 		getAnswer(answerObj); // get answer from server
 		
@@ -324,9 +326,8 @@ function fastInput() {
 		}
 		// 请填写成语中的空缺字：足_多谋"; (item_35.htm)
 		if(answerObj.value=="" && question.indexOf("空缺字")!=-1) {
-			getLostWord(question, function(answer){answerObj.value = answer;});
+			getLostWord(question, setAnswer);
 		}
-		function setAnswer(answer){answerObj.value = answer;}
 		
 		// “秋色连波”的下一句是什么？ (item_37.htm/item_55.htm)
 		if(answerObj.value=="" 
@@ -381,7 +382,7 @@ function fastInput() {
 		// 2011年的中国情人节“七夕节”是在星期几？（如：星期五）(item_77.htm)
 		if(answerObj.value=="" && question.indexOf("星期")!=-1) {
 			var word = getQuotedString(question);
-			getWeek(word, function(answer){answerObj.value = answer;});
+			getWeek(word, setAnswer);
 		}
 		// “淘”字有几划？ 如：9划(item_65.htm)
 		if(answerObj.value=="" && (question.indexOf("笔画")!=-1 || question.indexOf("笔划")!=-1 || question.indexOf("多少划")!=-1 || question.indexOf("多少画")!=-1 || question.indexOf("几划")!=-1 || question.indexOf("几画")!=-1)) {
@@ -445,6 +446,7 @@ function fastInput() {
 			if(SHOP_YEAR!="") answerObj.value = SHOP_YEAR;
 		}
 		
+		// compare all of the good's attributes to match the question
 		if(answerObj.value=="") {
 		out:for(var i=0; i<GOOD_ATTR.length; i++) {
 				var keywords = GOOD_ATTR[i][0].split("|");
@@ -457,19 +459,7 @@ function fastInput() {
 				}
 			}
 		}
-		// 日本的首都是什么？ (item_39.htm)
-		// search answer at last if no answer can be got directly
-		if(answerObj.value=="") { //&& (question.indexOf("是什么")!=-1) || question.indexOf("是哪里")!=-1 || question.indexOf("是谁")!=-1) {
-			searchAnswer(urlEncode(question), setAnswer);
-		}
-		
-		if(verifyCode==null || (verifyCode.value!="")) { // && answerObj.value==""
-			answerObj.focus();
-		}
 		/*------------------------------------------------  Answer Engine End  ------------------------------------------------*/
-		/*------------------------------------------------ Answer Helper Begin ------------------------------------------------*/
-		// 以下是问题回答辅助
-		// 直接将问题显示在答案输入框下面
 		function getPos(q){
 			var p = q.lastIndexOf("？");
 			if(p==-1) p = q.lastIndexOf("（");
@@ -480,6 +470,18 @@ function fastInput() {
 		}
 		var pos = getPos(question); var searchStr = question; var tail = "";
 		if(pos!=-1) {searchStr = question.substring(0, pos); tail = question.substring(pos);}
+		
+		// search answer at last if no answer can be got directly
+		if(answerObj.value=="") { //&& (question.indexOf("是什么")!=-1) || question.indexOf("是哪里")!=-1 || question.indexOf("是谁")!=-1) {
+			searchAnswer(urlEncode(searchStr), setAnswer);
+		}
+		
+		if(verifyCode==null || (verifyCode.value!="")) { // && answerObj.value==""
+			answerObj.focus();
+		}
+		/*------------------------------------------------ Answer Helper Begin ------------------------------------------------*/
+		// 以下是问题回答辅助
+		// 直接将问题显示在答案输入框下面
 		
 		function createBlock(text) {
 			var newDiv = document.createElement("div");
