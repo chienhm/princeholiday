@@ -81,7 +81,7 @@ function getWeek(word, callback) {
 	});
 }
 
-function getCity(question) {
+function getCity(question, callback) {
 	var provCity = [["北京", "京", "北京"], ["上海", "沪", "上海"], ["天津", "津", "天津"], ["重庆", "渝", "重庆"], ["黑龙江", "黑", "哈尔滨"], ["吉林", "吉", "长春"], ["辽宁", "辽", "沈阳"], ["内蒙古", "蒙", "呼和浩特"], ["河北", "冀", "石家庄"], ["新疆", "新", "乌鲁木齐"], ["甘肃", "甘", "兰州"], ["青海", "青", "西宁"], ["陕西", "陕", "西安"], ["宁夏", "宁", "银川"], ["河南", "豫", "郑州"], ["山东", "鲁", "济南"], ["山西", "晋", "太原"], ["安徽", "皖", "合肥"], ["湖北", "鄂", "武汉"], ["湖南", "湘", "长沙"], ["江苏", "苏", "南京"], ["四川", "川", "成都"], ["贵州", "黔", "贵阳"], ["云南", "滇", "昆明"], ["广西", "桂", "南宁"], ["西藏", "藏", "拉萨"], ["浙江", "浙", "杭州"], ["江西", "赣", "南昌"], ["广东", "粤", "广州"], ["福建", "闽", "福州"], ["台湾", "台", "台北"], ["海南", "琼", "海口"], ["香港", "港", "香港"], ["澳门", "澳", "澳门"] 
 	];
 	var answer = null;
@@ -107,6 +107,30 @@ function getCity(question) {
 				break;
 			}
 		}
+	} else if(question.indexOf("哪个省") !=-1) {
+		var searchStr = question;
+		var p = question.lastIndexOf("？");
+		if(p==-1) p = question.lastIndexOf("（");
+		if(p!=-1) {searchStr = question.substring(0, p);}
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: "http://www.baidu.com/s?wd="+searchStr,//baidu version
+			onload: function(response) {
+				var html = response.responseText;
+				var maxcount = 1;
+				var maxindex = -1;
+				for(var i=0; i<provCity.length; i++) {
+					var count = html.split(provCity[i][0]).length;
+					if(count > maxcount) {
+						maxcount = count;
+						maxindex = i;
+					}
+				}
+				if(maxindex != -1) {
+					callback(provCity[maxindex][0]);
+				}
+			}
+		});
 	}
 	return answer;
 }

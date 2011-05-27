@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Taobao SecKill Assistant
-// @version	  5.0
+// @version	  5.1
 // @namespace      http://www.morntea.com/
 // @description    Assistant for seckill
 // @author	  Lou Lin(loulin@morntea.com)
@@ -363,9 +363,12 @@ function fastInput() {
 		}
 		
 		// 西安是哪个省的省会？（答案两个字）(item_31.htm)
-		if(answerObj.value=="" && question.indexOf("省")!=-1 
-				&& (question.indexOf("省会")!=-1 || question.indexOf("缩写")!=-1 || question.indexOf("简称")!=-1)) {
-			answerObj.value = getCity(question);
+		if(answerObj.value=="" && question.indexOf("省")!=-1) { 
+			if(question.indexOf("省会")!=-1 || question.indexOf("缩写")!=-1 || question.indexOf("简称")!=-1) {
+				answerObj.value = getCity(question);
+			} else if(question.indexOf("哪个省")!=-1) {
+				getCity(question, setAnswer);
+			}
 		}
 		// 韩国的首都是什么城市？如：釜山(item_64.htm)
 		if(answerObj.value=="" && question.indexOf("首都")!=-1) {
@@ -473,7 +476,7 @@ function fastInput() {
 		
 		// search answer at last if no answer can be got directly
 		if(answerObj.value=="") { //&& (question.indexOf("是什么")!=-1) || question.indexOf("是哪里")!=-1 || question.indexOf("是谁")!=-1) {
-			searchAnswer(urlEncode(searchStr), setAnswer);
+			searchAnswer(urlEncode(searchStr), function s(a){if(answerObj.value=="")setAnswer(a);});
 		}
 		
 		if(verifyCode==null || (verifyCode.value!="")) { // && answerObj.value==""
