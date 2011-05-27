@@ -15,6 +15,7 @@ use LWP;
 my $Book_List_File_Path = "books.txt";
 my $Jingdong_URL = "http://book.360buy.com/";
 my $Discount_Threshold = 0.5; #50% cut off
+my $Store_Info_URL = "http://price.360buy.com/stocksoa/StockHandler.ashx?callback=getProvinceStockCallback&type=provincestock&provinceid=2&skuid=";
 
 
 #============================
@@ -22,14 +23,16 @@ my $Discount_Threshold = 0.5; #50% cut off
 #============================
 my %bookDiscountPrice;
 my %bookName;
+my %Store_Info = ("0"=>"统计中", "33"=>"现货", "34"=>"无货", "36"=>"预定", "39"=>"在途", "40"=>"调配");
 
-#
+#============================
 # Constant Varible.
-#
+#============================
 my $BOOK_NAME_REX = "<title>《(.*)》（(.*)）.*</title>";
 my $ORG_PRICE_REX = "<li>定&nbsp;&nbsp;&nbsp;&nbsp;价：<del>￥([0-9\.]+)</del></li>";
-my $PRICE_URL_REX = "src=\"(http:\/\/price\.360buy\.com\/price-b-[^\"]+)\"";
+my $PRICE_URL_REX = "src=\"(http:\/\/price\.360buy\.com\/price-b-P([^\"]+).html)\"";
 my $DIS_PRICE_REX = "\"\\\\uFFE5([0-9\.]+)\"";
+my $STORE_INFO_REX = "stock:\{\"StockState\":([0-9]+),";
 
 
 #============================
@@ -66,8 +69,10 @@ sub notifyBookPrice
     my $name = $_[1];
     my $orgPrice = $_[2];
     my $disPrice = $_[3];
+    my $storeInfo = $_[4];
+    my $discount = int($disPrice/$orgPrice*100+0.5);
     # send a message
-    print "Book:$name, Original Price:$orgPrice, Discount Price:$disPrice!\n";
+    print "$name, 原价:$orgPrice, 京东价:$disPrice, 折扣:$discount%, $Store_Info{$storeInfo}!\n";
 }
 
 #============================
@@ -78,10 +83,12 @@ sub monitorBookPrice
     my $response;
     my $page;
     my $bookID;
+    my $bookSID;
     my $orgPrice;
-	my $lastPrice;
+    my $lastPrice;
     my $discountPriceURL;
     my $discountPrice;
+    my $storeInfo;
     foreach $bookID (keys %bookDiscountPrice)
     {
         $bookURL = $Jingdong_URL.$bookID.".html";
@@ -95,21 +102,33 @@ sub monitorBookPrice
                 if ($page =~ m/$ORG_PRICE_REX/)
                 {
                     $orgPrice = $1;
+                    if (undef($bookDiscountPrice{$bookID}))
+                    {
+                        $bookDiscountPrice{$bookID} = $orgPrice;
+                    }
                     if ($page =~ m/$PRICE_URL_REX/)
                     {
                         $discountPriceURL = $1;
+                        $bookSID = $2;
                         $response = $userAgent->get($discountPriceURL);
                         $page = $response->decoded_content;
                         if ($page =~ m/$DIS_PRICE_REX/)
                         {
                             $discountPrice = $1;
-							$lastPrice = $bookDiscountPrice{$bookID};
-							$bookDiscountPrice{$bookID} = $discountPrice;
-                            if (($discountPrice/$orgPrice <= $Discount_Threshold) 
-                                && ($discountPrice < $lastPrice))
+                            $lastPrice = $bookDiscountPrice{$bookID};
+                            $bookDiscountPrice{$bookID} = $discountPrice;
+                            if (($discountPrice/$orgPrice <= $Discount_Threshold))
+                                # && ($discountPrice < $lastPrice))
                             {
-                                notifyBookPrice($bookID, $bookName{$bookID}, $orgPrice, $discountPrice);
-                            }							
+                                $storeInfo = 0;
+                                $response = $userAgent->get($Store_Info_URL.$bookSID);
+                                $page = $response->decoded_content;
+                                if ($page =~ m/$STORE_INFO_REX/)
+                                {
+                                    $storeInfo = $1;
+                                }
+                                notifyBookPrice($bookID, $bookName{$bookID}, $orgPrice, $discountPrice, $storeInfo);
+                            }
                         }
                     }
                 }
