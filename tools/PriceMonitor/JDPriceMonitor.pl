@@ -22,6 +22,7 @@ my $Store_Info_URL = "http://price.360buy.com/stocksoa/StockHandler.ashx?callbac
 # Global Variable.
 #============================
 my %bookDiscountPrice;
+my %bookOriginalPrice;
 my %bookName;
 my %Store_Info = ("0"=>"统计中", "33"=>"现货", "34"=>"无货", "36"=>"预定", "39"=>"在途", "40"=>"调配");
 
@@ -29,7 +30,7 @@ my %Store_Info = ("0"=>"统计中", "33"=>"现货", "34"=>"无货", "36"=>"预�
 # Constant Varible.
 #============================
 my $BOOK_NAME_REX = "<title>《(.*)》（(.*)）.*</title>";
-my $ORG_PRICE_REX = "<li>定&nbsp;&nbsp;&nbsp;&nbsp;价：<del>￥([0-9\.]+)</del></li>";
+my $ORG_PRICE_REX = "价：<del>￥([0-9\.]+)</del></li>";
 my $PRICE_URL_REX = "src=\"(http:\/\/price\.360buy\.com\/price-b-P([^\"]+).html)\"";
 my $DIS_PRICE_REX = "\"\\\\uFFE5([0-9\.]+)\"";
 my $STORE_INFO_REX = "stock:\{\"StockState\":([0-9]+),";
@@ -47,7 +48,7 @@ sub readBookList
     while ($line = <BOOKLIST>)
     {
         chomp($line);
-        if (($line =~ m/^\#/) || ($line =~ m/^\s*$/))
+        if (($line =~ m/^#/) || ($line =~ m/^\s*$/))
         {
             next;
         }
@@ -55,8 +56,8 @@ sub readBookList
         {
             @bookInfo = split(/\s+/, $line);
             $bookID = $bookInfo[0];
-            $bookPrice = $bookInfo[1];
-            $bookDiscountPrice{$bookID} = $bookPrice;
+            $bookDiscountPrice{$bookID} = $bookInfo[2];
+            #print "$bookID, $bookPrice\n";
         }
     }
     close(BOOKLIST);
@@ -92,6 +93,7 @@ sub monitorBookPrice
     foreach $bookID (keys %bookDiscountPrice)
     {
         $bookURL = $Jingdong_URL.$bookID.".html";
+        #print "$bookURL\n";
         $response = $userAgent->get($bookURL);
         if ($response->is_success)
         {
@@ -99,9 +101,12 @@ sub monitorBookPrice
             if ($page =~ m/$BOOK_NAME_REX/)
             {
                 $bookName{$bookID} = $1."(".$2.")";
+                #print "$bookName{$bookID}\n";
                 if ($page =~ m/$ORG_PRICE_REX/)
                 {
                     $orgPrice = $1;
+                    $bookOriginalPrice{$bookID} = $orgPrice;
+                    #print "$orgPrice\n";
                     if (undef($bookDiscountPrice{$bookID}))
                     {
                         $bookDiscountPrice{$bookID} = $orgPrice;
@@ -110,11 +115,13 @@ sub monitorBookPrice
                     {
                         $discountPriceURL = $1;
                         $bookSID = $2;
+                        #print "$discountPriceURL, $bookSID\n";
                         $response = $userAgent->get($discountPriceURL);
                         $page = $response->decoded_content;
                         if ($page =~ m/$DIS_PRICE_REX/)
                         {
                             $discountPrice = $1;
+                            #print "$discountPrice\n";
                             $lastPrice = $bookDiscountPrice{$bookID};
                             $bookDiscountPrice{$bookID} = $discountPrice;
                             if (($discountPrice/$orgPrice <= $Discount_Threshold))
@@ -141,11 +148,13 @@ sub writeBookList
 {
     my $filePath = $_[0];
     my $bookID;
+    my $discount;
     open(BOOKLIST, ">$filePath");
     foreach $bookID (keys %bookDiscountPrice)
     {
         print BOOKLIST encode("utf8", "# $bookName{$bookID}\n");
-        print BOOKLIST "$bookID $bookDiscountPrice{$bookID}\n";
+        $discount = int($bookDiscountPrice{$bookID}/$bookOriginalPrice{$bookID}*100+0.5);
+        print BOOKLIST "$bookID $bookOriginalPrice{$bookID} $bookDiscountPrice{$bookID} $discount\%\n";
     }
     close(BOOKLIST);
 }
