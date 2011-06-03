@@ -10,7 +10,7 @@ function loulin(){
 					window.document.title="!!!赶紧下单!!!";
 					window.open("http://jd2008.360buy.com/purchase/InitCart.aspx?pid="+r[0].I+"&pcount=1&ptype=1");
 				} else {
-					tick = setTimeout(loulin, 3000);
+					tick = setTimeout(loulin, 1000);
 				}
 			}
 		}
@@ -19,7 +19,7 @@ function loulin(){
 loulin(); 
 
 /*
-clearTimeout(tick);
+javascript:clearTimeout(tick);void(0);
 
 jsonp1307001100549([
 	{"C":"电源","I":"378512","P":179.0000,"R":500,"S":2,"U":"http:\/\/img10.360buyimg.com\/n4\/4083\/1ba76b47-ed50-48e8-b199-76c5fcd6cd9e.jpg","W":"安钛克（Antec）VP 350P 电源（额宿W 120mm静音风扇 主动PFC 黑化外型设计＿"},
