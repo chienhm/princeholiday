@@ -16,7 +16,9 @@ function loulin(){
 		}
 	});
 }
-loulin(); 
+//loulin(); 
+
+var now = new Date();var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 9, 59, 55, 300);document.title=atTime.toString();setTimeout(function(){loulin();}, atTime.getTime()-now.getTime());
 
 /*
 javascript:clearTimeout(tick);void(0);
