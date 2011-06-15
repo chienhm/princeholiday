@@ -15,14 +15,13 @@ function loulin(){
 	$.ajax({url: link, dataType: "text",
 		success: function (text) {
 			console.log(text);
-			var p = text.substring(text.indexOf("FFE5")+4, text.indexOf("\","));
-			var id = text.substring(text.indexOf("\"I\":")+4, text.indexOf(",\"M"));
-			if(lastprice!="" && lastprice!=p) {
+			eval(text);
+			if(lastprice!="" && lastprice!=jdprice.P) {
 				clearTimeout(tick);
-				window.open("http://jd2008.360buy.com/purchase/InitCart.aspx?pid="+id+"&pcount=1&ptype=1");
+				window.open("http://jd2008.360buy.com/purchase/InitCart.aspx?pid="+jdprice.I+"&pcount=1&ptype=1");
 				alert("price changed!");
 			} else {
-				lastprice = p;
+				lastprice = jdprice.P;
 				tick = setTimeout(loulin, 1000);
 			}
 		},
