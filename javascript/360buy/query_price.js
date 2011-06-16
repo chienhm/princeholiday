@@ -6,9 +6,7 @@ head.appendChild(script);
 
 
 //var jdprice={"P":"\uFFE5598.00","I":332171,"M":"\uFFE5598.00"};
-var skuid = "54925C58DBBA80BD7614803E3740CAB7";
-var link = "http://price.360buy.com/price-b-P" + skuid + ".html";
-var prices = new Array();
+var link = "http://price.360buy.com/price-b-PAFF7209820A7B0B41F5E3D631D29F143.html";
 var lastprice = "";
 var tick;
 function loulin(){

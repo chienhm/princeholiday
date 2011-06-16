@@ -29,7 +29,7 @@ public class NovelSplitter {
             while ((tempString = reader.readLine()) != null) {
             	sb.append(tempString + "<br>");
             	if(sb.length()>pageSize) {
-            		writeToFile(outputFolder + "\\" + pageNumber + ".htm", pageNumber, sb.toString());
+            		writeToFile(outputFolder + "\\" + pageNumber + ".html", pageNumber, sb.toString());
             		pageNumber++;
             		sb = new StringBuffer();
             	}
@@ -38,7 +38,7 @@ public class NovelSplitter {
                 //break;
             }
             reader.close();
-            writeIndex(outputFolder + "\\0.htm", pageNumber-1);
+            writeIndex(outputFolder + "\\0.html", pageNumber-1);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -56,9 +56,9 @@ public class NovelSplitter {
             FileWriter writer = new FileWriter(fileName, false);
             writer.write(HEADER.replace("${title}", "Page " + pageNumber));
             writer.write(body);
-            writer.write("<a href=\"" + (pageNumber-1) + ".htm\">" + (pageNumber-1) + "</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
-            		"<a href=\"0.htm\">index</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
-            		"<a href=\"" + (pageNumber+1) + ".htm\">" + (pageNumber+1) + "</a>");
+            writer.write("<a href=\"" + (pageNumber-1) + ".html\">" + (pageNumber-1) + "</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
+            		"<a href=\"0.html\">index</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
+            		"<a href=\"" + (pageNumber+1) + ".html\">" + (pageNumber+1) + "</a>");
             writer.write(FOOTER);
             writer.close();
         } catch (IOException e) {
@@ -69,7 +69,7 @@ public class NovelSplitter {
 	private void writeIndex(String fileName, int maxPage) {
 		StringBuffer sb = new StringBuffer();
 		for(int i=1; i<=maxPage; i++) {
-			sb.append("<a href=\"" + i + ".htm\">" + i + "</a>");
+			sb.append("<a href=\"" + i + ".html\">" + i + "</a>");
 			if(i%3 == 0) {
 				sb.append("<br>");
 			} else {
