@@ -14,8 +14,8 @@ function loulin() {
 				$.limitBuy.replace();
 				if (r[1].P != 0) {
 					clearTimeout(tick);
-					alert("目标出现：" + r[1].C + "\n" + r[1].P + "元");
 					window.open("http://jd2008.360buy.com/purchase/InitCart.aspx?pid=" + r[1].I + "&pcount=1&ptype=1");
+					alert("目标出现：" + r[1].C + "\n" + r[1].P + "元");
 				} else {
 					console.log(r[0].C + "("+r[0].P+"), " + r[1].C + "("+r[1].P+"), " + r[2].C + "("+r[2].P+")");
 					tick = setTimeout(loulin, 1000);
