@@ -1,0 +1,57 @@
+var nameBL = ["phone", "logonId"];
+var dr = {choice1560065869: "4", verifyCode0_1560065833: "¿œ", sssaf:""};	//data received
+var dc = {};	//data collected
+
+var f = document.forms[0];
+function collect() {
+	for(var i=0; i<f.elements.length; i++) {
+		var e = f.elements[i];
+		if(e.type=="hidden" || inArray(e.name, nameBL))continue;
+		if(e.type=="radio") {
+			//console.log(e.value);
+			if(e.checked) {
+				dc[e.name] = e.value;
+			}
+			continue;
+		}
+		if(e.value!="") {
+			dc[e.name] = e.value;
+		}
+		//console.log(e.name + ", " + e.type);
+	}
+}
+
+function dispatch() {
+	for(name in dr) {
+		if(f[name]) {
+			if(f[name].length && f[name][0].type=="radio") {
+				for(var i=0; i<f[name].length; i++) {
+					if(f[name][i].value==dr[name]) {
+						f[name][i].checked = true;
+						break;
+					}
+				}
+			} else {
+				f[name].value = dr[name];
+			}
+		}
+	}
+}
+//collect();
+dispatch();
+console.log(dc);
+
+function inArray(s, a) {
+	for(var i=0; i<a.length; i++) {
+		if(s==a[i])return true;
+	}
+	return false;
+}
+
+function dynamicJs(src) {
+	var head = document.getElementsByTagName('head')[0];
+	var script = document.createElement('script');
+	script.type = 'text/javascript';
+	script.src= src;
+	head.appendChild(script);
+}
