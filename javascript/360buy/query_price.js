@@ -6,17 +6,22 @@ head.appendChild(script);
 
 
 //var jdprice={"P":"\uFFE5598.00","I":332171,"M":"\uFFE5598.00"};
-var link = "http://price.360buy.com/price-b-PAFF7209820A7B0B41F5E3D631D29F143.html";
+//http://price.360buy.com/price-b-P5274995D0619B85DBA9C300E0625D990.html
+var link = "http://price.360buy.com/price-b-PABC324C9EEB720AB3E530099C8265D40.html";
 var lastprice = "";
 var tick;
+var count = 0;
 function loulin(){
 	$.ajax({url: link, dataType: "text",
 		success: function (text) {
-			console.log(text);
+			console.log((count++) + ". " + text + "[" + (new Date()) + "]");
 			eval(text);
 			if(lastprice!="" && lastprice!=jdprice.P) {
 				clearTimeout(tick);
 				window.open("http://jd2008.360buy.com/purchase/InitCart.aspx?pid="+jdprice.I+"&pcount=1&ptype=1");
+				setTimeout(function(){
+					window.open("http://jd2008.360buy.com/purchase/shoppingcartselect.aspx");
+				}, 1000);
 				alert("price changed!");
 			} else {
 				lastprice = jdprice.P;
