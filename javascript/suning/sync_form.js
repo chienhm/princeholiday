@@ -39,8 +39,9 @@ function dispatch() {
 }
 collect();
 //dispatch();
-var para = json2qs(dc);
-//alert(para);
+var para = json2qs(dc) + "r=" + Math.random();
+//para = "?choice1560065869=4&verifyCode0_1560065833=ºÃ&qa1560065871=ÖÐÎÄ2&r=0.8843177182134241";
+console.log(para);
 dynamicJs("http://cnrdloull1c:8080/e.morntea.com/util/suning/sync_form.jsp" + para);
 console.log(dc);
 
@@ -64,7 +65,7 @@ function json2qs(json) {
 	for(name in json) {
 		qs += name + "=" + json[name] + "&";
 	}
-	return qs + "r=" + Math.random();
+	return qs;
 }
 
 function getParameterByName(name) {
