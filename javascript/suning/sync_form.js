@@ -37,13 +37,24 @@ function dispatch() {
 		}
 	}
 }
-collect();
-//dispatch();
-var para = json2qs(dc) + "r=" + Math.random();
-//para = "?choice1560065869=4&verifyCode0_1560065833=好&qa1560065871=中文2&r=0.8843177182134241";
-console.log(para);
-dynamicJs("http://cnrdloull1c:8080/e.morntea.com/util/suning/sync_form.jsp" + para);
-console.log(dc);
+
+var tick;
+
+function upSync() {
+	collect();
+	var para = json2qs(dc) + "r=" + Math.random();
+	//para = "?choice1560065869=4&verifyCode0_1560065833=好&qa1560065871=中文2&r=0.8843177182134241";
+	console.log(para);
+	dynamicJs("http://cnrdloull1c:8080/e.morntea.com/util/suning/sync_form.jsp" + para);
+	console.log(dc);
+}
+
+function downSync() {
+	dispatch();
+	tick = setTimeout(upSync, 1000);
+}
+
+upSync();
 
 function inArray(s, a) {
 	for(var i=0; i<a.length; i++) {
