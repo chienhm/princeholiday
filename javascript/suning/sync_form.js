@@ -1,5 +1,5 @@
 var nameBL = ["phone", "logonId"];
-var dr = {choice1560065869: "4", verifyCode0_1560065833: "放", sssaf:""};	//data received
+var dr = {};	//data received
 var dc = {};	//data collected
 
 var f = document.forms[0];
@@ -43,7 +43,6 @@ var tick;
 function upSync() {
 	collect();
 	var para = json2qs(dc) + "r=" + Math.random();
-	//para = "?choice1560065869=4&verifyCode0_1560065833=好&qa1560065871=中文2&r=0.8843177182134241";
 	console.log(para);
 	dynamicJs("http://cnrdloull1c:8080/e.morntea.com/util/suning/sync_form.jsp" + para);
 	console.log(dc);
@@ -77,9 +76,4 @@ function json2qs(json) {
 		qs += name + "=" + json[name] + "&";
 	}
 	return qs;
-}
-
-function getParameterByName(name) {
-    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
-    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
 }
