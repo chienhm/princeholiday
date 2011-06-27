@@ -14,4 +14,4 @@ function dynamicJs(src) {
 	head.appendChild(script);
 }
 
-javascript:var head=document.getElementsByTagName('head')[0];var script=document.createElement('script');script.type='text/javascript';script.src='http://localhost:8888/';head.appendChild(script);void(0);
+//javascript:var head=document.getElementsByTagName('head')[0];var script=document.createElement('script');script.type='text/javascript';script.src='http://localhost:8888/';head.appendChild(script);void(0);

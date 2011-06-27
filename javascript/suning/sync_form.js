@@ -4,48 +4,41 @@ var dc = {};	//data collected
 
 var f = document.forms[0];
 function collect() {
+	dc = {};
 	for(var i=0; i<f.elements.length; i++) {
 		var e = f.elements[i];
 		if(e.type=="hidden" || inArray(e.name, nameBL))continue;
 		if(e.type=="radio") {
-			//console.log(e.value);
-			if(e.checked) {
+			if(e.checked && e.value!=dr[e.name]) {
 				dc[e.name] = e.value;
 			}
 			continue;
 		}
-		if(e.value!="") {
+		if(e.value!="" && e.value!=dr[e.name]) {
 			dc[e.name] = e.value;
 		}
-		//console.log(e.name + ", " + e.type);
 	}
 }
 
 function dispatch() {
 	for(name in dr) {
 		if(f[name]) {
-			if(f[name].length && f[name][0].type=="radio") {
-				for(var i=0; i<f[name].length; i++) {
-					if(f[name][i].value==dr[name]) {
-						f[name][i].checked = true;
-						break;
-					}
-				}
+			if(dc[name]==dr[name]) {
+				//if received value equals to input value, ignore
 			} else {
-				f[name].value = dr[name];
+				if(f[name].length && f[name][0].type=="radio") {
+					for(var i=0; i<f[name].length; i++) {
+						if(f[name][i].value==dr[name]) {
+							f[name][i].checked = true;
+							break;
+						}
+					}
+				} else {
+					f[name].value = dr[name];
+				}
 			}
 		}
 	}
-}
-
-var tick;
-
-function upSync() {
-	collect();
-	var para = json2qs(dc) + "r=" + Math.random();
-	console.log(para);
-	dynamicJs("http://cnrdloull1c:8080/e.morntea.com/util/suning/sync_form.jsp" + para);
-	console.log(dc);
 }
 
 function downSync() {
@@ -53,6 +46,15 @@ function downSync() {
 	tick = setTimeout(upSync, 1000);
 }
 
+function upSync() {
+	collect();
+	var para = json2qs(dc) + "r=" + Math.random();
+	console.log(para);
+	dynamicJs("http://cnrdloull1c:8080/e.morntea.com/util/suning/sync_form.jsp" + para);
+	//console.log(dc);
+}
+
+var tick;
 upSync();
 
 function inArray(s, a) {
