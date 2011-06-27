@@ -1,4 +1,4 @@
-package novelsplitter.morntea.com;
+package com.morntea.app.novelsplitter;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
