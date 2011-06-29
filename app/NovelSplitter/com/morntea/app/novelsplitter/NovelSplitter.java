@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 public class NovelSplitter {
 	final String HEADER = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>${title}</title></head><body>";
 	final String FOOTER = "</body></html>";
+	final String EXT  = ".htm";
 	private int pageSize;
 	public NovelSplitter() {
 		this(500);
@@ -29,7 +30,7 @@ public class NovelSplitter {
             while ((tempString = reader.readLine()) != null) {
             	sb.append(tempString + "<br>");
             	if(sb.length()>pageSize) {
-            		writeToFile(outputFolder + "\\" + pageNumber + ".html", pageNumber, sb.toString());
+            		writeToFile(outputFolder + "\\" + pageNumber + EXT, pageNumber, sb.toString());
             		pageNumber++;
             		sb = new StringBuffer();
             	}
@@ -38,7 +39,7 @@ public class NovelSplitter {
                 //break;
             }
             reader.close();
-            writeIndex(outputFolder + "\\0.html", pageNumber-1);
+            writeIndex(outputFolder + "\\0" + EXT, pageNumber-1);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -56,9 +57,9 @@ public class NovelSplitter {
             FileWriter writer = new FileWriter(fileName, false);
             writer.write(HEADER.replace("${title}", "Page " + pageNumber));
             writer.write(body);
-            writer.write("<a href=\"" + (pageNumber-1) + ".html\">" + (pageNumber-1) + "</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
-            		"<a href=\"0.html\">index</a>&nbsp;&nbsp;&nbsp;&nbsp;" +
-            		"<a href=\"" + (pageNumber+1) + ".html\">" + (pageNumber+1) + "</a>");
+            writer.write("<a href=\"" + (pageNumber-1) + EXT + "\">" + (pageNumber-1) + "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+            		"<a href=\"0" + EXT + "\">index</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +
+            		"<a href=\"" + (pageNumber+1) + EXT + "\">" + (pageNumber+1) + "</a>");
             writer.write(FOOTER);
             writer.close();
         } catch (IOException e) {
@@ -69,11 +70,11 @@ public class NovelSplitter {
 	private void writeIndex(String fileName, int maxPage) {
 		StringBuffer sb = new StringBuffer();
 		for(int i=1; i<=maxPage; i++) {
-			sb.append("<a href=\"" + i + ".html\">" + i + "</a>");
-			if(i%3 == 0) {
-				sb.append("<br>");
+			sb.append("<a href=\"" + i + EXT + "\">" + i + "</a>");
+			if(i%5 == 0) {
+				sb.append("<br/></br>");
 			} else {
-				sb.append("&nbsp;&nbsp;&nbsp;&nbsp;");
+				sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
 			}
 		}
 		try {
