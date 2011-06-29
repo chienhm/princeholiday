@@ -1,0 +1,57 @@
+# Copyright (c) 1993-1999 Microsoft Corp.
+#
+# This is a sample HOSTS file used by Microsoft TCP/IP for Windows.
+#
+# This file contains the mappings of IP addresses to host names. Each
+# entry should be kept on an individual line. The IP address should
+# be placed in the first column followed by the corresponding host name.
+# The IP address and the host name should be separated by at least one
+# space.
+#
+# Additionally, comments (such as these) may be inserted on individual
+# lines or following the machine name denoted by a '#' symbol.
+#
+# For example:
+#
+#      102.54.94.97     rhino.acme.com          # source server
+#       38.25.63.10     x.acme.com              # x client host
+
+127.0.0.1       localhost
+#Docs
+64.233.189.101  writely-china.l.google.com
+64.233.189.101  writely.l.google.com
+64.233.189.102  docs.google.com
+64.233.189.101  docs.google.com
+64.233.189.100  docs.google.com
+209.85.225.101	docs.google.com
+72.14.235.100	docs.google.com
+74.125.91.100	docs.google.com
+74.125.19.102	docs.google.com
+74.125.227.2	docs0.google.com
+74.125.227.2	docs1.google.com
+74.125.227.2	docs2.google.com
+74.125.227.2	docs3.google.com
+
+74.125.91.100	writely.l.google.com
+72.14.235.100	spreadsheets.google.com
+74.125.153.100	spreadsheets.google.com
+209.85.225.101	spreadsheets.google.com 
+74.125.227.2	spreadsheets.google.com
+74.125.227.2	spreadsheets0.google.com
+74.125.227.2	spreadsheets1.google.com
+74.125.227.2	spreadsheets2.google.com
+74.125.227.2	spreadsheets3.google.com
+74.125.153.103	encrypted.google.com
+
+#Picasa
+74.125.39.147   picasa.google.com
+74.125.39.91    photos.google.com
+74.125.39.91    picasaweb.google.com
+74.125.39.93    picasaweb.google.com
+74.125.39.136   picasaweb.google.com
+74.125.39.190   picasaweb.google.com
+74.125.91.103	picasa.google.com
+74.125.91.99	www.picasa.com
+
+209.85.201.125	talk.google.com
+74.125.127.120 ssl.gstatic.com
