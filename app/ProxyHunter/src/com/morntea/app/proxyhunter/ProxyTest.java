@@ -11,18 +11,15 @@ import java.net.Proxy;
 import java.net.URL;
 
 public class ProxyTest {
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	static String VERIFY_URL = "http://www.ip.cn/getip.php?action=getip&ip_url=";
+	public boolean test(String ip) {
 		URL url = null;
 		try {
-			url = new URL("http://www.ip.cn/getip.php?action=getip&ip_url=");
+			url = new URL(VERIFY_URL);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("121.14.104.244", 80));  
+		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(ip, 80));  
 		try {
 			if(url!=null){
 				StringBuffer sb = new StringBuffer();
@@ -39,9 +36,19 @@ public class ProxyTest {
 				in.close();
 				System.out.print(sb.toString());
 			}
+			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
-		}  
+			return false;
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		ProxyTest pt = new ProxyTest();
+		System.out.print(pt.test("giotto.dut.ac.za"));
 	}
 
 }
