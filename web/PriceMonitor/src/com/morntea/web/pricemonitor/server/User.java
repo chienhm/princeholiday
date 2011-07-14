@@ -11,7 +11,7 @@ import javax.jdo.annotations.PrimaryKey;
 public class User {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private long userId;
+    private Long userId;
 
     @Persistent
     private String username;
@@ -35,7 +35,7 @@ public class User {
         this.password = password;
     }
     
-    public long getId() {
+    public Long getUserId() {
         return this.userId;
     }
     public String getUsername() {
