@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.morntea.web.pricemonitor.data.Product;
+
 public class AddBookServlet extends HttpServlet {
 
     private static final long serialVersionUID = -2274196995667077150L;
@@ -14,17 +16,16 @@ public class AddBookServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         PersistenceManager pm = PMFactory.get().getPersistenceManager();
-        //String query = "select from " + Product.class.getName();
+        Product product = new Product("JD_BOOK", "10056155", null, null);
+        JDBookProductFetcher fetcher = new JDBookProductFetcher();
+        product = fetcher.getProduct(product);
         
-        //@SuppressWarnings("unchecked")
-        //List<Product> products = (List<Product>) pm.newQuery(query).execute();
-        //JDBookProductFetcher fetcher = new JDBookProductFetcher();
-        //Product product = fetcher.getProduct("10056155");
-        Product p = new Product("JD_BOOK", "10056155", 
-                "A9565DD54C48CDD4C24ECCAD3B178744", "中国大历史");
+        if (product == null) {
+            
+        }
+        
         try {
-                pm.makePersistent(p);
-
+            pm.makePersistent(product);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

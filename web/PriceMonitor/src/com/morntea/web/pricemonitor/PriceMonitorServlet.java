@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.morntea.web.pricemonitor.data.Product;
+import com.morntea.web.pricemonitor.data.Price;
+
 public class PriceMonitorServlet extends HttpServlet {
 
     private static final long serialVersionUID = 3535010863164481522L;

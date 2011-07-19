@@ -1,4 +1,4 @@
-package com.morntea.web.pricemonitor;
+package com.morntea.web.pricemonitor.data;
 
 import java.util.Date;
 

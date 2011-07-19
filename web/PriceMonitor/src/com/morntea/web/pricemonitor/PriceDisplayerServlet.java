@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.morntea.web.pricemonitor.data.Product;
+import com.morntea.web.pricemonitor.data.Price;
+
 public class PriceDisplayerServlet extends HttpServlet {
     
     private static final long serialVersionUID = 4622284175802319756L;
@@ -17,6 +20,7 @@ public class PriceDisplayerServlet extends HttpServlet {
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         resp.setContentType("text/plain");
+        resp.setCharacterEncoding("GBK");
         PrintWriter servletWriter = resp.getWriter();
         
         PersistenceManager pm = PMFactory.getPersistenceManager();
