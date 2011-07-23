@@ -7,22 +7,98 @@
 <!-- but may lead to some differences in layout.   -->
 
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello World</title>
-  </head>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>Hello World</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.validate.min.js"></script>
+<style type="text/css">
+* {
+	font-family: Verdana;
+	font-size: 96%;
+}
 
-  <body>
-    <h1>Hello World!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-      	<td><a href="pricedisplayer">PriceDisplayer</a></td>
-        <td><a href="addbook">Addbook</a></td>
-      </tr>
-    </table>
-  </body>
+label {
+	width: 10em;
+	float: left;
+}
+
+label.error {
+	float: none;
+	color: red;
+	padding-left: .5em;
+	vertical-align: top;
+}
+
+p {
+	clear: both;
+}
+
+.submit {
+	margin-left: 12em;
+}
+
+em {
+	font-weight: bold;
+	padding-right: 1em;
+	vertical-align: top;
+}
+</style>
+<script>
+	$(document).ready(function() {
+		$("#form_addpro").validate({
+			submitHandler : function(form) {
+				addproduct(form["type"].value, form["pid"].value);
+			},
+			messages : {
+				id : {
+					required : "Product id should not be empty.",
+					digits : "Please input a valid product id."
+				}
+			}
+		});
+	});
+</script>
+<script>
+	function addproduct(type, pid) {
+		console.log(pid);
+		$.ajax({
+			url : 'addbook',
+			data : 'type='+type+'&pid=' + pid,
+			success : function(data) {
+				if (data) {
+					console.log(data);
+				}
+			}
+		});
+	}
+</script>
+</head>
+
+<body>
+	<h1>Hello World!</h1>
+
+	<table>
+		<tr>
+			<td colspan="2" style="font-weight: bold;">Available Servlets:</td>
+		</tr>
+		<tr>
+			<td><a href="pricedisplayer">PriceDisplayer</a>
+			</td>
+			<td><a href="addbook">Addbook</a>
+			</td>
+		</tr>
+
+	</table>
+	<form class="cmxform" id="form_addpro" method="get" action="">
+		<label>Product Type:<em>*</em></label> 
+		<select name="type" id="type" class="required">
+			<option value="360buy">360buy</option>
+			<option value="360buybook">360buy book</option>
+		</select><br />
+		<label for="id">Product ID:<em>*</em></label>
+		<input type="text" name="pid" id="pid" class="required digits" /> <br />
+		<input type="submit" name="btn_sbm" value="Add Product" />
+	</form>
+</body>
 </html>
