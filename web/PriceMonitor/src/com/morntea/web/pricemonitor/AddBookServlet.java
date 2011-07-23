@@ -18,7 +18,7 @@ public class AddBookServlet extends HttpServlet {
         PersistenceManager pm = PMFactory.get().getPersistenceManager();
         Product product = new Product("JD_BOOK", "10056155", null, null);
         JDBookProductFetcher fetcher = new JDBookProductFetcher();
-        product = fetcher.getProduct(product);
+        product = fetcher.fetchInfo(product);
         
         if (product == null) {
             

@@ -28,6 +28,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>AddBook</servlet-name>
 		<servlet-class>com.morntea.web.pricemonitor.AddBookServlet</servlet-class>
 	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddProduct</servlet-name>
+		<url-pattern>/addproduct</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AddProduct</servlet-name>
+		<servlet-class>com.morntea.web.pricemonitor.AddProductServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PriceDisplayer</servlet-name>
+		<url-pattern>/price.html</url-pattern>
+	</servlet-mapping>
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

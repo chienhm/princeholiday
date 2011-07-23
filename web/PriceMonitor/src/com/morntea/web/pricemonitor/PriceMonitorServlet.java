@@ -28,7 +28,7 @@ public class PriceMonitorServlet extends HttpServlet {
             Price price = null;
             for(Product product : products) {
                 priceFetcher = ProductFetcherFactory.createPriceFetcher(product);
-                price = priceFetcher.getPrice(product);
+                price = priceFetcher.fetchPrice(product);
                 pm.makePersistent(price);
             }
         } catch (Exception e) {

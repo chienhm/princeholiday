@@ -21,7 +21,7 @@ public class JDBookProductFetcher implements ProductFetcher {
     
     public static final Logger logger = Logger.getLogger(JDBookProductFetcher.class.getName());
     
-    public Product getProduct(Product product) {
+    public Product fetchInfo(Product product) {
         try {
             URLFetchService fetchService = URLFetchServiceFactory.getURLFetchService();
             URL productUrl = new URL("http://book.360buy.com/" 
@@ -58,7 +58,7 @@ public class JDBookProductFetcher implements ProductFetcher {
         }
         return null; 
     }
-    public Price getPrice(Product product) {
+    public Price fetchPrice(Product product) {
         try {
             URLFetchService fetchService = URLFetchServiceFactory.getURLFetchService();
             URL priceUrl = new URL("http://price.360buy.com/price-b-P"
