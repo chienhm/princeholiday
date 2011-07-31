@@ -64,7 +64,7 @@ em {
 		console.log(pid);
 		$.ajax({
 			url : 'addproduct',
-			data : 'type='+type+'&pid=' + pid,
+			data : 'type=' + type + '&pid=' + pid,
 			success : function(data) {
 				if (data) {
 					console.log(data.name);
@@ -93,10 +93,10 @@ em {
 	<form class="cmxform" id="form_addpro" method="get" action="">
 		<label>Product Type:<em>*</em></label> 
 		<select name="type" id="type" class="required">
-			<option value="JD_PRODUCT">360buy</option>
+			<option value="JD_MERCHANDISE">360buy merchandise</option>
 			<option value="JD_BOOK">360buy book</option>
 		</select><br />
-		<label for="id">Product ID:<em>*</em></label>
+		<label for="pid">Product ID:<em>*</em></label>
 		<input type="text" name="pid" id="pid" class="required digits" /> <br />
 		<input type="submit" name="btn_sbm" value="Add Product" />
 	</form>

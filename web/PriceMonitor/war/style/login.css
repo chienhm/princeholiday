@@ -1,0 +1,104 @@
+body {
+	background-color: #DCE6EB;
+	font: 15px/1.5 Tahoma, Helvetica, arial, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+#logoField {
+	background-color: #008000;
+	height: 100px;
+}
+
+#shortcutField {
+	background-color: #505050;
+}
+
+#shortcutContentField {
+	position: relative;
+	width: 600px;
+	height: 25px;
+	line-height: 25px;
+	vertical-align:middle;
+	margin: auto;
+}
+
+#shortcutField a {
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: bold;
+	margin-left: 25px;
+	margin-right: 25px;
+	text-decoration: none;
+}
+
+#loginField {
+	clear: both;
+	width: 600px;
+	background-color: #DDEDFB;
+	border: thin solid darkgray;
+	margin: 50px auto;
+}
+	#loginTitleField {
+		background-color: #EAECEC;
+		height: 23px;
+		line-height: 23px;
+		font: 14px/1.5 Times;
+		font-style: italic;
+		vertical-align: middle;
+		border-bottom: thin solid darkgray;
+		padding-left: 10px;
+	}
+	#loginForm {
+		position: relative;
+		width: 400px;
+		line-height: 40px;
+		padding-top: 10px;
+		padding-left: 150px;
+	}
+		#loginForm label {
+			display: inline-block;
+			width: 80px;
+			text-align: right;
+			padding-right: 2px;
+		}
+		#loginForm #username,#password,#confirm {
+			width: 100px;
+		}
+		
+		#loginForm label.error {
+			margin-left: 24px;
+			width: auto;
+			display: inline;
+			color: red;
+			font-size: 13px;
+			font-style: italic;
+		}
+		#forget,#register {
+			font-size: 13px;
+			width: 100px;
+			display: inline-block;
+			text-align: center;
+			margin-left: 18px;
+			color: blue;
+		}
+		#term {
+			font-size: 13px;
+		}
+		#submit {
+			width: 80px;
+			margin-right: 20px;
+			padding: 0;
+			font: 13px/1.5 Verdana;
+			background-color: lightblue;
+			border: thin solid darkgray;
+			cursor: pointer;
+		}
+		#reset {
+			width: 80px;
+			padding: 0;
+			font: 13px/1.5 Verdana;
+			background-color: lightblue;
+			border: thin solid darkgray;
+			cursor: pointer;
+		}

@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html" charset=UTF-8"/>
+        <title>Register - MornTea</title>
+        <link rel="icon" href="favicon.ico" type="image/x-icon"/>
+        <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/jquery.validate.min.js"></script>
+        <script type="text/javascript">
+            function initDocument() {
+                $("#loginForm").validate({
+                    rules: {
+                        username: {
+                            required: true,
+                            minlength: 4,
+                            maxlength: 20
+                        }
+                    },
+                    messages: {
+                        username: {
+                            required: "Can not be empty.",
+                            minlength: "At least 4 bytes.",
+                            maxlength: "At most 20 bytes."
+                        }
+                    }
+                });
+            }
+            $(document).ready( initDocument );
+        </script>
+        <link rel="stylesheet" type="text/css" href="style/login.css" />
+</head>
+    <body>
+        <div id="documentField">
+            <div id="logoField">
+            </div>
+            <div id="shortcutField">
+                <div id="shortcutContentField">
+	                <a id="home" href="index.html">Home</a>
+	                <a id="product" href="product.html">Product</a>
+	                <a id="download" href="download.html">Download</a>
+	                <a id="about" href="about.html">About</a>
+	                <a id="contact" href="contact.html">Contact</a>
+                </div>
+            </div>
+            <div id="loginField">
+                <div id="loginTitleField">
+                    Register
+                </div>
+                <form id="loginForm" action="/register" method="post">
+                    <div id="usernameField">
+                        <label for="username">username: </label>
+                        <input id="username" type="text" name="username" tabindex="1">
+                    </div>
+                    <div id="passwordField">
+                        <label for="password">password: </label>
+                        <input id="password" type="password" name="password" tabindex="2">
+                    </div>
+                    <div id="confirmField">
+                        <label for="confirm">confirm: </label>
+                        <input id="confirm" type="password" name="confirm" tabindex="3">
+                    </div>
+                    <div id="agreeField">
+                    	<input id="agree" type="checkbox" name="agree" tabindex="3">
+                        <a id="term" href="term.html">I have read and accept the terms of use.</a>
+                    </div>
+                    <div id="submitField">
+                        <input id="submit" type="submit" name="submit" value="Register" tabindex="5">
+                        <input id="reset" type="reset" name="reset" value="Reset" tabindex="6">
+                    </div> 
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
