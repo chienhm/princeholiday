@@ -62,7 +62,7 @@ body {
 			text-align: right;
 			padding-right: 2px;
 		}
-		#loginForm #username,#password,#confirm {
+		#loginForm #username,#password,#confirm,#email {
 			width: 100px;
 		}
 		

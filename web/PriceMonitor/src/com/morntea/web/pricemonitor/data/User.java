@@ -19,6 +19,8 @@ public class User {
     @Persistent
     private String password;
 
+    @Persistent
+    private String email;
     /*
     @Persistent
     private String nickName;
@@ -30,9 +32,10 @@ public class User {
     private Date registerDate;
     */
     
-    public User(String username, String password) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
     
     public Long getUserId() {
@@ -40,6 +43,9 @@ public class User {
     }
     public String getUsername() {
         return this.username;
+    }
+    public String getEmail() {
+        return this.email;
     }
     public boolean isPassword(String password) {
         return this.password.equals(password);

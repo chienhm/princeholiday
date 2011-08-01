@@ -37,9 +37,21 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-class>com.morntea.web.pricemonitor.AddProductServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>PriceDisplayer</servlet-name>
-		<url-pattern>/price.html</url-pattern>
+		<servlet-name>Login</servlet-name>
+		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>Login</servlet-name>
+		<servlet-class>com.morntea.web.pricemonitor.LoginServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Register</servlet-name>
+		<url-pattern>/register</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>Register</servlet-name>
+		<servlet-class>com.morntea.web.pricemonitor.RegisterServlet</servlet-class>
+	</servlet>
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
