@@ -4,11 +4,12 @@
         <title>Register - MornTea</title>
         <link rel="icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+        <link rel="stylesheet" type="text/css" href="style/style.css" />
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/jquery.validate.min.js"></script>
         <script type="text/javascript">
             function initDocument() {
-                $("#loginForm").validate({
+                $("#registerForm").validate({
                     rules: {
                         username: {
                             required: true,
@@ -27,7 +28,6 @@
             }
             $(document).ready( initDocument );
         </script>
-        <link rel="stylesheet" type="text/css" href="style/login.css" />
 </head>
     <body>
         <div id="documentField">
@@ -42,34 +42,34 @@
 	                <a id="contact" href="contact.html">Contact</a>
                 </div>
             </div>
-            <div id="loginField">
-                <div id="loginTitleField">
+            <div id="registerField" class="contentField">
+                <div id="registerTitleField" class="contentTitleField">
                     Register
                 </div>
-                <form id="loginForm" action="/register" method="post">
-                    <div id="usernameField">
+                <form id="registerForm" class="contentContentField" action="/register" method="post">
+                    <div id="usernameField" class="textInputField">
                         <label for="username">username: </label>
-                        <input id="username" type="text" name="username" tabindex="1">
+                        <input id="username" class="textInput" type="text" name="username" tabindex="1">
                     </div>
-                    <div id="passwordField">
+                    <div id="passwordField" class="passwordInputField">
                         <label for="password">password: </label>
-                        <input id="password" type="password" name="password" tabindex="2">
+                        <input id="password" class="textInput" type="password" name="password" tabindex="2">
                     </div>
-                    <div id="confirmField">
+                    <div id="confirmField" class="passwordInputField">
                         <label for="confirm">confirm: </label>
-                        <input id="confirm" type="password" name="confirm" tabindex="3">
+                        <input id="confirm" class="textInput" type="password" name="confirm" tabindex="3">
                     </div>
-                    <div id="emailField">
+                    <div id="emailField" class="textInputField">
                         <label for="email">email: </label>
-                        <input id="email" type="text" name="email" tabindex="4">
+                        <input id="email" class="textInput" type="text" name="email" tabindex="4">
                     </div>
-                    <div id="agreeField">
+                    <div id="agreeField" class="checkInputField">
                     	<input id="agree" type="checkbox" name="agree" tabindex="5">
                         <a id="term" href="term.html">I have read and accept the terms of use.</a>
                     </div>
-                    <div id="submitField">
-                        <input id="submit" type="submit" name="submit" value="Register" tabindex="6">
-                        <input id="reset" type="reset" name="reset" value="Reset" tabindex="7">
+                    <div id="submitField" class="buttonInputField">
+                        <input id="submit" class="firstButton" type="submit" name="submit" value="Register" tabindex="6">
+                        <input id="reset" class="button" type="reset" name="reset" value="Reset" tabindex="7">
                     </div> 
                 </form>
             </div>

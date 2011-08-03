@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,21 +32,30 @@ public class RegisterServlet extends HttpServlet {
         @SuppressWarnings("unchecked")
         List<User> users = (List<User>) userQuery.execute();
         
-        if(users == null || users.size() == 0) {
+        if(users.size() == 0) {
             User user = new User(username, password, email);
             try {
                 pm.makePersistent(user);
                 //set cookies
+                Cookie cookie = new Cookie("SuccessMessage@Morntea",
+                        "Register successfully!");
+                resp.addCookie(cookie);
                 resp.sendRedirect(Page.SUCCESS);
             } catch (Exception e) {
                 logger.severe(username
                               + ": Can not register the user: "
                               + e.toString() + "!\n");
+                Cookie cookie = new Cookie("ErrorMessage@Morntea",
+                        "Sorry, server error!");
+                resp.addCookie(cookie);
                 resp.sendRedirect(Page.ERROR);
             } finally {
                 pm.close();
             }
         } else {
+            Cookie cookie = new Cookie("ErrorMessage@Morntea",
+                    "Sorry, the username has been registered!");
+            resp.addCookie(cookie);
             resp.sendRedirect(Page.ERROR);
         }
     }

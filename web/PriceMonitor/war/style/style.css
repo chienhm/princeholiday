@@ -32,14 +32,14 @@ body {
 	text-decoration: none;
 }
 
-#loginField {
+.contentField {
 	clear: both;
 	width: 600px;
 	background-color: #DDEDFB;
 	border: thin solid darkgray;
 	margin: 50px auto;
 }
-	#loginTitleField {
+	.contentTitleField {
 		background-color: #EAECEC;
 		height: 23px;
 		line-height: 23px;
@@ -49,24 +49,24 @@ body {
 		border-bottom: thin solid darkgray;
 		padding-left: 10px;
 	}
-	#loginForm {
+	.contentContentField {
 		position: relative;
 		width: 400px;
 		line-height: 40px;
 		padding-top: 10px;
-		padding-left: 150px;
+		padding-left: 80px;
 	}
-		#loginForm label {
+		.contentContentField label {
 			display: inline-block;
 			width: 80px;
 			text-align: right;
 			padding-right: 2px;
 		}
-		#loginForm #username,#password,#confirm,#email {
-			width: 100px;
+		.contentContentField .textInput {
+			width: 180px;
 		}
 		
-		#loginForm label.error {
+		.contentContentField label.error {
 			margin-left: 24px;
 			width: auto;
 			display: inline;
@@ -74,7 +74,10 @@ body {
 			font-size: 13px;
 			font-style: italic;
 		}
-		#forget,#register {
+		.contentContentField .buttonInputField {
+			padding-left: 87px;
+		}
+		.link {
 			font-size: 13px;
 			width: 100px;
 			display: inline-block;
@@ -82,20 +85,21 @@ body {
 			margin-left: 18px;
 			color: blue;
 		}
-		#term {
+		.checkInputField {
 			font-size: 13px;
+			padding-left: 87px;
 		}
-		#submit {
+		.firstButton {
 			width: 80px;
-			margin-right: 20px;
 			padding: 0;
 			font: 13px/1.5 Verdana;
 			background-color: lightblue;
 			border: thin solid darkgray;
 			cursor: pointer;
 		}
-		#reset {
+		.button {
 			width: 80px;
+			margin-left: 15px;
 			padding: 0;
 			font: 13px/1.5 Verdana;
 			background-color: lightblue;

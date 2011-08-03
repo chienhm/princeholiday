@@ -4,6 +4,7 @@
         <title>Login - MornTea</title>
         <link rel="icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+        <link rel="stylesheet" type="text/css" href="style/style.css" />
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/jquery.validate.min.js"></script>
         <script type="text/javascript">
@@ -25,7 +26,6 @@
             }
             $(document).ready( initDocument );
         </script>
-        <link rel="stylesheet" type="text/css" href="style/login.css" />
 </head>
     <body>
         <div id="documentField">
@@ -40,24 +40,24 @@
 	                <a id="contact" href="contact.html">Contact</a>
                 </div>
             </div>
-            <div id="loginField">
-                <div id="loginTitleField">
+            <div id="loginField" class="contentField">
+                <div id="loginTitleField" class="contentTitleField">
                     Login
                 </div>
-                <form id="loginForm" action="/login" method="post">
-                    <div id="usernameField">
+                <form id="loginForm" class="contentContentField" action="/login" method="post">
+                    <div id="usernameField" class="textInputField">
                         <label for="username">username: </label>
-                        <input id="username" type="text" name="username" value="" class="" tabindex="1">
+                        <input id="username" class="textInput" type="text" name="username" value="" tabindex="1">
                     </div>
-                    <div id="passwordField">
+                    <div id="passwordField" class="passwordInputField">
                         <label for="password">password: </label>
-                        <input id="password" type="password" name="password" value="" tabindex="2">
-                        <a id="forget" href="forget.html">Forgot password</a>
+                        <input id="password" class="textInput" type="password" name="password" value="" tabindex="2">
+                        <a id="forget" class="link" href="forget.html">Forgot password</a>
                     </div>
-                    <div id="submitField">
-                        <input id="submit" type="submit" name="submit" value="Login" tabindex="3">
-                        <input id="reset" type="reset" name="reset" value="Reset" tabindex="4">
-                        <a id="register" href="register.html">Register Now</a>
+                    <div id="submitField" class="buttonInputField">
+                        <input id="submit" class="firstButton" type="submit" name="submit" value="Login" tabindex="3">
+                        <input id="reset" class="button" type="reset" name="reset" value="Reset" tabindex="4">
+                        <a id="register" class="link" href="register.html">Register Now</a>
                     </div> 
                 </form>
             </div>
