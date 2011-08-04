@@ -54,13 +54,13 @@ body {
 		width: 400px;
 		line-height: 40px;
 		padding-top: 10px;
+		padding-bottom: 10px;
 		padding-left: 80px;
 	}
 		.contentContentField label {
 			display: inline-block;
 			width: 80px;
-			text-align: right;
-			padding-right: 2px;
+			text-align: right;		
 		}
 		.contentContentField .textInput {
 			width: 180px;
@@ -75,9 +75,9 @@ body {
 			font-style: italic;
 		}
 		.contentContentField .buttonInputField {
-			padding-left: 87px;
+			padding-left: 85px;
 		}
-		.link {
+		.contentContentField .link {
 			font-size: 13px;
 			width: 100px;
 			display: inline-block;
@@ -85,11 +85,11 @@ body {
 			margin-left: 18px;
 			color: blue;
 		}
-		.checkInputField {
+		.contentContentField .checkInputField {
 			font-size: 13px;
-			padding-left: 87px;
+			padding-left: 82px;
 		}
-		.firstButton {
+		.contentContentField .firstButton {
 			width: 80px;
 			padding: 0;
 			font: 13px/1.5 Verdana;
@@ -97,9 +97,9 @@ body {
 			border: thin solid darkgray;
 			cursor: pointer;
 		}
-		.button {
+		.contentContentField .button {
 			width: 80px;
-			margin-left: 15px;
+			margin-left: 18px;
 			padding: 0;
 			font: 13px/1.5 Verdana;
 			background-color: lightblue;
