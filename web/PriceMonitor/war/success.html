@@ -7,27 +7,37 @@
         <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" type="text/css" href="style/style.css" />
         <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/morntea.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				updateUserInfo();
+				updateMessage();
+			});
+		</script>
 </head>
     <body>
         <div id="documentField">
             <div id="logoField">
             </div>
             <div id="shortcutField">
-                <div id="shortcutContentField">
-	                <a id="home" href="index.html">Home</a>
-	                <a id="product" href="product.html">Product</a>
-	                <a id="download" href="download.html">Download</a>
-	                <a id="about" href="about.html">About</a>
-	                <a id="contact" href="contact.html">Contact</a>
-                </div>
+            	<div id="shortcutContentField">
+	                <div id="menuField">
+		                <a id="home" href="index.html">Home</a>
+		                <a id="product" href="product.html">Product</a>
+		                <a id="download" href="download.html">Download</a>
+		                <a id="about" href="about.html">About</a>
+		                <a id="contact" href="contact.html">Contact</a>
+	                </div>
+	                <div id="userInfoField">
+	           		</div>
+           		</div>
             </div>
             <div id="successField" class="contentField">
                 <div id="successTitleField" class="contentTitleField">
                     Success
                 </div>
                 <div id="successContentField" class="contentContentField">
-                    <div id="successMessageField" class="textField">
-                        Success
+                    <div id="messageField" class="textField">
                     </div>
                     <div id=successLinkField" class="linkField">
                     	<a id="back" class="link" href="index.html">Back to Home</a>

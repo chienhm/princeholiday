@@ -32,30 +32,44 @@ public class RegisterServlet extends HttpServlet {
         @SuppressWarnings("unchecked")
         List<User> users = (List<User>) userQuery.execute();
         
-        if(users.size() == 0) {
+        if(users.size() <= 0) {
             User user = new User(username, password, email);
             try {
                 pm.makePersistent(user);
                 //set cookies
-                Cookie cookie = new Cookie("SuccessMessage@Morntea",
-                        "Register successfully!");
-                resp.addCookie(cookie);
+                String message = new String("Congratulations, Register successfully!");
+                Cookie messageCookie = new Cookie("message", message);
+                Cookie usernameCooke = new Cookie("username", user.getUsername());
+                Cookie usersidCookie = new Cookie("usersid", user.getUserId().toString());
+                resp.addCookie(messageCookie);
+                resp.addCookie(usernameCooke);
+                resp.addCookie(usersidCookie);
                 resp.sendRedirect(Page.SUCCESS);
             } catch (Exception e) {
                 logger.severe(username
                               + ": Can not register the user: "
                               + e.toString() + "!\n");
-                Cookie cookie = new Cookie("ErrorMessage@Morntea",
-                        "Sorry, server error!");
-                resp.addCookie(cookie);
+                String message = new String("Sorry, internal server error!");
+                Cookie messageCookie = new Cookie("message", message);
+                Cookie usernameCooke = new Cookie("username", "");
+                Cookie usersidCookie = new Cookie("usersid", "");
+                resp.addCookie(messageCookie);
+                resp.addCookie(usernameCooke);
+                resp.addCookie(usersidCookie);
                 resp.sendRedirect(Page.ERROR);
             } finally {
                 pm.close();
             }
         } else {
-            Cookie cookie = new Cookie("ErrorMessage@Morntea",
-                    "Sorry, the username has been registered!");
-            resp.addCookie(cookie);
+            logger.severe(users.get(0).getUsername());
+            System.out.println(users.get(0).getUsername());
+            String message = new String("Sorry, the username has been registered!");
+            Cookie messageCookie = new Cookie("message", message);
+            Cookie usernameCooke = new Cookie("username", "");
+            Cookie usersidCookie = new Cookie("usersid", "");
+            resp.addCookie(messageCookie);
+            resp.addCookie(usernameCooke);
+            resp.addCookie(usersidCookie);
             resp.sendRedirect(Page.ERROR);
         }
     }
