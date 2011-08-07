@@ -1,4 +1,4 @@
-package com.morntea.web.pricemonitor;
+package com.morntea.web.pricemonitor.servlet;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.morntea.web.pricemonitor.PMFactory;
+import com.morntea.web.pricemonitor.Page;
 import com.morntea.web.pricemonitor.data.User;
 
 public class RegisterServlet extends HttpServlet {
