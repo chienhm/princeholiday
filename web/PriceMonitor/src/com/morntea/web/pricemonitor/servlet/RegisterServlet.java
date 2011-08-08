@@ -22,7 +22,7 @@ public class RegisterServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(RegisterServlet.class.getName());
     
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException {
+            throws IOException {
         String username = req.getParameter("username");
         String password = req.getParameter("password");
         String email = req.getParameter("email");
@@ -42,7 +42,7 @@ public class RegisterServlet extends HttpServlet {
                 String message = new String("Congratulations, Register successfully!");
                 Cookie messageCookie = new Cookie("message", message);
                 Cookie usernameCooke = new Cookie("username", user.getUsername());
-                Cookie usersidCookie = new Cookie("usersid", user.getUserId().toString());
+                Cookie usersidCookie = new Cookie("userid", user.getUserId().toString());
                 resp.addCookie(messageCookie);
                 resp.addCookie(usernameCooke);
                 resp.addCookie(usersidCookie);
@@ -54,7 +54,7 @@ public class RegisterServlet extends HttpServlet {
                 String message = new String("Sorry, internal server error!");
                 Cookie messageCookie = new Cookie("message", message);
                 Cookie usernameCooke = new Cookie("username", "");
-                Cookie usersidCookie = new Cookie("usersid", "");
+                Cookie usersidCookie = new Cookie("userid", "");
                 resp.addCookie(messageCookie);
                 resp.addCookie(usernameCooke);
                 resp.addCookie(usersidCookie);
