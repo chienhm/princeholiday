@@ -18,12 +18,12 @@ function at(time, func) {
 	if(diff<0) {log("time expired");return;}
 	var timeout = (diff>10000)?(diff-10000):(diff>1000)?(diff-1000):(diff>200)?(diff-200):diff;
 	setTimeout(function(){if(timeout==diff)func();else at(time, func);}, timeout);
-	log(now + ", " + now.getMilliseconds() + "ms; " + diff + "ms left.");
+	log("[" + now + "." + now.getMilliseconds() + "ms]; " + diff + "ms left, invoke function after " + timeout + " ms.");
 }
 
-var time = new Date(2011,0,5,15,56,10);
+var time = new Date(2011,10,15,19,59,59);
 time.setMilliseconds(800);
-at(time, function(){alert(new Date() + "," + new Date().getMilliseconds());});
+at(time, function(){log(new Date() + "," + new Date().getMilliseconds());});
 
 //javascript:function showActEnd(){};showInaction();function enableSecKill(){};function disableSecKill(){};void(0);
 
