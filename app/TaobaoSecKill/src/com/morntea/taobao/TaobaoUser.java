@@ -18,6 +18,7 @@ public class TaobaoUser {
 	private String token = null;
 	private boolean vip = false;
 	private boolean login = false;
+	private String userid;
 	public Http http = null;
 
 	final static String USER_HOME_URL = "http://i.taobao.com";
@@ -92,6 +93,7 @@ public class TaobaoUser {
 		this.login = true;
 		/*String html = this.visit(USER_HOME_URL);
 		//System.out.print(html);
+		userid = StringHelper.regFetch(html, "userid=(\\d+)");
 		if (html.indexOf("Œ“µƒÃ‘±¶") != -1) {
 			this.login = true;
 			ConsoleLog.log(this.username + " login success.");
@@ -105,6 +107,7 @@ public class TaobaoUser {
 		}
 		this.visit(LOGOUT_URL);
 		http.terminate();
+		http = null;
 		this.login = false;
 		ConsoleLog.log(this.username + " logout.");
 	}
@@ -161,5 +164,9 @@ public class TaobaoUser {
 
 	public boolean isLogin() {
 		return login;
+	}
+
+	public String getUserid() {
+		return userid;
 	}
 }

@@ -45,7 +45,7 @@ public class ReplyPostTask extends TaobaoTask {
 		// System.out.println(html);
 		Map<String, String> data = HtmlParserHelper.parseForm(html, "id",
 				"addReplyForm");
-		data.put("_fmw.publis._0.c", "<p>先顶起来再说，UP!Up!</p>");
+		data.put("_fmw.publis._0.c", "<p>鍏堥《璧锋潵鍐嶈UP!Up!</p>");
 		// data.put("_fmw.publis._0.ch", "3E4B");
 		System.out.println(data.toString());
 		Http http = user.http;
