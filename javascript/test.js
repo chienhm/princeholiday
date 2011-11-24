@@ -13,7 +13,7 @@ script.src= 'http://code.jquery.com/jquery-1.5.2.min.js';
 head.appendChild(script);
 
 function loadPage() {
-	jQuery("<iframe src='http://www.baidu.com' id='page' name='page'></iframe>").bind("load", function(){alert("loaded");}).appendTo(body);
+	jQuery("<iframe src='http://www.baidu.com' id='page' name='page'></iframe>").bind("load", function(){alert($("#page")[0].contentWindow.document.title);}).appendTo(body);
 }
 
 script.onload = loadPage;
