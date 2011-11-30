@@ -23,6 +23,7 @@ public class SkuFactory {
 		    JsonElement je = parser.parse(json);
 		    JsonObject s = je.getAsJsonObject();
 		    JsonArray itemInfo = s.getAsJsonArray("defSelected");
+		    if(itemInfo!=null)
 		    for(JsonElement j : itemInfo) {
 		    	if(!j.getAsString().equals("")) {
 		    		defSelected = j.getAsString();
@@ -33,6 +34,7 @@ public class SkuFactory {
 		    
 		    JsonObject skuMap = s.getAsJsonObject("skuMap");
 		    skuList = new ArrayList<Sku>();
+		    if(skuMap!=null)
 		    for(Entry<String, JsonElement> ent : skuMap.entrySet()) {
 		    	ConsoleLog.log(ent.getKey() + " : " + ent.getValue());
 			    Sku skuObj = gson.fromJson(ent.getValue(), Sku.class);

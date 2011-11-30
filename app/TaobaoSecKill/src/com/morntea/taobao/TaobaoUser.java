@@ -9,6 +9,7 @@ import com.morntea.helper.ConsoleLog;
 import com.morntea.helper.DateHelper;
 import com.morntea.helper.HtmlParserHelper;
 import com.morntea.helper.Http;
+import com.morntea.helper.StringHelper;
 import com.morntea.taobao.task.TaobaoTask;
 
 public class TaobaoUser {
@@ -91,13 +92,13 @@ public class TaobaoUser {
 		http.post(LOGIN_URL, data);
 
 		this.login = true;
-		/*String html = this.visit(USER_HOME_URL);
+		String html = this.visit(USER_HOME_URL);
 		//System.out.print(html);
 		userid = StringHelper.regFetch(html, "userid=(\\d+)");
 		if (html.indexOf("Œ“µƒÃ‘±¶") != -1) {
 			this.login = true;
 			ConsoleLog.log(this.username + " login success.");
-		}*/
+		}
 
 	}
 
@@ -144,14 +145,15 @@ public class TaobaoUser {
 		Commodity c = new Commodity();
 		c.http = http;
 		Map<String, String> data = c.getData(id);
+		ConsoleLog.log(data);
 
 		String html = null;
 		html = http.post("http://buy.taobao.com/auction/buy_now.jhtml", data);
 		//System.out.println(html);
 		data = HtmlParserHelper.parseForm(html, "id", "J_Form");
 		ConsoleLog.log(data);
-		/*html = http.post("http://buy.taobao.com/auction/order/unity_order_confirm.htm", data);
-		System.out.println(html);*/
+		html = http.post("http://buy.taobao.com/auction/order/unity_order_confirm.htm", data);
+		System.out.println(html);
 	}
 
 	public void setVip(boolean isVip) {

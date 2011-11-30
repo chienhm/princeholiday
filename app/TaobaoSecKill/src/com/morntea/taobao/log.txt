@@ -1,0 +1,56 @@
+_tb_token_:3ebdd3db5e3be
+item_id_num:13573379221
+item_id:13573379221
+auction_id:13573379221
+auction_type:b
+title:%C3%EB%C9%B1 %BD%F0%CA%F4%B2%A9%CA%BF %CD%E6%BE%DF %D2%E6%D6%C7%CD%E6%BE%DF %B6%F9%CD%AF%CD%E6%BE%DF %C6%B4%D7%B0%CD%E6%BE%DF %D5%BD%B6%B7%BB%FA (unable to decode value)
+x_id:
+seller_id:04cc00d88520fcdf33bf1591d138dfad
+seller_num_id:730435596
+allow_quantity:10
+seller_nickname:%C2%F3%B1%A6%CD%E6%BE%DF%D7%A8%D3%AA%B5%EA (unable to decode value)
+from:item_detail
+seller_rate_sum:0
+seller_rank:0
+who_pay_ship:%C2%F4%BC%D2%B3%D0%B5%A3%D4%CB%B7%D1 (unable to decode value)
+current_price:1.00
+buy_now:1.00
+is_orginal:no
+photo_url:i1/T1gGSyXjVmXXbHqUnb_095440.jpg
+pay_method:%BF%EE%B5%BD%B7%A2%BB%F5 (unable to decode value)
+region:%C9%CF%BA%A3 (unable to decode value)
+secure_pay:true
+point_price:false
+auto_post:false
+activity:
+virtual:false
+rootCatId:
+auto_post1:
+destination:
+quantity:1
+skuId:
+skuInfo:
+chargeTypeId:
+is_cod:false
+a92799e885e044c81fa0e4af8f35f1f7:8bc0a13c8141c2e45b12fd24ba95e6de
+buyer_from:
+bankfrom:
+
+
+Request URL:http://buy.taobao.com/auction/buy_now.jhtml
+Request Method:POST
+Status Code:200 OK
+Request Headersview source
+Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Charset:GBK,utf-8;q=0.7,*;q=0.3
+Accept-Encoding:gzip,deflate,sdch
+Accept-Language:zh-CN,en-US;q=0.8,en;q=0.6,zh-TW;q=0.4
+Cache-Control:max-age=0
+Connection:keep-alive
+Content-Length:905
+Content-Type:application/x-www-form-urlencoded
+Cookie:swfstore=225335; cna=8lyUBtxoMCUCATmQn6gMT3qE; miid=7377647792832822556; __utma=174353853.1297579392.1317557673.1317557673.1317557673.1; __utmz=174353853.1317557673.1.1.utmcsr=taobao.com|utmccn=(referral)|utmcmd=referral|utmcct=/go/act/tiantian/1-5zhe.php; lzstat_uv=37222670541263621508|2113208@2511429@1836558@2471204@2471208@2285988@1544272@2462330@2532477@2429309@1791451@2059610@2244711@2330004@2558276@2530121@1759261@1626624@2285972@1107343@2274730@2493299@2270023@2199358@2544569@1329597; lzstat_ss=1225783563_0_1321610984_1791451; publishItemObj=MA%3D%3D; mt=ci=0_0; uc2=wuf=http%3A%2F%2Flogin.tmall.com%2F%3Fredirect_url%3Dhttp%253A%252F%252Fmaibaowj.tmall.com%252Fshop%252Fview_shop.htm%253Fspm%253D3.45497.157929.7%2526prt%253D1321621243562%2526prc%253D1&ab=G----; v=0; ck1=; _sv_=0; tg=0; _cc_=V32FPkk%2Fhw%3D%3D; unb=680334733; _nk_=lleoeo; nt=UIHiLt3xSDLjDBKRjEL2D6BnzeoR43zPNUmd8P1GLrCvcrPpsOAVsZ%2FnKlz4xYo%3D; _l_g_=Ug%3D%3D; cookie2=0c23ba51c783213c3b631b707bbe0790; _wwmsg_=0%2C0; tracknick=lleoeo; ssllogin=1; lastgetwwmsg=MTMyMTYyMTI5MQ%3D%3D; cookie1=VqpfgMhApMJoh2RJIo93hhA5cOw5NT7FzjbtS5sEwbo%3D; cookie17=VWeRP5nl3chW; _tb_token_=3ebdd3db5e3be; t=8c84f4b6e11ce0eb40df8164c05f6741; x=e%3D1%26p%3D*%26s%3D1%26c%3D1%26f%3D0%26g%3D0%26t%3D0%26__ll%3D-1%26_ato%3D0; mpp=t%3D1%26m%3D%26h%3D1321624690763%26l%3D1321621328520; tlut=UoLef5WoPS4new%3D%3D; uc1=lltime=1321527909&cookie14=UoLef5WoPS4new%3D%3D&existShop=false&cookie16=URm48syIJ1yk0MX2J7mAAEhTuw%3D%3D&sg=o39&cookie21=URm48syIZx9a&tag=0&cookie15=VFC%2FuZ9ayeYq2g%3D%3D
+Host:buy.taobao.com
+Origin:http://item.taobao.com
+Referer:http://item.taobao.com/item.htm?id=13573379221
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.106 Safari/535.2
