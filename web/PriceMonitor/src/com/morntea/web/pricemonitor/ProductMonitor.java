@@ -19,7 +19,7 @@ public class ProductMonitor {
 			if(!condition.isMeet() && ps.meet(condition)) {
 				//send message if condition is meet
 				cs.setCondition(condition);
-				cs.sendMsg();
+				cs.sendMsg(ps.getMessage());
 				//If condition is meet, set the meet flag, so it won't send alert again.
 				condition.setMeet(true);
 			}

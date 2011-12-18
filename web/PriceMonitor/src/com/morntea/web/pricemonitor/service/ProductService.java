@@ -18,6 +18,7 @@ public class ProductService {
 	protected String html;
 	protected ProductItem item;
 	protected float newPrice;
+	protected String message;
 
 	public void load(ProductItem item) {
 		this.item = item;
@@ -107,6 +108,10 @@ public class ProductService {
 	
 	public float getNewPrice() {
 		return newPrice;
+	}
+
+	public String getMessage() {
+		return message;
 	}
 	
 	// save product with its conditions?
