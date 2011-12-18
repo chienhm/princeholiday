@@ -23,6 +23,8 @@ public class ProductItem {
     private Date fetchDate;
     @Persistent
     private List<Condition> conditions;
+    @Persistent
+    private int errorTimes;
     
 	public ProductItem(String url) {
 		super();
@@ -59,5 +61,13 @@ public class ProductItem {
 
 	public List<Condition> getConditions() {
 		return conditions;
+	}
+
+	public void setErrorTimes(int errorTimes) {
+		this.errorTimes = errorTimes;
+	}
+
+	public int getErrorTimes() {
+		return errorTimes;
 	}
 }

@@ -6,6 +6,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Email;
+
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Condition {
     @PrimaryKey
@@ -15,6 +17,13 @@ public class Condition {
     private int type;
     @Persistent
     private String parameter;
+    @Persistent
+    private boolean meet;
+    @Persistent
+    private Email email;
+    @Persistent
+    private String phone;
+    
 	public Long getId() {
 		return id;
 	}
@@ -33,5 +42,29 @@ public class Condition {
 
 	public int getType() {
 		return type;
+	}
+
+	public void setMeet(boolean meet) {
+		this.meet = meet;
+	}
+
+	public boolean isMeet() {
+		return meet;
+	}
+
+	public void setEmail(Email email) {
+		this.email = email;
+	}
+
+	public Email getEmail() {
+		return email;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getPhone() {
+		return phone;
 	}
 }

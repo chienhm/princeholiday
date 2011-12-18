@@ -1,19 +1,28 @@
 package com.morntea.web.pricemonitor.seller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.morntea.helper.ConsoleLog;
 import com.morntea.helper.StringHelper;
-import com.morntea.web.pricemonitor.ProductService;
 
 public class WeiweiService extends ProductService {
+	private static final Logger logger = Logger.getLogger(WeiweiService.class.getName());
 
 	public float getCurrentPrice() {
 		if(html!=null && !html.isEmpty()) {
-			String sPrice = StringHelper.regFetch(html, "为为价:￥([^-]+)-为为网");
+			String sPrice = StringHelper.regFetch(html, "id=\"vvshopMemberPrice\">\\s*��(.+?)\\s*</STRONG>");
+			ConsoleLog.log(sPrice);
+			logger.log(Level.INFO, "Get price:" + sPrice);
 			if(sPrice.isEmpty()) {
-				return -1;
+				logger.log(Level.SEVERE, "Can't get price. Url:" + item.getUrl());
 			} else {
 				return Float.parseFloat(sPrice);
 			}
+		} else {
+			logger.log(Level.SEVERE, "HTML invalid for " + item.getUrl());
 		}
+		incError();
 		return -1;
 	}
 }

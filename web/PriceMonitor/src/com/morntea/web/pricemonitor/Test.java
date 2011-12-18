@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.morntea.web.pricemonitor.data.Condition;
 import com.morntea.web.pricemonitor.data.ProductItem;
+import com.morntea.web.pricemonitor.seller.ProductService;
+import com.morntea.web.pricemonitor.seller.WeiweiService;
 
 
 public class Test {
@@ -19,13 +21,13 @@ public class Test {
 		cl.add(c);
 		item.setConditions(cl);
 		//--------------------------------------------- Begin Test
-		ProductService ps = new ProductService();
+		ProductService ps = new WeiweiService();
 		ps.load(item);
 		List<Condition> conditionList = item.getConditions();
 		for(Condition condition : conditionList) {
-			if(ps.meet(condition)) {
+			if(!condition.isMeet() && ps.meet(condition)) {
 				//ConditionService.send
-				System.out.println("Yes");
+				System.out.println("ºÃµÄ");
 			}
 		}
 	}
