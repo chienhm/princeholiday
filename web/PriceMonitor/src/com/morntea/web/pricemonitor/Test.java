@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.morntea.web.pricemonitor.data.Condition;
 import com.morntea.web.pricemonitor.data.ProductItem;
-import com.morntea.web.pricemonitor.seller.ProductService;
-import com.morntea.web.pricemonitor.seller.WeiweiService;
+import com.morntea.web.pricemonitor.service.ProductService;
+import com.morntea.web.pricemonitor.service.WeiweiService;
 
 
 public class Test {

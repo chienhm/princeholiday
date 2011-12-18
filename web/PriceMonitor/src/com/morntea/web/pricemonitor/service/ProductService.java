@@ -1,4 +1,4 @@
-package com.morntea.web.pricemonitor.seller;
+package com.morntea.web.pricemonitor.service;
 
 import java.util.Date;
 import java.util.logging.Level;

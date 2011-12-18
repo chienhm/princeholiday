@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.morntea.web.pricemonitor.data.Condition;
 import com.morntea.web.pricemonitor.data.ProductItem;
-import com.morntea.web.pricemonitor.seller.ConditionService;
-import com.morntea.web.pricemonitor.seller.ProductService;
+import com.morntea.web.pricemonitor.service.ConditionService;
+import com.morntea.web.pricemonitor.service.ProductService;
 
 public class ProductMonitor {
 	
