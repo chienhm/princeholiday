@@ -22,8 +22,6 @@ public class ProductMonitor {
 				cs.sendMsg();
 				//If condition is meet, set the meet flag, so it won't send alert again.
 				condition.setMeet(true);
-				
-				System.out.println("Yes");
 			}
 		}
 		item.setPrice(ps.getNewPrice());
