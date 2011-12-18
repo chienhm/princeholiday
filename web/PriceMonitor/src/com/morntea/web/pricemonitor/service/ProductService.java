@@ -4,14 +4,17 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jdo.PersistenceManager;
+
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import com.morntea.helper.Http;
+import com.morntea.web.pricemonitor.PMFactory;
 import com.morntea.web.pricemonitor.data.Condition;
 import com.morntea.web.pricemonitor.data.ProductItem;
 
 public class ProductService {
-	private static final Logger log = Logger.getLogger(ProductService.class.getName());
+	private static final Logger logger = Logger.getLogger(ProductService.class.getName());
 	protected String html;
 	protected ProductItem item;
 	protected float newPrice;
@@ -43,7 +46,7 @@ public class ProductService {
 	public boolean priceLowerThan(float expectedPrice) {
 		if(newPrice<0)return false;
 		
-		log.log(Level.INFO, "Expected Price:" + expectedPrice + ", Current Price:" + newPrice);
+		logger.log(Level.INFO, "Expected Price:" + expectedPrice + ", Current Price:" + newPrice);
 		if(newPrice<expectedPrice) {
 			return true;
 		}
@@ -104,5 +107,19 @@ public class ProductService {
 	
 	public float getNewPrice() {
 		return newPrice;
+	}
+	
+	// save product with its conditions?
+	public void save() {
+		PersistenceManager pm = PMFactory.getPersistenceManager();
+        try {
+            pm.makePersistent(item);
+        } catch (Exception e) {
+            logger.severe(item.getId()
+                          + ": Can not save product item: " + item.getUrl()
+                          + "(" + e.toString() + ")!\n");
+        } finally {
+            pm.close();
+        }
 	}
 }
