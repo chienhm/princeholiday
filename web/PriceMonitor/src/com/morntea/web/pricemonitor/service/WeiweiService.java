@@ -11,6 +11,7 @@ public class WeiweiService extends ProductService {
 
 	public float getCurrentPrice() {
 		if(html!=null && !html.isEmpty()) {
+			
 			String sPrice = StringHelper.regFetch(html, "id=\"vvshopMemberPrice\">\\s*гд(.+?)\\s*</STRONG>");
 			ConsoleLog.log(sPrice);
 			logger.log(Level.INFO, "Get price:" + sPrice);

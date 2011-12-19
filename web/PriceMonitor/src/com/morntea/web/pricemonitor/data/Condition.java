@@ -1,18 +1,18 @@
 package com.morntea.web.pricemonitor.data;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Email;
+import com.google.appengine.api.datastore.Key;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable
 public class Condition {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long id;
+    private Key key;
     @Persistent
     private int type;
     @Persistent
@@ -23,9 +23,11 @@ public class Condition {
     private Email email;
     @Persistent
     private String phone;
+    @Persistent
+    private ProductItem item;
     
-	public Long getId() {
-		return id;
+	public Key getKey() {
+		return key;
 	}
 
 	public void setParameter(String parameter) {
@@ -66,5 +68,13 @@ public class Condition {
 
 	public String getPhone() {
 		return phone;
+	}
+
+	public void setItem(ProductItem item) {
+		this.item = item;
+	}
+
+	public ProductItem getItem() {
+		return item;
 	}
 }

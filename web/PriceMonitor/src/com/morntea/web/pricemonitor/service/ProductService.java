@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
 
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import com.morntea.helper.Http;
 import com.morntea.web.pricemonitor.PMFactory;
 import com.morntea.web.pricemonitor.data.Condition;
@@ -22,8 +20,7 @@ public class ProductService {
 
 	public void load(ProductItem item) {
 		this.item = item;
-		Http http = new Http(new DefaultHttpClient());
-		html = http.doGet(item.getUrl());
+		html = Http.getHtml(item.getUrl(), "gb2312");
 		//System.out.println(html);
 		item.setFetchDate(new Date());
 		newPrice = getCurrentPrice();

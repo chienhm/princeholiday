@@ -84,6 +84,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-name>GetPrice</servlet-name>
         <url-pattern>/getprice</url-pattern>
     </servlet-mapping>
+    
+    
+	<servlet>
+		<servlet-name>AddItem</servlet-name>
+		<servlet-class>com.morntea.web.pricemonitor.servlet.AddItemServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AddItem</servlet-name>
+		<url-pattern>/additem</url-pattern>
+	</servlet-mapping>
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

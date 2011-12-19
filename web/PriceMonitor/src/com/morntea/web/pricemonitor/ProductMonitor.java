@@ -6,12 +6,12 @@ import com.morntea.web.pricemonitor.data.Condition;
 import com.morntea.web.pricemonitor.data.ProductItem;
 import com.morntea.web.pricemonitor.service.ConditionService;
 import com.morntea.web.pricemonitor.service.ProductService;
+import com.morntea.web.pricemonitor.service.WeiweiService;
 
 public class ProductMonitor {
 	
-	public void run() {		
-		ProductItem item = new ProductItem("");
-		ProductService ps = new ProductService();
+	public void monitor(ProductItem item) {
+		ProductService ps = new WeiweiService();
 		ps.load(item);
 		List<Condition> conditionList = item.getConditions();
 		ConditionService cs = new ConditionService();
@@ -25,5 +25,6 @@ public class ProductMonitor {
 			}
 		}
 		item.setPrice(ps.getNewPrice());
+		ps.save();
 	}
 }

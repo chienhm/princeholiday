@@ -21,7 +21,7 @@ public class ProductItem {
 	private float price;
     @Persistent
     private Date fetchDate;
-    @Persistent
+    @Persistent(mappedBy = "item")
     private List<Condition> conditions;
     @Persistent
     private int errorTimes;

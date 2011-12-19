@@ -27,7 +27,7 @@ public class Test {
 		for(Condition condition : conditionList) {
 			if(!condition.isMeet() && ps.meet(condition)) {
 				//ConditionService.send
-				System.out.println("ºÃµÄ");
+				System.out.println("good");
 			}
 		}
 	}
