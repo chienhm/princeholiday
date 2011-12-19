@@ -29,12 +29,11 @@ public class AddItemServlet extends HttpServlet {
 		Condition c = new Condition();
 		c.setType(1);
 		c.setParameter("9");
+		c.setEmail(new Email("5794560@qq.com"));
 		cl.add(c);
-		Condition c2 = new Condition();
-		c2.setType(2);
-		c2.setParameter("sss");
-		c2.setEmail(new Email("5794560@qq.com"));
-		cl.add(c2);
+		c = new Condition();
+		c.setType(2);
+		cl.add(c);
 		
 		item.setConditions(cl);
 
