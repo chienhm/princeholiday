@@ -19,17 +19,19 @@ public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException {
+		String from = req.getParameter("from");
+		String to = req.getParameter("to");
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
-        String msgBody = "...";
+        String msgBody = "Hello, Google App Engine.";
 
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("lahvey@gmail.com", "Example.com Admin"));
+            msg.setFrom(new InternetAddress(from, "MornTea.com Admin"));
             msg.addRecipient(Message.RecipientType.TO,
-                             new InternetAddress("kissrat@gmail.com", "Mr. User"));
-            msg.setSubject("Your Example.com account has been activated");
+                             new InternetAddress(to, "Dear MornTea User"));
+            msg.setSubject("Send Email To You");
             msg.setText(msgBody);
             Transport.send(msg);
 

@@ -1,6 +1,5 @@
 package com.morntea.web.pricemonitor.service;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,14 +35,18 @@ public class ConditionService {
 
 	public void sendEmail(Email email, String message) {
 		logger.log(Level.INFO, "Send email to " + email);
+		if(email==null || email.getEmail().isEmpty()) {
+			logger.log(Level.SEVERE, "Email is invalid.");
+			return;
+		}
 		Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("kissrat@gmail.com", "MornTea.com Admin"));
+            msg.setFrom(new InternetAddress("kissrat@gmail.com"));
             msg.addRecipient(Message.RecipientType.TO,
-                             new InternetAddress(email.getEmail(), "Dear MornTea User"));
+                             new InternetAddress(email.getEmail()));
             msg.setSubject("Your Example.com account has been activated");
             msg.setText(message);
             Transport.send(msg);
@@ -52,9 +55,7 @@ public class ConditionService {
 			e.printStackTrace();
         } catch (MessagingException e) {
 			e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+        }
 	}
 	
 	public void sendSMS(String phone, String message) {
