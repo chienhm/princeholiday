@@ -10,7 +10,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class ProductItem {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -18,13 +18,13 @@ public class ProductItem {
     @Persistent
 	private String url;
     @Persistent
-	private float price;
+	private float price = -1;
     @Persistent
-    private Date fetchDate;
+    private Date fetchDate = new Date();
     @Persistent(mappedBy = "item")
     private List<Condition> conditions;
     @Persistent
-    private int errorTimes;
+    private int errorTimes = 0;
     
 	public ProductItem(String url) {
 		super();

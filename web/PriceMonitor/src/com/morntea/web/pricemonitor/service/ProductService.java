@@ -1,10 +1,13 @@
 package com.morntea.web.pricemonitor.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 import com.morntea.helper.Http;
 import com.morntea.web.pricemonitor.PMFactory;
@@ -31,13 +34,20 @@ public class ProductService {
 			case 0: //CONTAIN_STRING
 				return containString(condition.getParameter());
 			case 1: //PRICE_LOWER_THAN
-				return priceLowerThan(Float.parseFloat(condition.getParameter()));
+				float expectedPrice = Float.parseFloat(condition.getParameter());
+				return priceLowerThan(expectedPrice);
 			case 2: //PRICE_DOWN
 				return priceDown();
 			case 3: //PRICE_UP
 				return priceUp();
+			case 4: //IN_STOCK
+				return inStock();
 			default:
 		}
+		return false;
+	}
+	
+	public boolean inStock() {
 		return false;
 	}
 	
@@ -74,6 +84,8 @@ public class ProductService {
 		if(newPrice<0)return 0;
 		
 		float lastPrice = item.getPrice();
+		if(lastPrice<0)return 0;
+		
 		float diff = newPrice - lastPrice;
 		if(diff>0.01) {
 			return 1;
@@ -115,6 +127,7 @@ public class ProductService {
 	public void save() {
 		PersistenceManager pm = PMFactory.getPersistenceManager();
         try {
+        	logger.info("save item:" + item.getUrl());
             pm.makePersistent(item);
         } catch (Exception e) {
             logger.severe(item.getId()
@@ -123,5 +136,13 @@ public class ProductService {
         } finally {
             pm.close();
         }
+	}
+	
+	public static List<ProductItem> getAllItem() {
+		PersistenceManager pm = PMFactory.getPersistenceManager();
+		Query query = pm.newQuery(ProductItem.class);
+		List<ProductItem> items = (List<ProductItem>) query.execute();
+		pm.detachCopyAll(items);
+		return items;
 	}
 }
