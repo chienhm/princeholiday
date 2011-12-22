@@ -17,17 +17,19 @@ import com.morntea.web.pricemonitor.service.WeiweiService;
 public class ProductMonitorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ProductMonitorServlet.class.getName());
+	private ProductService ps;
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException {
-		for(ProductItem item : ProductService.getAllItem()) {
+		ps = new WeiweiService();
+		for(ProductItem item : ps.getAllItem()) {
 			logger.info("Monitor item: " + item.getUrl());
 			monitor(item);
 		}
+		ps.close();
 	}
 	
 	public void monitor(ProductItem item) {
-		ProductService ps = new WeiweiService();
 		ps.load(item);
 		List<Condition> conditionList = item.getConditions();
 		ConditionService cs = new ConditionService();
@@ -35,7 +37,7 @@ public class ProductMonitorServlet extends HttpServlet {
 			if(!condition.isMeet() && ps.meet(condition)) {
 				//send message if condition is meet
 				cs.setCondition(condition);
-				//cs.sendMsg(ps.getMessage());
+				cs.sendMsg(ps.getMessage());
 				//If condition is meet, set the meet flag, so it won't send alert again.
 				condition.setMeet(true);
 			}

@@ -24,6 +24,7 @@ public class ConditionService {
 			logger.log(Level.SEVERE, "Condition is not set for condition service.");
 		}
 		if(condition.getEmail()!=null) {
+			logger.info("Send message to " + condition.getEmail().getEmail() + ":" + message);
 			sendEmail(condition.getEmail(), message);
 		}
 		if(condition.getPhone()!=null && condition.getPhone().isEmpty()) {
@@ -47,7 +48,7 @@ public class ConditionService {
             msg.setFrom(new InternetAddress("kissrat@gmail.com"));
             msg.addRecipient(Message.RecipientType.TO,
                              new InternetAddress(email.getEmail()));
-            msg.setSubject("Your Example.com account has been activated");
+            msg.setSubject("Product Change Notification");
             msg.setText(message);
             Transport.send(msg);
 
