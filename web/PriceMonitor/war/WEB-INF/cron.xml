@@ -3,6 +3,6 @@
   <cron>
     <url>/monitor</url>
     <description>Monitor product change every 5 minutes</description>
-    <schedule>every 5 minutes synchronized</schedule>
+    <schedule>every 20 minutes synchronized</schedule>
   </cron>
 </cronentries>
