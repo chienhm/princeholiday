@@ -67,7 +67,7 @@ public class ProductService {
 		if(newPrice<0)return false;
 		
 		logger.log(Level.INFO, "Expected Price:" + expectedPrice + ", Current Price:" + newPrice);
-		if(newPrice<expectedPrice) {
+		if(newPrice<=expectedPrice) {
 			return true;
 		}
 		return false;
