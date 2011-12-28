@@ -1,8 +1,8 @@
-<!-- Indices written at Thu, 22 Dec 2011 08:21:00 UTC -->
+<!-- Indices written at Thu, 22 Dec 2011 09:38:37 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 2 times in query history -->
+    <!-- Used 4 times in query history -->
     <datastore-index kind="Condition" ancestor="true" source="auto">
         <property name="conditions_INTEGER_IDX" direction="asc"/>
     </datastore-index>
