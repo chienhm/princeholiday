@@ -1,0 +1,362 @@
+<html>
+<head>
+<script>
+   function loadSession(session) {
+		var loadByWindow = function(win, sessionWin) {
+			chrome.tabs.getAllInWindow(win.id, function (tabs){
+				if (tabs.length>1) {
+				  for (var i=1;i<tabs.length;i++) {
+					 chrome.tabs.remove(tabs[i].id)
+				  }
+				}
+				var firstTabId = tabs[0].id
+				var tabs = sessionWin.tabs
+			
+				if (tabs.length>0) {
+					chrome.tabs.update(firstTabId, {
+						url : tabs[0]
+					}, null)
+					for (var j=1;j<tabs.length;j++) {
+						chrome.tabs.create({windowId : win.id, url: tabs[j]})
+					}
+				}
+			})			
+		}
+		var windows = session.windows;
+			chrome.windows.getAll({populate :false}, function (winList) {
+				  
+				  
+				  var totalWins = winList.length;
+				  if (winList.length>windows.length) {
+					  for (var i=0;i<windows.length;i++) {
+					        if (i==0) {
+								loadByWindow(winList[i], windows[i], true);
+							} else {
+								loadByWindow(winList[i], windows[i]);
+							}
+					  }					  
+						  
+					  var c = 0;
+					  var l = winList.length - windows.length;
+					  totalWins = windows.length;
+					  for (var i=windows.length;i<winList.length;i++) {
+							chrome.windows.remove(winList[i].id)
+					  }
+				  } else if (winList.length<windows.length) {
+					  for (var i=0;i<winList.length;i++) {
+								loadByWindow(winList[i], windows[i]);
+					  }	
+					  var c = i;
+					  for (var i=winList.length;i<windows.length;i++) {
+						   chrome.windows.create({}, function (win) {
+							   var interval = setTimeout(function() {
+								   loadByWindow(win, windows[c]);
+								   cfff++;
+							   }, 500);
+						   })
+					  }							   
+
+
+				  } else {
+					  for (var i=0;i<windows.length;i++) {
+					        if (i==0) {
+								loadByWindow(winList[i], windows[i], true);
+							} else {
+								loadByWindow(winList[i], windows[i]);
+							}
+					  }	
+				  }
+			})			
+   }
+   function todayStr() {
+	  var today=new Date()
+	  return today.getMonth()+1+"/"+today.getDate()+"/"+(today.getYear() + 1900)
+   }
+
+
+	//---------------------------------------------------------------------------
+	// Logic
+	var config; // memory-resident
+	
+	// Level 2
+	function loadConfig() {
+		config = jsonLoad("config");
+		if(config==null) {
+			config = {
+				attach:true,
+				detach:false,
+				move:false,
+				maxAutoSession:20,
+				maxUserSession:10
+			};
+		}
+	}
+	
+	function saveConfig() {
+		localStorage["config"] = JSON.stringify(config, function(key, value) {
+			return value;
+		});
+	}
+	
+	function openSession(index) {
+	}
+	
+	function loadSessions(target) {
+		var sessions = jsonLoad(target);
+		if(sessions==null) {
+			sessions = new Array();
+		}
+		return sessions;
+	}
+	
+	// Level 3
+	function autoSaveSession(name, type, tabId) {
+	chrome.tabs.get(tabId, function(tab) {
+		chrome.windows.getAll({populate:true}, function (windows) {
+			var session = getSession(windows);
+			session.type = type;
+			if(name!=null) {
+				session.name = name;
+			} else {
+				session.name = tab.title;
+			}
+			
+			var sessions = loadSessions("autoSessionList");
+			if(type==2) {	// Complete
+				log("update session");
+				sessions.pop();
+			} else if(sessions.length >= config.maxAutoSession) {
+				sessions.shift();
+			}
+			sessions.push(session);
+			storeSession("autoSessionList", sessions);
+		})
+	});
+	}
+	
+	function userSaveSession(name) {
+		chrome.windows.getAll({populate:true}, function (windows) {
+			var session = getSession(windows);
+			if(name!=null && name!=undefined) {
+				session.name = name;
+			}
+			var sessions = loadSessions("userSessionList");
+			if(sessions.length >= config.maxUserSession) {
+				sessions.shift();
+			}
+			sessions.push(session);
+			storeSession("userSessionList", sessions);
+		})
+	}
+	
+	function delAutoSession(indexs) {
+		delSession("autoSessionList", indexs);
+	}
+	
+	function delUserSession(indexs) {
+		delSession("userSessionList", indexs);
+	}
+	
+	// Level 2
+	function delSession(target, indexs) {
+		var sessions = loadSessions(target);
+		
+		function isValid(index) {
+			if(index<0 || index>=sessions.length) {
+				console.warn("Index " + index + " out of bound(0-" + (sessions.length-1) + ").");
+				return false;
+			}
+			return true;
+		}
+		
+		if(typeof(indexs) == "object") {
+			for(var i=0; i<indexs.length; i++) {
+				if(!isValid(indexs[i]))return;
+			}
+			indexs.sort();
+			for(var i=indexs.length-1; i>=0; i--) {
+				sessions.splice(indexs[i], 1);
+			}
+		} else {
+			if(isValid(indexs)) {
+				sessions.splice(indexs, 1);
+			} else {
+				return;
+			}
+		}
+		storeSession(target, sessions);
+		//listSessions();
+	}
+	
+	function storeSession(target, sessions) {
+		localStorage[target] = JSON.stringify(sessions, function(key, value) {
+			return value;
+		});
+		log("Save " + target + " success.");
+	}
+	
+	function getSession(windows) {
+		var EXCEPTIONS = ["chrome-extension://", "chrome-devtools://"]; //"chrome://"
+		var now = format(new Date());
+		var session = {
+			name:		null,
+			date:		now,
+			type:		0,	// Create(0), Loading(1), Complete(2), Attach(3), Detach(4), Remove(5), Move(6)
+			windows:	new Array(),
+			tabCount:	0
+		};
+		for(var i=0; i<windows.length; i++) {
+			var win = windows[i];
+			var tabs = new Array();
+			for(var j=0; j<win.tabs.length; j++) {
+				var tab = win.tabs[j];
+				var isException = false;
+				for(var eIndex=0; eIndex<EXCEPTIONS.length; eIndex++) {
+					if(tab.url.substr(0, EXCEPTIONS[eIndex].length)==EXCEPTIONS[eIndex]) {
+						isException = true;
+						break;
+					}
+				}
+				if(isException) continue; // ignore chrome debug or extension tabs
+				
+				tabs.push({ // tabs Array
+					title:	tab.title,
+					icon:	tab.favIconUrl,
+					url:	tab.url
+				});
+				session.tabCount++;
+				if(tab.active) {
+					//log("Active tab title: " + tab.title + ", Active tab url: " + tab.url);
+					session.name = tab.title;
+				}
+			}
+			// if this window contains available tabs, put it into windows array
+			if(tabs.length>0) {
+				session.windows.push({ // windows Array
+					id:		win.id,
+					tabs:	tabs
+				});
+			}
+		}
+		return session;
+	}
+	//---------------------------------------------------------------------------
+	// For Debug
+	function listSessions() {
+		var sessions = loadSessions("autoSessionList");
+		console.log("Session	Windows	Tabs	Last Update			Name");
+		for(var i=0; i<sessions.length; i++) {
+			console.log(i + "	" + sessions[i].windows.length + "	" + sessions[i].tabCount + "	" + sessions[i].date + "		[" + getTypeString(sessions[i].type) + "] " + sessions[i].name.substr(0,50));
+		}
+	}
+	
+	function listSession(index) {
+		var sessions = loadSessions("autoSessionList");
+		if(index<0 || index>=sessions.length) {
+			console.warn("Index " + index + " out of bound(0-" + (sessions.length-1) + ").");
+			return;
+		}
+		showSession(sessions[index]);
+	}
+	
+	function showSession(session) {
+		console.log(session.date + ": Tabs(" + session.tabCount + "/" + getTypeString(session.type) + "): " + session.name);
+		for(var i=0; i<session.windows.length; i++) {
+			var win = session.windows[i];
+			console.log("Window " + i + ": Tabs(" + win.tabs.length + ")");
+			for(var j=0; j<win.tabs.length; j++) {
+				console.log("	" + (j+1) + ". " + win.tabs[j].title + ":" + win.tabs[j].url);
+			}
+		}
+	}
+	
+	//---------------------------------------------------------------------------
+	// Level 0
+	function jsonLoad(name) {
+		var value = localStorage[name];
+		if ((value==null) || (value==undefined)) {
+			return null;
+		} else {
+			return JSON.parse(value);
+		}
+	}
+	
+	function getTypeString(type) {
+		switch(type) {
+			case 0: return "Create";
+			case 1: return "Loading";
+			case 2: return "Complete";
+			case 3: return "Attach";
+			case 4: return "Detach";
+			case 5: return "Remove";
+			case 5: return "Move";
+			default: return "Unknown";
+		}
+	}
+	
+	Date.prototype.getFullMonth = function() {return (this.getMonth()<9?"0":"") + (this.getMonth()+1);};
+	Date.prototype.getFullDate = function() {return (this.getDate()<10?"0":"") + this.getDate();};
+	Date.prototype.getFullHours = function() {return (this.getHours()<10?"0":"") + this.getHours();};
+	Date.prototype.getFullMinutes = function() {return (this.getMinutes()<10?"0":"") + this.getMinutes();};
+	Date.prototype.getFullSeconds = function() {return (this.getSeconds()<10?"0":"") + this.getSeconds();};
+	Date.prototype.getFullMilliseconds = function() {return (this.getMilliseconds()<10?"00":(this.getMilliseconds()<100?"0":"")) + this.getMilliseconds();};
+	
+	function format(date) {
+		return date.getFullYear()+"."+date.getFullMonth()+"."+date.getFullDate()+" "+date.getFullHours()+":"+date.getFullMinutes()+":"+date.getFullSeconds()+"."+date.getFullMilliseconds();
+	}
+	function log(string) {
+		console.log("["+format(new Date())+"] " + string);
+	}
+	
+	//---------------------------------------------------------------------------
+	// Listener
+	loadConfig();
+	
+	chrome.tabs.onCreated.addListener(function(tab) {
+		log("onCreated:" + tab.id);
+		//autoSaveSession(format(new Date()));
+	});
+	chrome.tabs.onAttached.addListener(function(tabId, attachInfo) {
+		log("onAttached:" + tabId + "," + attachInfo.newWindowId);
+		if(config.attach) {
+			autoSaveSession(null, 3, tabId);
+		}
+	});
+	chrome.tabs.onDetached.addListener(function(tabId, detachInfo) {
+		log("onDetached:" + tabId + "," + detachInfo.oldWindowId );
+		//if(config.detach) { // either attach or detach, one is enough
+			autoSaveSession(null, 4, tabId);
+		//}
+	});
+	chrome.tabs.onActiveChanged.addListener(function(tabId, selectInfo) {
+		//log("onActiveChanged:" + tabId + "," + selectInfo.windowId);
+	});
+	chrome.tabs.onHighlightChanged.addListener(function(selectInfo) {
+		//log("onHighlightChanged: winId(" + selectInfo.windowId + "),tabId(" + selectInfo.tabIds + ")");
+	});
+	chrome.tabs.onMoved.addListener(function(tabId, moveInfo) {
+		log("onMoved:" + tabId + "," + moveInfo.windowId + ", from " + moveInfo.fromIndex + " to " + moveInfo.toIndex);
+		if(config.move) {
+			autoSaveSession(null, 6, tabId);
+		}
+	});
+	chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
+		log("onRemoved:" + tabId + "," + removeInfo.isWindowClosing);
+		if(!removeInfo.isWindowClosing) {
+			autoSaveSession(null, 5, tabId);
+		}
+	});
+	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+		log("onUpdated:" + tabId + "," + changeInfo.status + ":" + changeInfo.url);
+		if(changeInfo.status == "complete") {
+			autoSaveSession(null, 2, tabId);
+		} else { //loading
+			if(changeInfo.url != undefined) { //resource is not available
+				autoSaveSession(null, 1, tabId);
+			}
+		}
+	});
+
+</script>
+</head>
+</html>

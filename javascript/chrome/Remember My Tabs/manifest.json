@@ -1,0 +1,13 @@
+{
+  "name": "Remember My Tabs",
+  "version": "1.0",
+  "background_page": "background.html",
+  "description": "Automatically save all your opened session/tabs.",
+  "browser_action": {
+    "default_icon": "icon.png",
+	"popup": "sessions.html"
+  },
+  "permissions": [
+    "tabs"
+  ]
+}
