@@ -1,3 +1,15 @@
+//------------------------------------------------------------------------------------------------- (0)
+// Basic
+// 1. Trigger event in Firefox/Chrome
+var evt = document.createEvent("MouseEvents");  
+evt.initEvent("click", true, true);
+document.getElementById('J_hb').dispatchEvent(evt);
+// 2. Time interval
+function _click() {
+	document.getElementById('J_hb').click();//for IE
+}
+var interval = setInterval(_click, 1000, null);
+//clearInterval(interval);
 //------------------------------------------------------------------------------------------------- (1)
 // Dynamic load javascript
 //-------------------------------------------------------------------------------------------------
@@ -67,3 +79,22 @@ jQuery.ajax({
 		+ "[Server:" + jqXHR.getResponseHeader("Date") + "]");
 	}
 });
+//------------------------------------------------------------------------------------------------- (5)
+// Wrapped in iframe
+//-------------------------------------------------------------------------------------------------
+document.write("<iframe id='homevv' width='"+document.body.clientWidth+"' height='"+document.body.clientHeight+"' frameborder='0' src='"+ location.href +"'></iframe>");
+
+//------------------------------------------------------------------------------------------------- (5)
+// Format Time & Log
+//-------------------------------------------------------------------------------------------------
+Date.prototype.getFullMonth = function() {return (this.getMonth()<9?"0":"") + (this.getMonth()+1);};
+Date.prototype.getFullDate = function() {return (this.getDate()<10?"0":"") + this.getDate();};
+Date.prototype.getFullHours = function() {return (this.getHours()<10?"0":"") + this.getHours();};
+Date.prototype.getFullMinutes = function() {return (this.getMinutes()<10?"0":"") + this.getMinutes();};
+Date.prototype.getFullSeconds = function() {return (this.getSeconds()<10?"0":"") + this.getSeconds();};
+Date.prototype.getFullMilliseconds = function() {return (this.getMilliseconds()<10?"00":(this.getMilliseconds()<100?"0":"")) + this.getMilliseconds();};
+function log(string) {
+	var date = new Date();
+	var fTime = "["+date.getFullYear()+"."+date.getFullMonth()+"."+date.getFullDate()+" "+date.getFullHours()+":"+date.getFullMinutes()+":"+date.getFullSeconds()+"."+date.getFullMilliseconds()+"] ";
+	console.log(fTime + string);
+}
