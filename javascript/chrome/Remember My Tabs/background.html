@@ -127,20 +127,18 @@
 		return sessions;
 	}
 	
-	// Level 3
+	//---------------------------------------------------------------------------
+	// Level 3 -- Interface
 	function autoSaveSession(name, type) {
 		chrome.windows.getAll({populate:true}, function (windows) {
 			var session = getSession(windows);
 			session.type = type;
-			if(name!=null && name!=undefined) {
+			if(name!=null) {
 				session.name = name;
 			}
 			
 			var sessions = loadSessions("autoSessionList");
-			if(type==2) {	// Complete
-				log("update session");
-				sessions.pop();
-			} else if(sessions.length >= config.maxAutoSession) {
+			if(sessions.length >= config.maxAutoSession) {
 				sessions.shift();
 			}
 			sessions.push(session);
@@ -151,7 +149,7 @@
 	function userSaveSession(name) {
 		chrome.windows.getAll({populate:true}, function (windows) {
 			var session = getSession(windows);
-			if(name!=null && name!=undefined) {
+			if(name!=null) {
 				session.name = name;
 			}
 			var sessions = loadSessions("userSessionList");
@@ -171,7 +169,8 @@
 		delSession("userSessionList", indexs);
 	}
 	
-	// Level 2
+	//---------------------------------------------------------------------------
+	// Level 2 -- Private functions
 	function delSession(target, indexs) {
 		var sessions = loadSessions(target);
 		
@@ -224,6 +223,8 @@
 			var tabs = new Array();
 			for(var j=0; j<win.tabs.length; j++) {
 				var tab = win.tabs[j];
+				
+				// ignore chrome debug and extension tabs
 				var isException = false;
 				for(var eIndex=0; eIndex<EXCEPTIONS.length; eIndex++) {
 					if(tab.url.substr(0, EXCEPTIONS[eIndex].length)==EXCEPTIONS[eIndex]) {
@@ -231,7 +232,7 @@
 						break;
 					}
 				}
-				if(isException) continue; // ignore chrome debug or extension tabs
+				if(isException) continue;
 				
 				tabs.push({ // tabs Array
 					title:	tab.title,
@@ -364,10 +365,6 @@
 		log("onUpdated:" + tabId + "," + changeInfo.status + ":" + changeInfo.url);
 		if(changeInfo.status == "complete") {
 			autoSaveSession(null, 2);
-		} else { //loading
-			if(changeInfo.url != undefined) { //resource is not available
-				autoSaveSession(null, 1);
-			}
 		}
 	});
 
