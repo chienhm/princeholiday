@@ -77,6 +77,24 @@
 	//---------------------------------------------------------------------------
 	// Logic
 	var config; // memory-resident
+	/*var currentSession;
+	{
+		name:	null,
+		date:	"",
+		tabCount:	0,
+		windows: {
+			"id:0" : 
+				{
+					"id:100" : {name:"",url:"",index:""},
+					"id:101" : {name:"",url:"",index:""}
+				}
+			"id:1" : 
+				{
+					"id:200" : {name:"",url:"",index:""},
+					"id:201" : {name:"",url:"",index:""}
+				}
+		}
+	}*/
 	
 	// Level 2
 	function loadConfig() {
@@ -110,15 +128,12 @@
 	}
 	
 	// Level 3
-	function autoSaveSession(name, type, tabId) {
-	chrome.tabs.get(tabId, function(tab) {
+	function autoSaveSession(name, type) {
 		chrome.windows.getAll({populate:true}, function (windows) {
 			var session = getSession(windows);
 			session.type = type;
-			if(name!=null) {
+			if(name!=null && name!=undefined) {
 				session.name = name;
-			} else {
-				session.name = tab.title;
 			}
 			
 			var sessions = loadSessions("autoSessionList");
@@ -131,7 +146,6 @@
 			sessions.push(session);
 			storeSession("autoSessionList", sessions);
 		})
-	});
 	}
 	
 	function userSaveSession(name) {
@@ -319,40 +333,40 @@
 	chrome.tabs.onAttached.addListener(function(tabId, attachInfo) {
 		log("onAttached:" + tabId + "," + attachInfo.newWindowId);
 		if(config.attach) {
-			autoSaveSession(null, 3, tabId);
+			autoSaveSession(null, 3);
 		}
 	});
 	chrome.tabs.onDetached.addListener(function(tabId, detachInfo) {
 		log("onDetached:" + tabId + "," + detachInfo.oldWindowId );
 		//if(config.detach) { // either attach or detach, one is enough
-			autoSaveSession(null, 4, tabId);
+			autoSaveSession(null, 4);
 		//}
 	});
 	chrome.tabs.onActiveChanged.addListener(function(tabId, selectInfo) {
 		//log("onActiveChanged:" + tabId + "," + selectInfo.windowId);
 	});
 	chrome.tabs.onHighlightChanged.addListener(function(selectInfo) {
-		//log("onHighlightChanged: winId(" + selectInfo.windowId + "),tabId(" + selectInfo.tabIds + ")");
+		log("onHighlightChanged: winId(" + selectInfo.windowId + "),tabId(" + selectInfo.tabIds + ")");
 	});
 	chrome.tabs.onMoved.addListener(function(tabId, moveInfo) {
 		log("onMoved:" + tabId + "," + moveInfo.windowId + ", from " + moveInfo.fromIndex + " to " + moveInfo.toIndex);
 		if(config.move) {
-			autoSaveSession(null, 6, tabId);
+			autoSaveSession(null, 6);
 		}
 	});
 	chrome.tabs.onRemoved.addListener(function(tabId, removeInfo) {
 		log("onRemoved:" + tabId + "," + removeInfo.isWindowClosing);
 		if(!removeInfo.isWindowClosing) {
-			autoSaveSession(null, 5, tabId);
+			autoSaveSession(null, 5);
 		}
 	});
 	chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 		log("onUpdated:" + tabId + "," + changeInfo.status + ":" + changeInfo.url);
 		if(changeInfo.status == "complete") {
-			autoSaveSession(null, 2, tabId);
+			autoSaveSession(null, 2);
 		} else { //loading
 			if(changeInfo.url != undefined) { //resource is not available
-				autoSaveSession(null, 1, tabId);
+				autoSaveSession(null, 1);
 			}
 		}
 	});
