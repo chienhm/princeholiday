@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-  <cron>
+  <!-- <cron>
     <url>/monitor</url>
     <description>Monitor product change every 5 minutes</description>
     <schedule>every 20 minutes synchronized</schedule>
-  </cron>
+  </cron> -->
 </cronentries>
