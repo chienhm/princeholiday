@@ -10,6 +10,7 @@
 <html>
   <head>
     <link type="text/css" rel="stylesheet" href="main.css" />
+    <link rel="shortcut icon" href="favicon.png" />
     <title>说说您对书声天堂的看法</title>
   </head>
 
