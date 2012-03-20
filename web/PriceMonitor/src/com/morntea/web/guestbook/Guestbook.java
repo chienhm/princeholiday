@@ -25,6 +25,9 @@ public class Guestbook {
     
     @Persistent
     private int appId;
+    
+    @Persistent
+    private String ip;
 
     public Guestbook(User author, String content, Date date, int appId) {
         this.author = author;
@@ -63,5 +66,13 @@ public class Guestbook {
 
 	public int getAppId() {
 		return appId;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public String getIp() {
+		return ip;
 	}
 }

@@ -14,7 +14,7 @@ public class SoundBookGuestbookServlet extends HttpServlet {
                 throws IOException {
         String content = req.getParameter("content");
         GusetbookService gs = new GusetbookService();
-        gs.addMessage(content, 1);
+        gs.addMessage(content, 1, req.getRemoteAddr());
         resp.sendRedirect("/seacrystal/guestbook.jsp");
     }
 }

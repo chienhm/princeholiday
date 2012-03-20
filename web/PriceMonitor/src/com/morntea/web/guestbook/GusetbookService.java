@@ -12,11 +12,12 @@ import com.google.appengine.api.users.UserServiceFactory;
 
 public class GusetbookService {
 	private static final Logger log = Logger.getLogger(GusetbookService.class.getName());
-	public void addMessage(String content, int appId) {
+	public void addMessage(String content, int appId, String ip) {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();
         Date date = new Date();
 		Guestbook greeting = new Guestbook(user, content, date, appId);
+		greeting.setIp(ip);
 
         PersistenceManager pm = PMF.get().getPersistenceManager();
         try {
