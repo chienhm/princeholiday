@@ -110,6 +110,20 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>Test</servlet-name>
 		<url-pattern>/test</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>Test</servlet-name>
+		<servlet-class>com.morntea.web.pricemonitor.servlet.TestServlet</servlet-class>
+	</servlet>
+	
+    <servlet-mapping>
+        <servlet-name>soundbookpost</servlet-name>
+        <url-pattern>/soundbookpost</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>soundbookpost</servlet-name>
+        <servlet-class>com.morntea.web.guestbook.SoundBookGuestbookServlet</servlet-class>
+    </servlet>
+    
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
