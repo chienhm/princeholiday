@@ -12,9 +12,20 @@ public class SoundBookGuestbookServlet extends HttpServlet {
 	
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
                 throws IOException {
+    	doGet(req, resp);
+    }
+    
+    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+    throws IOException {
         String content = req.getParameter("content");
+        String action = req.getParameter("action");
         GusetbookService gs = new GusetbookService();
-        gs.addMessage(content, 1, req.getRemoteAddr());
-        resp.sendRedirect("/seacrystal/guestbook.jsp");
+        if(action.equals("del")) {
+        	Long id = Long.parseLong(req.getParameter("id"));
+        	gs.delMessage(id, 1);
+        } else if (action.equals("add")) {
+            gs.addMessage(content, 1, req.getRemoteAddr());
+        }
+        resp.sendRedirect("/seacrystal/guestbook.jsp");    	
     }
 }

@@ -116,11 +116,11 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	</servlet>
 	
     <servlet-mapping>
-        <servlet-name>soundbookpost</servlet-name>
-        <url-pattern>/soundbookpost</url-pattern>
+        <servlet-name>soundbook</servlet-name>
+        <url-pattern>/soundbook</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>soundbookpost</servlet-name>
+        <servlet-name>soundbook</servlet-name>
         <servlet-class>com.morntea.web.guestbook.SoundBookGuestbookServlet</servlet-class>
     </servlet>
     

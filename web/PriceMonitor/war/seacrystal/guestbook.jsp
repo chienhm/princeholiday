@@ -17,9 +17,13 @@
   <body>
 
 <%
+	boolean admin = false;
     UserService userService = UserServiceFactory.getUserService();
     User user = userService.getCurrentUser();
     if (user != null) {
+    	if (user.getEmail().endsWith("morntea.com")) {
+    		admin = true;
+    	}
 %>
 <p>您好， <%= user.getNickname() %>！ 
 (<a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">退出</a>)</p>
@@ -47,12 +51,20 @@
 <%
             } else {
             	String username = g.getAuthor().getNickname();
+            	String privacy[] = username.split("@");
+            	if(privacy.length>1) {
+            		username = privacy[0].substring(0,3) + "...@" + privacy[1];
+            	}
 %>
 <p><b><%= username %></b>
 <%
             }
 %>
-(<%= g.getDate() %>)：</p>
+(<%= g.getDate() %>)
+<% if(admin) { %>
+<a href="/soundbook?action=del&id=<%=g.getId()%>">删除</a>
+<% } %>
+：</p>
 <blockquote><%= g.getContent() %></blockquote>
 <%
         }
@@ -60,7 +72,8 @@
     pm.close();
 %>
 
-    <form action="/soundbookpost" method="post">
+    <form action="/soundbook" method="post">
+      <input type="hidden" name="action" value="add">
       <div><textarea name="content" rows="3" cols="60"></textarea></div>
       <div><input type="submit" value="提交留言" /></div>
     </form>
