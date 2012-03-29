@@ -124,6 +124,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-class>com.morntea.web.guestbook.SoundBookGuestbookServlet</servlet-class>
     </servlet>
     
+	<!-- Family Servlets -->
+    <servlet-mapping>
+        <servlet-name>member</servlet-name>
+        <url-pattern>/member</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>member</servlet-name>
+        <servlet-class>com.morntea.web.family.MemberServlet</servlet-class>
+    </servlet>
+     
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
