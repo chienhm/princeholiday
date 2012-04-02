@@ -1,6 +1,7 @@
 package com.morntea.web.family;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
@@ -8,7 +9,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(identityType = IdentityType.APPLICATION)
+@PersistenceCapable(identityType = IdentityType.APPLICATION, detachable="true")
 public class Member {
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -24,19 +25,33 @@ public class Member {
     private Long fatherId;
     
     @Persistent
-    private Long motherId;
+    private String motherName;
         
     @Persistent
     private boolean gender;
     
     @Persistent
+    private int generation;
+    
+    @Persistent
     private Date birthday;
+
+    @Persistent
+    private String phone;
+    
+    @Persistent
+    private String address;
+    
+    @Persistent
+    private Date lunarBirthday;
     
     @Persistent
     private Date deathday;
     
     @Persistent
     private String comment;
+    
+    private List<Long> descendants;
 
     public Member() {
     }
@@ -93,14 +108,6 @@ public class Member {
 		return fatherId;
 	}
 
-	public void setMotherId(Long motherId) {
-		this.motherId = motherId;
-	}
-
-	public Long getMotherId() {
-		return motherId;
-	}
-
 	public void setSpouseId(Long spouseId) {
 		this.spouseId = spouseId;
 	}
@@ -108,5 +115,53 @@ public class Member {
 	public Long getSpouseId() {
 		return spouseId;
 	}
+
+    public void setMotherName(String mother) {
+        this.motherName = mother;
+    }
+
+    public String getMotherName() {
+        return motherName;
+    }
+
+    public void setGeneration(int generation) {
+        this.generation = generation;
+    }
+
+    public int getGeneration() {
+        return generation;
+    }
+
+    public void setLunarBirthday(Date lunarBirthday) {
+        this.lunarBirthday = lunarBirthday;
+    }
+
+    public Date getLunarBirthday() {
+        return lunarBirthday;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setDescendants(List<Long> descendants) {
+        this.descendants = descendants;
+    }
+
+    public List<Long> getDescendants() {
+        return descendants;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
 
 }
