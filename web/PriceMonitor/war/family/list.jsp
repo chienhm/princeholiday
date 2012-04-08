@@ -14,7 +14,7 @@
 <script>
 function genOptions(code) {
 	var codes = [100,	101,	102,	103,	104,	105,	106,	107,	108,	109];
-	var gens = ["A",	"B",	"万",	"世",	"永",	"昌",	"发",	"启",	"智",	"兴"];
+	var gens = ["A",	"B",	"万",	"世",	"永",	"昌",	"发",	"启",	"强",	"兴"];
 	var options = "<select name=\"gen\"><option value=\"-1\">--</option>";
 	for(var i=0; i<codes.length; i++) {
 		options += "<option value=\"" + codes[i] + "\""

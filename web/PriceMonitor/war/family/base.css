@@ -12,23 +12,31 @@ a {
 }
 
 #container {
-    width: 1000px;
-    height: 600px;
+    width: 1500px;
+    height: 800px;
     margin:0 auto;
     position:relative;
 }
 
 #center-container {
-    height:700px;
+    height:800px;
     position:absolute;
     top:0;
 }
 
 #center-container {
-    width:1000px;
+    width:1500px;
     /*left:100px;*/
     background-color:#1a1a1a;
     color:#ccc;
+}
+
+#infovis {
+    position:relative;
+    width:1500px;
+    height:800px;
+    margin:auto;
+    overflow:hidden;
 }
 
 .text {
@@ -47,15 +55,6 @@ a {
     font-size:1.0em;
     font-weight:bold;
     color:#23A4FF;
-}
-
-
-#infovis {
-    position:relative;
-    width:1000px;
-    height:700px;
-    margin:auto;
-    overflow:hidden;
 }
 
 /*TOOLTIPS*/
