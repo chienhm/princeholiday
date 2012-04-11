@@ -121,7 +121,7 @@ public class MemberService {
 	
 	private String getDescendants(List<Member> members, Member root) {
 	    if(root==null)return "";
-	    String sons = "id: \""+root.getId()+"\", name: \""+root.getName()+"\", data: {comment:\""+root.getComment()+"\"},  children: [";
+	    String sons = "id: \""+root.getId()+"\", name: \""+root.getName()+"\", data: {gender:"+root.isGender()+", comment:\""+root.getComment()+"\"},  children: [";
 
 	    boolean hasChild = false;
         for(Member m : members) {

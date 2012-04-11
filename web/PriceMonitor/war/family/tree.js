@@ -108,12 +108,16 @@ function init(){
             //add some color to the nodes in the path between the
             //root node and the selected node.
             if (node.selected) {
-                node.data.$color = "#ff7";
+            	if(node.data.gender) {
+                    node.data.$color = "#ff7";
+            	}
             }
             else {
                 delete node.data.$color;
                 //if the node belongs to the last plotted level
-                if(!node.anySubnode("exist")) {
+                if(!node.data.gender) {
+                	node.data.$color = "red";
+                }else if(!node.anySubnode("exist")) {
                     //count children number
                     var count = 0;
                     node.eachSubnode(function(n) { count++; });
