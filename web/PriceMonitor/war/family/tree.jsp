@@ -22,6 +22,7 @@
 	}
 %>
 <script>
+	/* 兄弟姐妹大小排行未完全解决，顺序是以Node id为Hash的默认排序，暂时以数字从小到大作为Node的id */
     var json = <%=ms.getJson(root) %>;
 </script>
 <!-- JIT Library File -->

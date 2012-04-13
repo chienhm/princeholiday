@@ -1,6 +1,8 @@
 package com.morntea.web.family;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,8 @@ import com.morntea.web.guestbook.GusetbookService;
 import com.morntea.web.guestbook.PMF;
 
 public class MemberService {
+    /* Work around. id is used for JavaScript node id hash to order the siblings */
+    private static int id = 0;
 	private static final Logger log = Logger.getLogger(GusetbookService.class
 			.getName());
 	
@@ -116,15 +120,16 @@ public class MemberService {
 	        }
 	    }
 	    json = "{" + getDescendants(members, root) + "}";
+	    id = 0;
 	    return json;
 	}
 	
 	private String getDescendants(List<Member> members, Member root) {
 	    if(root==null)return "";
-	    String sons = "id: \""+root.getId()+"\", name: \""+root.getName()+"\", data: {gender:"+root.isGender()+", comment:\""+root.getComment()+"\"},  children: [";
+	    String sons = "id: \""+(id++)+"\", name: \""+root.getName()+"\", data: {id:"+root.getId()+", gender:"+root.isGender()+", comment:\""+root.getComment()+"\"},  children: [";
 
 	    boolean hasChild = false;
-        for(Member m : members) {
+        /*for(Member m : members) {
             if(m.getFatherId()!=null && m.getFatherId().equals(root.getId())) {
     	        if(!hasChild) {
     	            sons += "{";
@@ -137,9 +142,45 @@ public class MemberService {
 	    }
         if(hasChild) {
             sons += "}";
+        }*/
+        List<Member> descendants = getDescendant(members, root);
+        for(Member m : descendants) {
+            if(!hasChild) {
+                sons += "{";
+                hasChild = true;
+            } else {
+                sons += "}, {";
+            }
+            sons += getDescendants(members, m);
+        }
+        if(hasChild) {
+            sons += "}";
         }
         sons += "]";
 	    return sons;
+	}
+	
+	public List<Member> getDescendant(List<Member> allMembers, Member father) {
+	    List<Member> descendants = new ArrayList<Member>();
+	    for(Member m : allMembers) {
+            if(m.getFatherId()!=null && m.getFatherId().equals(father.getId())) {
+                descendants.add(m);
+            }
+        }
+	    Collections.sort(descendants, new Comparator<Member>(){
+            @Override
+            public int compare(Member m1, Member m2) {
+                if(m1!=null && m2!=null) {
+                    Date b1 = m1.getLunarBirthday();
+                    Date b2 = m2.getLunarBirthday();
+                    if(b1!=null && b2!=null) {
+                        return b1.compareTo(b2);                        
+                    }
+                }
+                return 0;
+            }
+	    });
+	    return descendants;
 	}
 	
 	public void delMember(Long id) {
