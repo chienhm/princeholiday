@@ -28,7 +28,7 @@ public class DistrictCodeTest {
 		            //System.out.println(codeMap.get(key));
 		            oldMap.put(key, olderMap.get(key));
 		        } else if(!newerMap.get(key).equals(olderMap.get(key))) {
-		            System.out.println(olderMap.get(key) + " <= " + newerMap.get(key));
+		            System.out.println(key + ":" + olderMap.get(key) + " <= " + newerMap.get(key));
 		        }
 		    }
             newerMap = olderMap;
