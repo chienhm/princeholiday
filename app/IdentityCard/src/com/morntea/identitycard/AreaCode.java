@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class AreaCode {
     public Date date;
-    public HashMap<String, String> code;
+    public HashMap<String, String> codeMap;
 	private final static int SIZE = 19;
 
     public static Date getDate(int year, int month, int day) {
@@ -22,43 +22,43 @@ public class AreaCode {
 		}
 
         codes[0].date = getDate(1999, 1, 1);
-        codes[0].code = getCode1999();
+        codes[0].codeMap = getCode1999();
         codes[1].date = getDate(2001, 10, 31);
-        codes[1].code = getCode20011031();
+        codes[1].codeMap = getCode20011031();
         codes[2].date = getDate(2001, 12, 31);
-        codes[2].code = getCode20011231();
+        codes[2].codeMap = getCode20011231();
         codes[3].date = getDate(2002, 3, 31);
-        codes[3].code = getCode20020331();
+        codes[3].codeMap = getCode20020331();
         codes[4].date = getDate(2002, 6, 31);
-        codes[4].code = getCode20020630();
+        codes[4].codeMap = getCode20020630();
         codes[5].date = getDate(2002, 12, 31);
-        codes[5].code = getCode20021231();
+        codes[5].codeMap = getCode20021231();
         codes[6].date = getDate(2003, 6, 31);
-        codes[6].code = getCode20030630();
+        codes[6].codeMap = getCode20030630();
         codes[7].date = getDate(2003, 12, 31);
-        codes[7].code = getCode20031231();
+        codes[7].codeMap = getCode20031231();
         codes[8].date = getDate(2004, 3, 31);
-        codes[8].code = getCode20040331();
+        codes[8].codeMap = getCode20040331();
         codes[9].date = getDate(2004, 9, 31);
-        codes[9].code = getCode20040930();
+        codes[9].codeMap = getCode20040930();
         codes[10].date = getDate(2004, 12, 31);
-        codes[10].code = getCode20041231();
+        codes[10].codeMap = getCode20041231();
         codes[11].date = getDate(2005, 6, 31);
-        codes[11].code = getCode20050630();
+        codes[11].codeMap = getCode20050630();
         codes[12].date = getDate(2005, 12, 31);
-        codes[12].code = getCode20051231();
+        codes[12].codeMap = getCode20051231();
         codes[13].date = getDate(2006, 12, 31);
-        codes[13].code = getCode20061231();
+        codes[13].codeMap = getCode20061231();
         codes[14].date = getDate(2007, 12, 31);
-        codes[14].code = getCode20071231();
+        codes[14].codeMap = getCode20071231();
         codes[15].date = getDate(2008, 12, 31);
-        codes[15].code = getCode20081231();
+        codes[15].codeMap = getCode20081231();
         codes[16].date = getDate(2009, 12, 31);
-        codes[16].code = getCode20091231();
+        codes[16].codeMap = getCode20091231();
         codes[17].date = getDate(2010, 10, 31);
-        codes[17].code = getCode20101031();
+        codes[17].codeMap = getCode20101031();
         codes[18].date = getDate(2011, 10, 31);
-        codes[18].code = getCode20111031();
+        codes[18].codeMap = getCode20111031();
 
         return codes;
     }
@@ -46290,7 +46290,7 @@ public class AreaCode {
         code.put("210106", "铁西区");
         code.put("210111", "苏家屯区");
         code.put("210112", "东陵区");
-        code.put("210113", "沈北新区*");
+        code.put("210113", "沈北新区");
         code.put("210114", "于洪区");
         code.put("210122", "辽中县");
         code.put("210123", "康平县");
@@ -46350,7 +46350,7 @@ public class AreaCode {
         code.put("210726", "黑山县");
         code.put("210727", "义县");
         code.put("210781", "凌海市");
-        code.put("210782", "北镇市*");
+        code.put("210782", "北镇市");
         code.put("210800", "营口市");
         code.put("210801", "市辖区");
         code.put("210802", "站前区");
@@ -49045,7 +49045,7 @@ public class AreaCode {
         code.put("620901", "市辖区");
         code.put("620902", "肃州区");
         code.put("620921", "金塔县");
-        code.put("620922", "瓜州县*");
+        code.put("620922", "瓜州县");
         code.put("620923", "肃北蒙古族自治县");
         code.put("620924", "阿克塞哈萨克族自治县");
         code.put("620981", "玉门市");
