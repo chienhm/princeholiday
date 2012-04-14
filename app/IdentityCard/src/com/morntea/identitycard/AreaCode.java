@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class AreaCode {
     public Date date;
     public HashMap<String, String> code;
+	private final static int SIZE = 19;
 
     public static Date getDate(int year, int month, int day) {
         Calendar c = Calendar.getInstance();
@@ -15,7 +16,10 @@ public class AreaCode {
     }
 
     public static AreaCode[] getCodes() {
-        AreaCode[] codes = new AreaCode[19];
+        AreaCode[] codes = new AreaCode[SIZE];
+		for(int i=0; i<SIZE; i++) {
+			codes[i] = new AreaCode();
+		}
 
         codes[0].date = getDate(1999, 1, 1);
         codes[0].code = getCode1999();

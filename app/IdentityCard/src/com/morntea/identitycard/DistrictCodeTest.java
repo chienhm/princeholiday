@@ -1,5 +1,7 @@
 package com.morntea.identitycard;
 
+import java.text.SimpleDateFormat;
+
 
 public class DistrictCodeTest {
 
@@ -12,7 +14,11 @@ public class DistrictCodeTest {
 		
 		district = DistrictCode.getDistrict("140227", null);
 		System.out.println(district);
-
+		
+		AreaCode codes[] = AreaCode.getCodes();
+		for(int i=0; i<codes.length; i++) {
+		    System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(codes[i].date) + ": " + codes[i].code.size());
+		}
 	}
 
 }
