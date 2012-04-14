@@ -17,24 +17,41 @@ public class DistrictCodeTest {
 		System.out.println(district);
 		
 		AreaCode codes[] = AreaCode.getCodes();
-		HashMap<String, String> olderMap, newerMap, oldMap = new HashMap<String, String>();
-		newerMap = olderMap = codes[codes.length-1].codeMap;
+		HashMap<String, String> olderMap, codeMap, oldMap = new HashMap<String, String>();
+		codeMap = codes[codes.length-1].codeMap;
 		System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(codes[0].date) + ": " + codes[0].codeMap.size());
-        for(int i=codes.length-2; i>0; i--) {
+        for(int i=codes.length-2; i>=0; i--) {
             olderMap = codes[i].codeMap;
 		    System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(codes[i].date) + ": " + codes[i].codeMap.size());
             for(String key : olderMap.keySet()) {
-		        if(!newerMap.containsKey(key)) {
-		            //System.out.println(codeMap.get(key));
-		            oldMap.put(key, olderMap.get(key));
-		        } else if(!newerMap.get(key).equals(olderMap.get(key))) {
-		            System.out.println(key + ":" + olderMap.get(key) + " <= " + newerMap.get(key));
+		        if(!codeMap.containsKey(key)) {
+		            if(!oldMap.containsKey(key)) {
+		                oldMap.put(key, olderMap.get(key));
+		            }
 		        }
 		    }
-            newerMap = olderMap;
-		    //break;
 		}
         System.out.println(oldMap.size());
+        for(String key : oldMap.keySet()) {
+            System.out.println(key + ": " + oldMap.get(key));
+        }
+	}
+	
+	public static void mapChange() {
+	       AreaCode codes[] = AreaCode.getCodes();
+	        HashMap<String, String> olderMap, newerMap;
+	        newerMap = olderMap = codes[codes.length-1].codeMap;
+	        System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(codes[0].date) + ": " + codes[0].codeMap.size());
+	        for(int i=codes.length-2; i>0; i--) {
+	            olderMap = codes[i].codeMap;
+	            System.out.println(new SimpleDateFormat("yyyy-MM-dd").format(codes[i].date) + ": " + codes[i].codeMap.size());
+	            for(String key : olderMap.keySet()) {
+	                if(!olderMap.get(key).equals(newerMap.get(key))) {
+	                    System.out.println(key + ":" + olderMap.get(key) + " <= " + newerMap.get(key));
+	                }
+	            }
+	            newerMap = olderMap;
+	        }
 	}
 
 }
