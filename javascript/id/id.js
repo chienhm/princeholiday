@@ -1,9 +1,21 @@
 ﻿//http://www.stats.gov.cn/tjbz/xzqhdm/
+//http://www.gov.cn/test/2005-06/15/content_18253.htm
 
+function formatDate(year, month, day) {
+	if(!isDate(year, month, day)) {
+		return "";
+	}
+	return year + (month<9?"0":"") + month + (day<10?"0":"") + day;
+}
 
-function genAllId(area6, birthday8, gender1) {
-	for(var i=gender1; i<1000; i+=2) {
-		console.log(genId(area6, birthday8, (i<10?"00":(i<100?"0":""))+i));
+function parseDate(dateString) {
+	var year = Number(dateString.substring(0, 4));
+	var month = Number(dateString.substring(4, 6));
+	var day = Number(dateString.substring(6, 8));
+	if(isDate(year, month, day)) {
+		return new Date(year, month-1, day);
+	} else {
+		return null;
 	}
 }
 
@@ -66,10 +78,22 @@ function isValid(id) {
 	}
 }
 
-function getBirthday(year, month, day) {
-	var date = new Date(year, month-1, day);
-	//isDate(date)
-	return date.getFullYear() + (date.getMonth()<9?"0":"") + (date.getMonth()+1) + (date.getDate()<10?"0":"") + date.getDate();
+function parseId(id) {
+	if(isValid(id)==0) {
+		var idInfo = {area:null, birthday:null, gender:false};
+		idInfo.area = getArea(id.substring(0, 6));
+		var genderCode;
+		if(id.length==15) {
+			idInfo.birthday = parseDate(id.substring(6, 12));
+			genderCode = parseInt(id.substring(15, 16));
+		} else {
+			idInfo.birthday = parseDate(id.substring(6, 14));
+			genderCode = parseInt(id.substring(16, 17));
+		}
+		idInfo.gender = (genderCode % 2==1);
+		return idInfo;
+	}
+	return null;
 }
 
 function calcChecksum(id) {
@@ -81,11 +105,6 @@ function calcChecksum(id) {
 		sum += parseInt(id.charAt(i)) * wi[i];
 	}
 	return table[sum % 11];
-}
-
-function genId(area6, birthday8, random3) {
-	var id = area6 + birthday8 + random3;
-	return id + calcChecksum(id);
 }
 
 function findCodeIndex(codes, code) {
@@ -162,4 +181,15 @@ function genProvince() {
 	for(var i=0; i<codes.length; i++) {
 		
 	}
+}
+
+function genAllId(area6, birthday8, gender1) {
+	for(var i=gender1; i<1000; i+=2) {
+		console.log(genId(area6, birthday8, (i<10?"00":(i<100?"0":""))+i));
+	}
+}
+
+function genId(area6, birthday8, random3) {
+	var id = area6 + birthday8 + random3;
+	return id + calcChecksum(id);
 }

@@ -9,8 +9,9 @@ var ids = ["510107197902172162", "34220119830606444X", "510215197612131923", "36
 
 var success = 0;
 for(var i=0; i<ids.length; i++) {
-	if(isValid(ids[i])==0) {
-		success++;
+	var idInfo = parseId(ids[i]);
+	if(idInfo!=null) {
+		console.log(ids[i] + " => " + idInfo.area.province + " " + idInfo.area.city + " " + idInfo.area.district + ", " + idInfo.gender);
 	} else {
 		console.log(ids[i] + " is not valid.");
 	}
