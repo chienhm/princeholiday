@@ -20,6 +20,7 @@ public class MemberService {
     private static int id = 0;
 	private static final Logger log = Logger.getLogger(GusetbookService.class
 			.getName());
+	private List<Member> members;
 	
 	public void updateMember(Long id, Long fatherId, String name, Date birthday, Date lunarbirthday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {
         
@@ -72,13 +73,17 @@ public class MemberService {
             } finally {
                 pm.close();
             }
+            members = null;
         }
     }
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Member> getMembers() {
-		List<Member> members = new ArrayList<Member>();
+	public List<Member> getAllMembers() {
+	    if(members!=null) {
+	        return members;
+	    }
+		members = new ArrayList<Member>();
         HashMap<Long, Member> hm = new HashMap<Long, Member>();
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -104,26 +109,47 @@ public class MemberService {
 	
 	public String getJson(Long rootId) {
 	    String json;
-	    List<Member> members = getMembers();
-	    Member root = null;
-	    for(Member m : members) {
-	        if(rootId!=null) {
-	            if(m.getId().equals(rootId)) {
-	                root = m;
-	                break;
-	            }
-	        } else {
-	            if(m.getFatherId()==null || m.getFatherId().equals(-1L)) {
-    	            root = m;
-    	            break;
-	            }
-	        }
-	    }
+	    List<Member> members = getAllMembers();
+	    Member root = getRoot(rootId);
 	    json = "{" + getDescendants(members, root) + "}";
 	    id = 0;
 	    return json;
 	}
-	
+	// get the member as root if rootId specified, otherwise select the first root of the forest
+	public Member getRoot(Long rootId) {
+        List<Member> members = getAllMembers();
+        Member root = null;
+	    for(Member m : members) {
+            if(rootId!=null) {
+                if(m.getId().equals(rootId)) {
+                    root = m;
+                    break;
+                }
+            } else {
+                if(m.getFatherId()==null || m.getFatherId().equals(-1L)) {
+                    root = m;
+                    break;
+                }
+            }
+        }
+	    return root;
+	}
+
+    
+    public String getDescendatList(List<Member> members, Member m) {
+        String out = "<li>"+ m.getName();
+        List<Member> desendants = getDescendant(members, m);
+        if(desendants.size()>0) {
+            out += "<ul>";
+            for(Member sd : desendants) {
+                out += getDescendatList(members, sd);
+            }
+            out += "</ul>";
+        }
+        out += "</li>";
+        return out;
+    }
+    
 	private String getDescendants(List<Member> members, Member root) {
 	    if(root==null)return "";
 	    String sons = "id: \""+(id++)+"\", name: \""+root.getName()+"\", data: {id:"+root.getId()+", gender:"+root.isGender()+", comment:\""+root.getComment()+"\"},  children: [";
@@ -195,6 +221,7 @@ public class MemberService {
         } finally {
             pm.close();
         }
+        members = null;
 	}
 
     public void addMember(String name, String gender, String zipai, String comment) {

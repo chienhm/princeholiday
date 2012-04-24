@@ -30,12 +30,10 @@ function genOptions(code) {
 </script>
 <script>
 	var mans = new Object();
-<%
-MemberService ms = new MemberService();
-List<Member> members = ms.getMembers();
+<%MemberService ms = new MemberService();
+List<Member> members = ms.getAllMembers();
 for(Member man : members) {
-    if(man.isGender()) {
-%>
+    if(man.isGender()) {%>
 	mans[<%=man.getId() %>] = {name:"<%=man.getName() %>", generation:<%=man.getGeneration()%>};
 <%
     }
