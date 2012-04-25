@@ -40,15 +40,20 @@ public class MemberServlet extends HttpServlet {
         String _zipai = req.getParameter("gen");
         String _birthday = req.getParameter("birthday");
         String _lunarbirthday = req.getParameter("lunar");
+        String _deathday = req.getParameter("deathday");
         
 		Date birthday = null;
 		Date lunarbirthday = null;
+        Date deathday = null;
         try {
             if(_birthday!=null && !_birthday.isEmpty()) {
                 birthday = new SimpleDateFormat("yyyy-MM-dd").parse(_birthday);
             }
             if(_lunarbirthday!=null && !_lunarbirthday.isEmpty()) {
                 lunarbirthday = new SimpleDateFormat("yyyy-MM-dd").parse(_lunarbirthday);
+            }
+            if(_deathday!=null && !_deathday.isEmpty()) {
+                deathday = new SimpleDateFormat("yyyy-MM-dd").parse(_deathday);
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -80,10 +85,10 @@ public class MemberServlet extends HttpServlet {
         MemberService ms = new MemberService();
 		if(action.equalsIgnoreCase("update")) {
 		    if(id!=-1L){
-		        ms.updateMember(id, fatherId, name, birthday, lunarbirthday, gender, zipai, motherName, phone, address, comment);
+		        ms.updateMember(id, fatherId, name, birthday, lunarbirthday, deathday, gender, zipai, motherName, phone, address, comment);
 		    }
 		} else if (action.equalsIgnoreCase("add")) {
-            ms.addMember(fatherId, name, birthday, lunarbirthday, gender, zipai, motherName, phone, address, comment);
+            ms.addMember(fatherId, name, birthday, lunarbirthday, deathday, gender, zipai, motherName, phone, address, comment);
 		}
 		resp.sendRedirect("/family/list.jsp");
 	}

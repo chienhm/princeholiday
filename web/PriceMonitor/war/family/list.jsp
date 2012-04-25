@@ -30,7 +30,8 @@ function genOptions(code) {
 </script>
 <script>
 	var mans = new Object();
-<%MemberService ms = new MemberService();
+<%
+MemberService ms = new MemberService();
 List<Member> members = ms.getAllMembers();
 for(Member man : members) {
     if(man.isGender()) {%>
@@ -67,6 +68,7 @@ function fidOptions(fid, gen) {
         <td>农历生日</td>
         <td>母亲</td>
         <td>父亲</td>
+        <td>别日</td>
         <td>电话</td>
         <td>地址</td>
         <td>备注</td>
@@ -76,6 +78,7 @@ function fidOptions(fid, gen) {
 for(Member m : members) {
     String birthday = "";
     String lunarBirthday = "";
+    String deathday = "";
     String motherName = "";
     String phone = "";
     String address = "";
@@ -84,6 +87,9 @@ for(Member m : members) {
     }
     if(m.getLunarBirthday()!=null) {
         lunarBirthday = new SimpleDateFormat("yyyy-MM-dd").format(m.getLunarBirthday());
+    }
+    if(m.getDeathday()!=null) {
+        deathday = new SimpleDateFormat("yyyy-MM-dd").format(m.getDeathday());
     }
     if(m.getMotherName()!=null) {
         motherName = m.getMotherName();
@@ -121,6 +127,7 @@ for(Member m : members) {
          <td>
          	<script>fidOptions(<%=m.getFatherId() %>, <%=m.getGeneration() %>);</script>
          </td>
+         <td><input type="text" name="deathday" value="<%= deathday %>" size="10" /></td>
          <td><input type="text" name="phone" value="<%= phone %>" /></td>
          <td><input type="text" name="address" value="<%= address %>" /></td>
          <td><input type="text" name="comment" value="<%= m.getComment() %>" /></td>
@@ -149,6 +156,7 @@ for(Member m : members) {
          <td>
          	<script>fidOptions(-1, -1);</script>
          </td>
+         <td><input type="text" name="deathday" value="" size="10" /></td>
          <td><input type="text" name="phone" value="" /></td>
          <td><input type="text" name="address" value="" /></td>
          <td><input type="text" name="comment" value="" /></td>

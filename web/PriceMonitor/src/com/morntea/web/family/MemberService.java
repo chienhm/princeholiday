@@ -22,7 +22,7 @@ public class MemberService {
 			.getName());
 	private List<Member> members;
 	
-	public void updateMember(Long id, Long fatherId, String name, Date birthday, Date lunarbirthday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {
+	public void updateMember(Long id, Long fatherId, String name, Date birthday, Date lunarbirthday, Date deathday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {
         
 	    Member member;
         PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -38,6 +38,7 @@ public class MemberService {
             member.setComment(comment);
             member.setBirthday(birthday);
             member.setLunarBirthday(lunarbirthday);
+            member.setDeathday(deathday);
             member.setPhone(phone);
             member.setAddress(address);
             try {
@@ -51,7 +52,7 @@ public class MemberService {
         }
     }
 	
-    public void addMember(Long fatherId, String name, Date birthday, Date lunarbirthday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {    
+    public void addMember(Long fatherId, String name, Date birthday, Date lunarbirthday, Date deathday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {    
         if(name!=null && !name.isEmpty()) {
             PersistenceManager pm = PMF.get().getPersistenceManager();
             Member member = new Member();
@@ -63,6 +64,7 @@ public class MemberService {
             member.setComment(comment);
             member.setBirthday(birthday);
             member.setLunarBirthday(lunarbirthday);
+            member.setDeathday(deathday);
             member.setPhone(phone);
             member.setAddress(address);
             try {
@@ -137,7 +139,10 @@ public class MemberService {
 
     
     public String getDescendatList(List<Member> members, Member m) {
-        String out = "<li>"+ m.getName();
+        String out = "<li"
+            + (m.isGender() ? " class='male" : " class='female")
+            + ((m.getDeathday()!=null && m.getDeathday().compareTo(new Date())<0) ? " dead'" : "'")
+            + ">" + m.getName();
         List<Member> desendants = getDescendant(members, m);
         if(desendants.size()>0) {
             out += "<ul>";
@@ -155,20 +160,6 @@ public class MemberService {
 	    String sons = "id: \""+(id++)+"\", name: \""+root.getName()+"\", data: {id:"+root.getId()+", gender:"+root.isGender()+", comment:\""+root.getComment()+"\"},  children: [";
 
 	    boolean hasChild = false;
-        /*for(Member m : members) {
-            if(m.getFatherId()!=null && m.getFatherId().equals(root.getId())) {
-    	        if(!hasChild) {
-    	            sons += "{";
-    	            hasChild = true;
-    	        } else {
-    	            sons += "}, {";
-    	        }
-	            sons += getDescendants(members, m);
-	        }
-	    }
-        if(hasChild) {
-            sons += "}";
-        }*/
         List<Member> descendants = getDescendant(members, root);
         for(Member m : descendants) {
             if(!hasChild) {
@@ -224,13 +215,15 @@ public class MemberService {
         members = null;
 	}
 
+	// for data initialize
     public void addMember(String name, String gender, String zipai, String comment) {
         Long fatherId = -1L;
         Date birthday = null;
         Date lunarbirthday = null;
+        Date deathday = null;
         String motherName = null;
         String address = null;
-        this.addMember(fatherId , name, birthday , lunarbirthday, gender.equals("0"), Integer.parseInt(zipai)+101, motherName , null, address , comment);
+        this.addMember(fatherId , name, birthday , lunarbirthday, deathday, gender.equals("0"), Integer.parseInt(zipai)+101, motherName , null, address , comment);
         
     }
 }
