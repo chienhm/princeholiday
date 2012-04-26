@@ -142,7 +142,8 @@
     chartClass         : "jOrgChart",
     dragAndDrop        : false,
     nodeCursor         : "n-resize",
-    nodeCollapseCursor : "pointer"
+    nodeCollapseCursor : "pointer",
+    fade               : false
   };
 
   // Method that recursively builds the tree
@@ -182,12 +183,20 @@
 
           if($tr.hasClass('contracted')){
             $this.css('cursor', opts.nodeCursor);
-            $tr.removeClass('contracted').addClass('expanded');
-            $tr.nextAll("tr").css('visibility', '');
+            $tr.removeClass('contracted').addClass('expanded');            
+            if(opts.fade){
+            	$tr.nextAll("tr").fadeIn("slow");
+            }else{
+            	$tr.nextAll("tr").css('visibility', '');
+            }
           }else{
             $this.css('cursor', opts.nodeCollapseCursor);
             $tr.removeClass('expanded').addClass('contracted');
-            $tr.nextAll("tr").css('visibility', 'hidden');
+            if(opts.fade){
+                $tr.nextAll("tr").fadeOut("slow");
+            }else{
+            	$tr.nextAll("tr").css('visibility', 'hidden');
+            }
           }
         });
     }

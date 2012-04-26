@@ -22,6 +22,11 @@
   border-left           : 2px solid black;
 }
 
+/* node table */
+.jOrgChart table {
+  width                 : 100%;
+}
+
 /* node cell */
 .jOrgChart td {
   text-align            : center;

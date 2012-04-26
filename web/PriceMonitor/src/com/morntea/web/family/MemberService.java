@@ -78,7 +78,34 @@ public class MemberService {
             members = null;
         }
     }
-	
+
+    
+    public void delMember(Long id) {
+        PersistenceManager pm = PMF.get().getPersistenceManager();
+        Member m = pm.getObjectById(Member.class, id);
+        try {
+            if(m!=null) {
+                pm.deletePersistent(m);
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            pm.close();
+        }
+        members = null;
+    }
+
+    // for data initialize
+    public void addMember(String name, String gender, String zipai, String comment) {
+        Long fatherId = -1L;
+        Date birthday = null;
+        Date lunarbirthday = null;
+        Date deathday = null;
+        String motherName = null;
+        String address = null;
+        this.addMember(fatherId , name, birthday , lunarbirthday, deathday, gender.equals("0"), Integer.parseInt(zipai)+101, motherName , null, address , comment);
+        
+    }
 	
 	@SuppressWarnings("unchecked")
 	public List<Member> getAllMembers() {
@@ -137,17 +164,17 @@ public class MemberService {
 	    return root;
 	}
 
-    
-    public String getDescendatList(List<Member> members, Member m) {
+    // used for org chart
+    public String getDescendantList(List<Member> members, Member m) {
         String out = "<li"
             + (m.isGender() ? " class='male" : " class='female")
             + ((m.getDeathday()!=null && m.getDeathday().compareTo(new Date())<0) ? " dead'" : "'")
-            + ">" + m.getName();
+            + " id='m"+m.getId()+"'>" + m.getName();
         List<Member> desendants = getDescendant(members, m);
         if(desendants.size()>0) {
             out += "<ul>";
             for(Member sd : desendants) {
-                out += getDescendatList(members, sd);
+                out += getDescendantList(members, sd);
             }
             out += "</ul>";
         }
@@ -199,31 +226,4 @@ public class MemberService {
 	    });
 	    return descendants;
 	}
-	
-	public void delMember(Long id) {
-        PersistenceManager pm = PMF.get().getPersistenceManager();
-        Member m = pm.getObjectById(Member.class, id);
-        try {
-            if(m!=null) {
-                pm.deletePersistent(m);
-            }
-        } catch (Exception e) {
-            log.log(Level.SEVERE, e.getMessage());
-        } finally {
-            pm.close();
-        }
-        members = null;
-	}
-
-	// for data initialize
-    public void addMember(String name, String gender, String zipai, String comment) {
-        Long fatherId = -1L;
-        Date birthday = null;
-        Date lunarbirthday = null;
-        Date deathday = null;
-        String motherName = null;
-        String address = null;
-        this.addMember(fatherId , name, birthday , lunarbirthday, deathday, gender.equals("0"), Integer.parseInt(zipai)+101, motherName , null, address , comment);
-        
-    }
 }

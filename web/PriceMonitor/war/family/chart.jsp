@@ -21,12 +21,14 @@
     <script>
     //https://github.com/wesnolte/jOrgChart
     jQuery(document).ready(function() {
-    	$("#chart").draggable();
         $("#org").jOrgChart({
             chartElement : '#chart',
             dragAndDrop  : false,
-            nodeCursor   : "pointer"
+            nodeCursor   : "pointer",
+            fade         : true
         });
+
+    	$(".jOrgChart").draggable();
     });
     </script>
 <%
@@ -45,7 +47,7 @@
     <div class="topbar">
         <div class="topbar-inner">
             <div class="container">
-                <a class="brand" href="#">家谱树</a>
+                <a class="brand" href="#">娄姓家族族谱树</a>
                 <ul class="nav">
                     <li><a href="list.jsp">List</a></li>
                     <li><a href="tree.jsp">Tree</a></li>                  
@@ -57,7 +59,7 @@
 
 	<div id="chart" class="orgChart"></div>
 	<ul id="org" style="display: none;">
-<%= ms.getDescendatList(members, root) %>
+<%= ms.getDescendantList(members, root) %>
 	</ul>
 
 </body>
