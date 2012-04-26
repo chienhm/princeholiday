@@ -8,10 +8,10 @@
 <title>娄氏家族族谱树</title>
 
 <!-- CSS Files -->
-<link type="text/css" href="base.css" rel="stylesheet" />
-<link type="text/css" href="Spacetree.css" rel="stylesheet" />
+<link type="text/css" href="tree/base.css" rel="stylesheet" />
+<link type="text/css" href="tree/Spacetree.css" rel="stylesheet" />
 <!-- http://thejit.org/static/v20/Docs/files/Options/Options-Canvas-js.html#Options.Canvas -->
-<!--[if IE]><script language="javascript" type="text/javascript" src="Extras/excanvas.js"></script><![endif]-->
+<!--[if IE]><script language="javascript" type="text/javascript" src="tree/Extras/excanvas.js"></script><![endif]-->
 
 <%
     MemberService ms = new MemberService();
@@ -26,8 +26,8 @@
     var json = <%=ms.getJson(root) %>;
 </script>
 <!-- JIT Library File -->
-<script language="javascript" type="text/javascript" src="jit-yc.js"></script>
-<script language="javascript" type="text/javascript" src="tree.js"></script>
+<script language="javascript" type="text/javascript" src="tree/jit-yc.js"></script>
+<script language="javascript" type="text/javascript" src="tree/tree.js"></script>
 </head>
 
 <body onload="init();">

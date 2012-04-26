@@ -121,4 +121,6 @@ a:hover{
 }
 
 #reset {
+	float               : right;
 	cursor              : pointer;
+}

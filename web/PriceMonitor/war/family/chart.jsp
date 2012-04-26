@@ -9,14 +9,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>娄氏家族族谱树</title>
 
-    <link rel="stylesheet" href="orgchart/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="orgchart/css/jquery.jOrgChart.css"/>
-    <link rel="stylesheet" href="orgchart/css/custom.css"/>
+    <link rel="stylesheet" href="chart/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="chart/css/jquery.jOrgChart.css"/>
+    <link rel="stylesheet" href="chart/css/custom.css"/>
     
     <script src="../script/jquery.min.js"></script>
-    <script type="text/javascript" src="orgchart/jquery-ui-1.8.19.custom.min.js"></script>
+    <script type="text/javascript" src="chart/jquery-ui-1.8.19.custom.min.js"></script>
     
-    <script src="orgchart/jquery.jOrgChart.js"></script>
+    <script src="chart/jquery.jOrgChart.js"></script>
 
     <script>
     //https://github.com/wesnolte/jOrgChart
@@ -54,10 +54,10 @@
                     <li><a href="chart.jsp">Chart</a></li>      
                 </ul>
                 <div class="note">(背景灰色表示已故，名字橙色为男性，红色为女性)</div>
+	            <div class="pull-right">
+	                <div class="alert-message info" id="reset">Reset</div>
+	            </div>
             </div>
-            <div class="pull-right">
-                <div class="alert-message info" id="reset">Reset</div>
-            </div>    
         </div>
     </div>
 

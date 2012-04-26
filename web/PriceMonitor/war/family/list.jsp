@@ -6,6 +6,12 @@
 <%@ page import="javax.jdo.PersistenceManager" %>
 <%@ page import="com.morntea.web.family.Member" %>
 <%@ page import="com.morntea.web.family.MemberService" %>
+<%
+if(session.getAttribute("auth")==null) {
+    session.setAttribute("referer", "list.jsp");
+    response.sendRedirect("auth.jsp");
+}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -57,7 +63,7 @@ function fidOptions(fid, gen) {
 </script>
 </head>
 <body>
-<a href="tree.jsp" target="_blank">娄氏家族族谱登记</a>
+<a href="chart.jsp" target="_blank">娄氏家族族谱登记</a> <a href="auth.jsp?auth=logout">退出</a>
 <table>
     <tr>
         <td>编号</td>
@@ -105,7 +111,7 @@ for(Member m : members) {
     <tr>
          <td>
          	<% if(m.isGender()) { %>
-         	<a href="tree.jsp?root=<%=m.getId() %>" target="_blank"><%=m.getId() %></a>
+         	<a href="chart.jsp?root=<%=m.getId() %>" target="_blank"><%=m.getId() %></a>
          	<% } else { %>
          	<%=m.getId() %>
          	<% } %>
