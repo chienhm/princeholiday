@@ -52,8 +52,12 @@
                     <li><a href="list.jsp">List</a></li>
                     <li><a href="tree.jsp">Tree</a></li>                  
                     <li><a href="chart.jsp">Chart</a></li>      
-                </ul>  
+                </ul>
+                <div class="note">(背景灰色表示已故，名字橙色为男性，红色为女性)</div>
             </div>
+            <div class="pull-right">
+                <div class="alert-message info" id="reset">Reset</div>
+            </div>    
         </div>
     </div>
 
@@ -61,6 +65,11 @@
 	<ul id="org" style="display: none;">
 <%= ms.getDescendantList(members, root) %>
 	</ul>
-
+    <script>
+    $("#reset").click(function(e){
+        e.preventDefault();        
+        $(".jOrgChart").css("left", "0px").css("top", "0px");
+    });
+    </script>
 </body>
 </html>

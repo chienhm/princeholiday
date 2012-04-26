@@ -5,6 +5,7 @@ body, html, div, p, span, a, h1, h2, h3, h4, h5{
 
 body, html{	
 	width 				: 100%;
+	height              : 700px;
 }
 
 body{
@@ -75,7 +76,7 @@ a:hover{
 
 /* Custom node styling */
 .jOrgChart .node {
-	font-size 			: 14px;
+	font-size 			: 16px;
 	border-radius 		: 8px;
 	border 				: 5px solid white;
 	-moz-border-radius 	: 8px;
@@ -86,7 +87,7 @@ a:hover{
 }
 
 .node p{
-	/*font-family 	: tahoma;*/
+	font-family 	: tahoma;
 	font-size 		: 10px;
 	line-height 	: 11px;
 	padding 		: 2px;
@@ -113,3 +114,11 @@ a:hover{
 .jOrgChart .dead {
 	background-color 	: Grey;
 }
+
+.note {
+	padding             : 10px 20px 8px;
+	float               : left;
+}
+
+#reset {
+	cursor              : pointer;
