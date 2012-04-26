@@ -49,7 +49,7 @@
             <div class="container">
                 <a class="brand" href="#">娄姓家族族谱树</a>
                 <ul class="nav">
-                    <li><a href="list.jsp">List</a></li>
+                    <!-- <li><a href="list.jsp">List</a></li> -->
                     <li><a href="tree.jsp">Tree</a></li>                  
                     <li><a href="chart.jsp">Chart</a></li>      
                 </ul>
