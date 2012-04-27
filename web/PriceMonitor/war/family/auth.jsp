@@ -34,8 +34,8 @@ if(auth!=null) {
 <body>
 
 <form action="?auth" method="post">
-请输入登录密码（本人的手机号码）：<input type="password" name="password" />
-<input type="submit" name="submit" value="submit" />
+请输入本人的手机号码（不知道请联系QQ: 5794560）：<input type="password" name="password" />
+<input type="submit" name="submit" value="进入" />
 </form>
 
 </body>

@@ -3,6 +3,12 @@
 <%@ page import="com.morntea.web.family.MemberService"%>
 <%@ page import="com.morntea.web.family.Member"%>
 <%@ page import="java.util.List"%>
+<%
+if(session.getAttribute("auth")==null) {
+    session.setAttribute("referer", "chart.jsp");
+    response.sendRedirect("auth.jsp");
+}
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -51,7 +57,8 @@
                 <ul class="nav">
                     <!-- <li><a href="list.jsp">List</a></li> -->
                     <li><a href="tree.jsp">Tree</a></li>                  
-                    <li><a href="chart.jsp">Chart</a></li>      
+                    <li><a href="chart.jsp">Chart</a></li>
+                    <li><a href="auth.jsp?auth=logout">退出</a></li>
                 </ul>
                 <div class="note">(背景灰色表示已故，名字橙色为男性，红色为女性)</div>
 	            <div class="pull-right">
