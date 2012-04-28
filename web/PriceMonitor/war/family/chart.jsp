@@ -2,7 +2,6 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="com.morntea.web.family.MemberService"%>
 <%@ page import="com.morntea.web.family.Member"%>
-<%@ page import="java.util.List"%>
 <%
 if(session.getAttribute("auth")==null) {
     session.setAttribute("referer", "chart.jsp");
@@ -45,7 +44,6 @@ if(session.getAttribute("auth")==null) {
 	    lroot = Long.parseLong(_root);
 	}
 	Member root = ms.getRoot(lroot);
-	List<Member> members = ms.getAllMembers();
 %>
 </head>
 
@@ -70,7 +68,7 @@ if(session.getAttribute("auth")==null) {
 
 	<div id="chart" class="orgChart"></div>
 	<ul id="org" style="display: none;">
-<%= ms.getDescendantList(members, root) %>
+<%= ms.getDescendantList(root) %>
 	</ul>
     <script>
     $("#reset").click(function(e){

@@ -106,8 +106,56 @@ public class MemberService {
         this.addMember(fatherId , name, birthday , lunarbirthday, deathday, gender.equals("0"), Integer.parseInt(zipai)+101, motherName , null, address , comment);
         
     }
+    
+    public Member getMember(Long id) {
+        List<Member> members = getAllMembers();
+        for(Member m : members) {
+            if(m.getId().equals(id)) {
+                return m;
+            }
+        }
+        return null;
+    }
+    
+    public List<Member> getSiblings(Member person) {
+        List<Member> siblings = new ArrayList<Member>();
+        List<Member> members = getAllMembers();
+        for(Member m : members) {
+            if(person.getFatherId()!=null 
+                    && !person.getFatherId().equals(-1L)
+                    && m.getFatherId().equals(person.getFatherId())
+                    && !m.getId().equals(person.getId())) {
+                siblings.add(m);
+            }
+        }
+        return siblings;
+    }
 	
-	@SuppressWarnings("unchecked")
+	public List<Member> getDescendant(Member father) {
+        List<Member> members = getAllMembers();
+        List<Member> descendants = new ArrayList<Member>();
+        for(Member m : members) {
+            if(m.getFatherId()!=null && m.getFatherId().equals(father.getId())) {
+                descendants.add(m);
+            }
+        }
+        Collections.sort(descendants, new Comparator<Member>(){
+            @Override
+            public int compare(Member m1, Member m2) {
+                if(m1!=null && m2!=null) {
+                    Date b1 = m1.getLunarBirthday();
+                    Date b2 = m2.getLunarBirthday();
+                    if(b1!=null && b2!=null) {
+                        return b1.compareTo(b2);                        
+                    }
+                }
+                return 0;
+            }
+        });
+        return descendants;
+    }
+
+    @SuppressWarnings("unchecked")
 	public List<Member> getAllMembers() {
 	    if(members!=null) {
 	        return members;
@@ -135,16 +183,20 @@ public class MemberService {
         }
 		return members;		
 	}
-	
-	public String getJson(Long rootId) {
-	    String json;
-	    List<Member> members = getAllMembers();
-	    Member root = getRoot(rootId);
-	    json = "{" + getDescendants(members, root) + "}";
-	    id = 0;
-	    return json;
-	}
-	// get the member as root if rootId specified, otherwise select the first root of the forest
+    
+    public List<String> getSpouse(Member person) {
+        List<String> spouses = new ArrayList<String>();
+
+        List<Member> descendants = getDescendant(person);
+        for(Member m : descendants) {
+            if(!spouses.contains(m.getMotherName())) {
+                spouses.add(m.getMotherName());
+            }
+        }
+        return spouses;
+    }
+
+    // get the member as root if rootId specified, otherwise select the first root of the forest
 	public Member getRoot(Long rootId) {
         List<Member> members = getAllMembers();
         Member root = null;
@@ -165,29 +217,42 @@ public class MemberService {
 	}
 
     // used for org chart
-    public String getDescendantList(List<Member> members, Member m) {
+    public String getDescendantList(Member m) {
         String out = "<li"
             + (m.isGender() ? " class='male" : " class='female")
             + ((m.getDeathday()!=null && m.getDeathday().compareTo(new Date())<0) ? " dead'" : "'")
-            + " id='m"+m.getId()+"'>" + m.getName();
-        List<Member> desendants = getDescendant(members, m);
+            + " id='m"+m.getId()+"'>" 
+            + "<a href='person.jsp?id="+m.getId()+"' target='_blank'>" 
+            + m.getName()
+            + "</a>";
+        List<Member> desendants = getDescendant(m);
         if(desendants.size()>0) {
             out += "<ul>";
             for(Member sd : desendants) {
-                out += getDescendantList(members, sd);
+                out += getDescendantList(sd);
             }
             out += "</ul>";
         }
         out += "</li>";
         return out;
     }
+
+    // used for family tree
+    public String getJson(Long rootId) {
+        String json;
+        List<Member> members = getAllMembers();
+        Member root = getRoot(rootId);
+        json = "{" + getDescendantString(members, root) + "}";
+        id = 0;
+        return json;
+    }
     
-	private String getDescendants(List<Member> members, Member root) {
+	private String getDescendantString(List<Member> members, Member root) {
 	    if(root==null)return "";
 	    String sons = "id: \""+(id++)+"\", name: \""+root.getName()+"\", data: {id:"+root.getId()+", gender:"+root.isGender()+", comment:\""+root.getComment()+"\"},  children: [";
 
 	    boolean hasChild = false;
-        List<Member> descendants = getDescendant(members, root);
+        List<Member> descendants = getDescendant(root);
         for(Member m : descendants) {
             if(!hasChild) {
                 sons += "{";
@@ -195,7 +260,7 @@ public class MemberService {
             } else {
                 sons += "}, {";
             }
-            sons += getDescendants(members, m);
+            sons += getDescendantString(members, m);
         }
         if(hasChild) {
             sons += "}";
@@ -204,26 +269,4 @@ public class MemberService {
 	    return sons;
 	}
 	
-	public List<Member> getDescendant(List<Member> allMembers, Member father) {
-	    List<Member> descendants = new ArrayList<Member>();
-	    for(Member m : allMembers) {
-            if(m.getFatherId()!=null && m.getFatherId().equals(father.getId())) {
-                descendants.add(m);
-            }
-        }
-	    Collections.sort(descendants, new Comparator<Member>(){
-            @Override
-            public int compare(Member m1, Member m2) {
-                if(m1!=null && m2!=null) {
-                    Date b1 = m1.getLunarBirthday();
-                    Date b2 = m2.getLunarBirthday();
-                    if(b1!=null && b2!=null) {
-                        return b1.compareTo(b2);                        
-                    }
-                }
-                return 0;
-            }
-	    });
-	    return descendants;
-	}
 }

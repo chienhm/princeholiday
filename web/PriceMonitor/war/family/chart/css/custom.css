@@ -18,13 +18,13 @@ body{
 	border 				: 1px solid white;
 }
 
-	body p{
-		font-size 		: 14px;
-	}
-	
-		body p a{
-			font-size	: 16px;
-		}
+body p{
+	font-size 		: 14px;
+}
+
+body p a{
+	font-size	: 16px;
+}
 
 h1 {
 	color 				: #E05E00;	
@@ -32,7 +32,7 @@ h1 {
 }
 
 a{
-	color 				: #E05E00;	
+	color 				: #E05E00;
 	text-decoration		: none;
 }
 
@@ -83,7 +83,7 @@ a:hover{
 	background-color 	: #35363B;
 	width               : 80px;
 	height              : 30px;
-	line-height 	    : 30px;
+	line-height 	    : 20px;
 }
 
 .node p{
@@ -102,12 +102,12 @@ a:hover{
 	cursor				: move;
 }
 
-.jOrgChart .female {
+.jOrgChart .female a {
 	/*background-color 	: Orchid;*/
 	color 				: Red; /*BlueViolet*/
 }
 
-.jOrgChart .male {
+.jOrgChart .male a {
 	color 				: #F38630;
 }
 
