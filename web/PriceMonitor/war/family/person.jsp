@@ -32,7 +32,7 @@ if(father!=null) {
 }
 String motherName = person.getMotherName();
 if(motherName==null || motherName.isEmpty()) {
-    motherName = "？";
+    motherName = "?";
 }
 
 List<Member> siblings = ms.getSiblings(person);
@@ -62,7 +62,7 @@ if(birthdayStr==null) {
     birthdayStr += "(" + lunarBirthdayStr + ")";
 }
 if(birthdayStr==null) {
-    birthdayStr = "？";
+    birthdayStr = "?";
 }
 
 if(person.getDeathday()!=null) {
@@ -70,7 +70,7 @@ if(person.getDeathday()!=null) {
     deathdayStr = Lunar.chineseDateFormat.format(person.getDeathday());
     //--------------------------------------------------------------------------特别处理
     if(deathdayStr.endsWith("01月01日")) {
-        deathdayStr = "？";
+        deathdayStr = "?";
         deathdiff = 9999;
     }
 }
@@ -105,9 +105,9 @@ List<String> spouses = ms.getSpouse(person);
 						</a>
 					</li>
 					<li>
-						<p>  生辰至今：<%=((birthdiff==-1)?"？":birthdiff) %>年</p>
+						<p>  生辰至今：<%=((birthdiff==-1)?"?":birthdiff) %>年</p>
 						<% if(deathdiff>0) { %>
-						<p>  逝世至今：<%=((deathdiff==9999)?"？":deathdiff) %>年</p>
+						<p>  逝世至今：<%=((deathdiff==9999)?"?":deathdiff) %>年</p>
 						<% } %>
 						<p>  纪念日: </p>
 						<p>  兄弟姐妹: <%=siblings.size() %>人</p>
@@ -138,13 +138,13 @@ List<String> spouses = ms.getSpouse(person);
 					</li>
 					<li>
 						父亲：
-						<% if(father!=null){%><a href="person.jsp?id=<%=father.getId() %>"><%=father.getName() %></a><%} else {%>？<%} %>&nbsp;&nbsp;
+						<% if(father!=null){%><a href="person.jsp?id=<%=father.getId() %>"><%=father.getName() %></a><%} else {%>?<%} %>&nbsp;&nbsp;
 					</li>
 					<li>母亲：
 						<%=motherName %>
 					</li>
 					<li>爷爷：
-						<% if(grandfather!=null){%><a href="person.jsp?id=<%=grandfather.getId() %>"><%=grandfather.getName() %></a><%} else {%>？<%} %>&nbsp;&nbsp;
+						<% if(grandfather!=null){%><a href="person.jsp?id=<%=grandfather.getId() %>"><%=grandfather.getName() %></a><%} else {%>?<%} %>&nbsp;&nbsp;
 					</li>
 					<li>
 						奶奶：
@@ -154,7 +154,7 @@ List<String> spouses = ms.getSpouse(person);
 						        grandMotherName = father.getMotherName();
 						    }
 						    if(grandMotherName==null || grandMotherName.isEmpty()){
-						    	out.println("？");
+						    	out.println("?");
 						    } else {
 						        out.println(grandMotherName);
 						    }
