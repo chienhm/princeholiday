@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.morntea.web.family.MemberService"%>
+<%@ page import="com.morntea.web.family.Member"%>
+<%@ page import="java.util.List"%>
 <%
 String referer = null;
 if(session.getAttribute("referer")!=null) {
@@ -13,11 +16,27 @@ if(auth!=null) {
     } else {
         String password = request.getParameter("password");
         if(password!=null && password.equals("15121036201")) {
-            session.setAttribute("auth", true);
-            out.println("登录成功！前往<a href='chart.jsp'>家谱图</a>");
-            if(referer!=null) {
-                session.removeAttribute("referer");
-                response.sendRedirect(referer);
+            String name = request.getParameter("name");
+            String fatherName = request.getParameter("fathername");
+
+            boolean success = false;
+            MemberService ms = new MemberService();
+            List<Member> persons = ms.getMemberByName(name);
+            for(Member m : persons) {
+                Member father = ms.getMember(m.getFatherId());
+                if(father!=null && father.getName().equals(fatherName)) {
+                    session.setAttribute("auth", true);
+                    out.println("登录成功！前往<a href='chart.jsp'>家谱图</a>");
+                    if(referer!=null) {
+                        session.removeAttribute("referer");
+                        response.sendRedirect(referer);
+                    }
+                    success = true;
+                    break;
+                }
+            }
+            if(!success) {
+                out.println("输入信息有误！");
             }
         } else {
             out.println(password + "密码错误！");

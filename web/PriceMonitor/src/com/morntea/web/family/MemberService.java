@@ -155,6 +155,17 @@ public class MemberService {
         return descendants;
     }
 
+	public List<Member> getMemberByName(String name) {
+        List<Member> members = getAllMembers();
+        List<Member> persons = new ArrayList<Member>();
+        for(Member m : members) {
+            if(m.getName().equals(name)) {
+                persons.add(m);
+            }
+        }
+        return persons;
+	}
+	
     @SuppressWarnings("unchecked")
 	public List<Member> getAllMembers() {
 	    if(members!=null) {

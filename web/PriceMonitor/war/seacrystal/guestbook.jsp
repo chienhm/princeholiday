@@ -71,12 +71,12 @@
     }
     pm.close();
 %>
-
+<% if (user != null) { %>
     <form action="/soundbook" method="post">
       <input type="hidden" name="action" value="add">
       <div><textarea name="content" rows="3" cols="60"></textarea></div>
       <div><input type="submit" value="提交留言" /></div>
     </form>
-
+<% } %>
   </body>
 </html>

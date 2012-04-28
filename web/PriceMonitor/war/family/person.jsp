@@ -150,8 +150,8 @@ List<String> spouses = ms.getSpouse(person);
 						奶奶：
 						<% 
 							String grandMotherName = null;
-						    if(grandfather!=null){
-						        grandMotherName = grandfather.getMotherName();
+						    if(father!=null){
+						        grandMotherName = father.getMotherName();
 						    }
 						    if(grandMotherName==null || grandMotherName.isEmpty()){
 						    	out.println("？");
@@ -215,7 +215,7 @@ List<String> spouses = ms.getSpouse(person);
 	</div>
 	<div id="footer" style="margin-bottom:20px;margin-top:20px;line-height:150%;font-family:Arial;">
 		<ul id="copyright" style="margin-left:0px;">
-			<li><span style="font-family:Arial;">&copy;</span>&nbsp;2012-2100&nbsp;&nbsp;联系人：娄林&nbsp;&nbsp;QQ：5794560&nbsp;&nbsp;</li>
+			<li><span style="font-family:Arial;">&copy;</span>&nbsp;2012-2100&nbsp;&nbsp;联系人：<a href="person.jsp?id=91001">娄林</a>&nbsp;&nbsp;QQ：5794560&nbsp;&nbsp;</li>
 			<li><a href="http://www.morntea.com" target="_blank">MornTea.com</a> 提供技术支持┊<span class="help">欢迎为娄氏家谱提供更多准确信息</span> Email：<a href="mailto:5794560@qq.com">5794560@qq.com</a></li>
 		</ul>
 	</div>
