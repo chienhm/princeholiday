@@ -210,7 +210,7 @@ public class Lunar {
 
     public static void main(String[] args) throws ParseException {
         Calendar today = Calendar.getInstance();
-        today.setTime(chineseDateFormat.parse("1885年1月29日"));
+        today.setTime(chineseDateFormat.parse("1985年1月29日"));
         Lunar lunar = new Lunar(today);
 
         System.out.println("北京时间：" + chineseDateFormat.format(today.getTime() )

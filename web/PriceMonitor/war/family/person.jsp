@@ -6,7 +6,6 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Date"%>
 <%
-MemberService ms = new MemberService();
 String _id = request.getParameter("id");
 Long id = null;
 if(_id!=null) {
@@ -14,6 +13,17 @@ if(_id!=null) {
 } else {
     return;
 }
+%>
+
+<%
+if(session.getAttribute("auth")==null) {
+    session.setAttribute("referer", "person.jsp?id="+_id);
+    response.sendRedirect("auth.jsp");
+}
+%>
+<%
+
+MemberService ms = new MemberService();
 Member person = ms.getMember(id);
 Member father = ms.getMember(person.getFatherId());
 Member grandfather = null;
