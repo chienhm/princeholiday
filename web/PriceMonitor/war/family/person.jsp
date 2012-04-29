@@ -109,12 +109,12 @@ List<String> spouses = ms.getSpouse(person);
 						<% if(deathdiff>0) { %>
 						<p>  逝世至今：<%=((deathdiff==9999)?"?":deathdiff) %>年</p>
 						<% } %>
-						<p>  纪念日: </p>
-						<p>  兄弟姐妹: <%=siblings.size() %>人</p>
+						<p>  纪念日：</p>
+						<p>  兄弟姐妹：<%=siblings.size() %>人</p>
 						<% if(person.isGender()) { %>
-						<p>  子女数目: <%=desendants.size() %>人</p>
+						<p>  子女数目：<%=desendants.size() %>人</p>
 						<% } %>
-						<p>  人生信仰: </p>
+						<p>  人生信仰：</p>
 					</li>
 				</ul>
 			</div>
