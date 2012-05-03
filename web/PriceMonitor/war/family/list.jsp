@@ -68,7 +68,8 @@ function fidOptions(fid, gen) {
     <tr>
         <td>编号</td>
         <td>姓名</td>
-        <td>字派</td>
+        <td>曾用名</td>
+        <td>字辈</td>
         <td>性别</td>
         <td>生日</td>
         <td>农历生日</td>
@@ -82,12 +83,16 @@ function fidOptions(fid, gen) {
     </tr>
 <%
 for(Member m : members) {
+    String byname = "";
     String birthday = "";
     String lunarBirthday = "";
     String deathday = "";
     String motherName = "";
     String phone = "";
     String address = "";
+    if(m.getByname()!=null) {
+        byname = m.getByname();
+    }
     if(m.getBirthday()!=null) {
         birthday = new SimpleDateFormat("yyyy-MM-dd").format(m.getBirthday());
     }
@@ -121,6 +126,9 @@ for(Member m : members) {
          	<input type="text" name="name" value="<%= m.getName() %>" size="5" />
          </td>
          <td>
+         	<input type="text" name="byname" value="<%= byname %>" size="5" />
+         </td>
+         <td>
          	<script>genOptions(<%=m.getGeneration() %>);</script>
          </td>
          <td>
@@ -148,6 +156,9 @@ for(Member m : members) {
     	 <td>&nbsp;</td>
          <td>
          	<input type="text" name="name" value="" size="5" />
+         </td>
+         <td>
+         	<input type="text" name="byname" value="" size="5" />
          </td>
          <td>
          	<script>genOptions(105);</script>

@@ -27,6 +27,11 @@ MemberService ms = new MemberService();
 Member person = ms.getMember(id);
 Member father = ms.getMember(person.getFatherId());
 Member grandfather = null;
+String byname = "";
+
+if(person.getByname()!=null) {
+    byname = person.getByname();
+}
 if(father!=null) {
     grandfather = ms.getMember(father.getFatherId());
 }
@@ -123,13 +128,13 @@ List<String> spouses = ms.getSpouse(person);
 			<div>
 				<ul style="line-height:180%;">
 					<li>姓名：<%=person.getName() %></li>
-					<li>字派：<%=gen %></li>
+					<li>字辈：<%=gen %></li>
 					<li>性别：<%=person.isGender()?"男":"女" %></li>
 					<li>出生：<%=birthdayStr %></li>
 					<% if(deathdayStr!=null) { %>
 					<li>逝世：<%=deathdayStr %></li>
 					<% } %>
-					<li>曾用名：</li>
+					<li>曾用名：<%=byname %></li>
 					<% if(person.isGender() && spouses.size()>0) { %>
 					<li>配偶：
 					<% for(String name : spouses) { %>

@@ -22,7 +22,7 @@ public class MemberService {
 			.getName());
 	private List<Member> members;
 	
-	public void updateMember(Long id, Long fatherId, String name, Date birthday, Date lunarbirthday, Date deathday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {
+	public void updateMember(Long id, Long fatherId, String name, String byname, Date birthday, Date lunarbirthday, Date deathday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {
         
 	    Member member;
         PersistenceManager pm = PMF.get().getPersistenceManager();
@@ -32,6 +32,7 @@ public class MemberService {
             if(name!=null && !name.isEmpty()) {
                 member.setName(name);
             }
+            member.setByname(byname);
             member.setGender(gender);
             member.setGeneration(zipai);
             member.setMotherName(motherName);
@@ -52,12 +53,13 @@ public class MemberService {
         }
     }
 	
-    public void addMember(Long fatherId, String name, Date birthday, Date lunarbirthday, Date deathday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {    
+    public void addMember(Long fatherId, String name, String byname, Date birthday, Date lunarbirthday, Date deathday, boolean gender, int zipai, String motherName, String phone, String address, String comment) {    
         if(name!=null && !name.isEmpty()) {
             PersistenceManager pm = PMF.get().getPersistenceManager();
             Member member = new Member();
             member.setFatherId(fatherId);
             member.setName(name);
+            member.setByname(byname);
             member.setGender(gender);
             member.setGeneration(zipai);
             member.setMotherName(motherName);
@@ -103,7 +105,7 @@ public class MemberService {
         Date deathday = null;
         String motherName = null;
         String address = null;
-        this.addMember(fatherId , name, birthday , lunarbirthday, deathday, gender.equals("0"), Integer.parseInt(zipai)+101, motherName , null, address , comment);
+        this.addMember(fatherId , name, null, birthday , lunarbirthday, deathday, gender.equals("0"), Integer.parseInt(zipai)+101, motherName , null, address , comment);
         
     }
     

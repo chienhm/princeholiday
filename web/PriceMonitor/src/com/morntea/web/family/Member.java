@@ -19,6 +19,9 @@ public class Member {
     private String name;
 
     @Persistent
+    private String byname;
+    
+    @Persistent
     private Long spouseId;
     
     @Persistent
@@ -162,6 +165,14 @@ public class Member {
 
     public String getPhone() {
         return phone;
+    }
+
+    public void setByname(String byname) {
+        this.byname = byname;
+    }
+
+    public String getByname() {
+        return byname;
     }
 
 }

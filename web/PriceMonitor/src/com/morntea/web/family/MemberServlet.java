@@ -66,7 +66,6 @@ public class MemberServlet extends HttpServlet {
 		if(_fatherId!=null) {
 		    fatherId = Long.parseLong(_fatherId);
 		}
-		String name = req.getParameter("name");
 		boolean gender = false;
 		if(_gender!=null) {
 		    gender = _gender.equals("1");
@@ -75,6 +74,8 @@ public class MemberServlet extends HttpServlet {
 		if(_zipai!=null) {
 		    zipai = Integer.parseInt(_zipai);
 		}
+        String name = req.getParameter("name");
+        String byname = req.getParameter("byname");
 		String motherName = req.getParameter("mother");
         String phone = req.getParameter("phone");
         String address = req.getParameter("address");
@@ -85,10 +86,10 @@ public class MemberServlet extends HttpServlet {
         MemberService ms = new MemberService();
 		if(action.equalsIgnoreCase("update")) {
 		    if(id!=-1L){
-		        ms.updateMember(id, fatherId, name, birthday, lunarbirthday, deathday, gender, zipai, motherName, phone, address, comment);
+		        ms.updateMember(id, fatherId, name, byname, birthday, lunarbirthday, deathday, gender, zipai, motherName, phone, address, comment);
 		    }
 		} else if (action.equalsIgnoreCase("add")) {
-            ms.addMember(fatherId, name, birthday, lunarbirthday, deathday, gender, zipai, motherName, phone, address, comment);
+            ms.addMember(fatherId, name, byname, birthday, lunarbirthday, deathday, gender, zipai, motherName, phone, address, comment);
 		}
 		resp.sendRedirect("/family/list.jsp");
 	}
