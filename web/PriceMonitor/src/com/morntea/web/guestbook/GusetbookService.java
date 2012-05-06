@@ -17,6 +17,9 @@ public class GusetbookService {
 	public void addMessage(String content, int appId, String ip) {
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
+		if(user==null) {
+		    return;
+		}
 		Date date = new Date();
 		Guestbook greeting = new Guestbook(user, content, date, appId);
 		greeting.setIp(ip);
