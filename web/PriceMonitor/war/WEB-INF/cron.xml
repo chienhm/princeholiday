@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<cronentries>
-  <!-- <cron>
-    <url>/monitor</url>
-    <description>Monitor product change every 5 minutes</description>
-    <schedule>every 20 minutes synchronized</schedule>
-  </cron> -->
-</cronentries>
+<blacklistentries>
+  <blacklist>
+    <subnet>31.184.238.134</subnet>
+    <description>SPAM IP address</description>
+  </blacklist>
+</blacklistentries>
