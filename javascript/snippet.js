@@ -62,9 +62,11 @@ function at(atTime, func) {
 }
 //Example:
 var now = new Date();
-var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 15, 52, 30, 30);
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 0, 0);
 at(atTime, function(){
+	var date = new Date(); console.log(date + date.getMilliseconds());
 	location.reload();
+	//window.frames[0].location.reload();
 });
 //clearTimeout(toHandle);
 //------------------------------------------------------------------------------------------------- (3)

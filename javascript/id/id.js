@@ -1,6 +1,8 @@
 ﻿//http://www.stats.gov.cn/tjbz/xzqhdm/
 //http://www.gov.cn/test/2005-06/15/content_18253.htm
-
+//http://sedac.ciesin.org/china/admin/gbcode/gbcode.html
+//http://citas.csde.washington.edu/
+//http://www.people.fas.harvard.edu/~chgis/work/downloads/
 function formatDate(year, month, day) {
 	if(!isDate(year, month, day)) {
 		return "";
