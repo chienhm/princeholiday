@@ -4,6 +4,7 @@
       html {
 		margin:0px;
 		padding:0px;
+		overflow-x:hidden;
 	  }
 	  body {
 	    margin:0px;
@@ -19,18 +20,18 @@
 	  }
 	  #main {
 	    float:left;
-	    width:350px;
+	    width:300px;
 		margin-left:4px;
 	  }
 	  #list {
-	    width:300px;
+	    width:280px;
 	    float:left;
 	    border:1px solid #d2d2d2;
 		margin-top:10px;
 		padding-top:6px;
 	  }
 	  #save-session-box {
-	    width:300px;
+	    width:280px;
 	    float:left;
 	    border:1px solid #d2d2d2;
 		margin-top:19px;
@@ -139,7 +140,7 @@
 	  }
 	  #saveSessionText[type=text]{
 	     float:left;
-		 width:270px;
+		 width:266px;
 		 height:22px;
 		 padding-left:1px;
 		 margin-top:4px;
@@ -158,7 +159,7 @@
 	  }
 	  .rowRenameText[type=text]{
 	     float:left;
-		 width:270px;
+		 width:266px;
 		 height:22px;
 		 padding-left:1px;
 		 margin-top:4px;
@@ -168,6 +169,7 @@
 		 color:#37383e;
 	  }
 </style>
+<script type="text/javascript" src="jquery.min.js"></script>
 <script type="text/javascript">
   var b = chrome.extension.getBackgroundPage()
   sessions = b.loadSessions("autoSessionList");
@@ -219,7 +221,7 @@
   }
 
   function loadSession(index) {
-      b.loadSession(sessions.list[index]);
+      b.loadSession(sessions[index]);
   }
 
 
@@ -420,22 +422,40 @@
 		  row.appendChild(sep2);
 		  row.appendChild(_open);
   }
+function das(i) {
+	var _sessions = b.delAutoSession(i);
+	if(_sessions!=null) {
+		sessions = _sessions;
+		createSessions();
+	}
+	//$("#row-"+i).remove();
+}
 
-  function createRow(i) {
-	  var row = document.createElement("div");
-	  row.setAttribute("id", "row-" + i);
-	  row.index = i;
-	  setRow(row, i);
-	  return row;
-  }
+function createItem(i) {
+	var item = sessions[i];
+	var name = item.name;
+	if(name.length>40) {
+		name = name.substring(0, 40) + "...";
+	}
+	var row = "<div id=\"row-" + i + "\" class=\"row\">"
+			+ "<div class=\"title\">" + name + "</div>"
+			+ "<div class=\"num\">(" + item.tabCount + "/" + item.windows.length + ") - " + item.date + "</div>"
+			+ "<a class=\"_open\" href=\"#\" onclick=\"das("+i+");\">Remove</a>"
+			+ "<div class=\"separator\">-</div>"
+			+ "<a class=\"link\" href=\"#\" onclick=\"return;\">Rename</a>"
+			+ "<div class=\"separator\">-</div>"
+			+ "<a href=\"#\" onclick=\"return false;\">Open</a>"
+			+ "</div>";
+	return row;
+}
 
-  function createSessions() {
-     var list = document.getElementById("list");
-	 list.innerHTML = "";
-	 for (var i=0;i<sessions.length;i++) {
-		  list.appendChild(createRow(i));
-	 }
-  }
+function createSessions() {
+	var list = $("#list");
+	list.empty();
+	for (var i=0;i<sessions.length;i++) {
+		list.append(createItem(i));
+	}
+}
 
 </script>
 </head>
