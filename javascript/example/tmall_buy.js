@@ -1,10 +1,4 @@
 //------------------------------------------------------------------------------------------------- ¶¨Ê±Ë¢ÐÂ
-// Run function at the next time slot, such as the 200th milliseconds
-function futureRun(func, ms) {
-	var t0 = new Date();
-	setTimeout(func, 1000-t0.getMilliseconds() + ms);
-}
-// Run script at specified time
 var toHandle = -1;
 function at(atTime, func) {
 	var left = atTime.getTime()-now.getTime();
@@ -19,6 +13,18 @@ at(atTime, function(){
 	window.frames[0].location.reload();
 });
 //clearTimeout(toHandle);
+function at(time, func) {
+	var now = new Date();
+	var diff = time.getTime() - now.getTime(); 
+	if(diff<0) {console.log("time expired");return;}
+	var timeout = (diff>60000)?(diff-60000):(diff>10000)?(diff-10000):diff;
+	toHandle = setTimeout(function(){
+		if(timeout==diff)func();
+		else at(time, func);
+	}, timeout);
+	console.log("[" + now + ", " + now.getMilliseconds() + "ms] " 
+		+ ( (diff>60000) ? (parseInt(diff/60000)+"m "+parseInt(diff%60000/1000)+"s") : (parseInt(diff/1000)+"s") ) + " left.");
+}
 //------------------------------------------------------------------------------------------------- ²âÊÔÇÀ¹ºÑÓ³Ù
 if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
 
@@ -91,7 +97,7 @@ function getFormValue(html, name) {
 }
 
 function login(user, pass, callback) {
-	$.get("http://login.taobao.com/member/login.jhtml",
+	jQuery.get("http://login.taobao.com/member/login.jhtml",
 		function(html) {
 			//console.log(data);
 			var data = {	
@@ -139,7 +145,7 @@ var toHandle = -1;
 function at(time, func) {
 	var now = new Date();
 	var diff = time.getTime() - now.getTime(); 
-	if(diff<0) {log("time expired");return;}
+	if(diff<0) {console.log("time expired");return;}
 	var timeout = (diff>60000)?(diff-60000):(diff>10000)?(diff-10000):diff;
 	toHandle = setTimeout(function(){
 		if(timeout==diff)func();

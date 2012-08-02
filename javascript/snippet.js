@@ -75,7 +75,7 @@ var toHandle = -1;
 function at(time, func) {
 	var now = new Date();
 	var diff = time.getTime() - now.getTime(); 
-	if(diff<0) {log("time expired");return;}
+	if(diff<0) {console.log("time expired");return;}
 	var timeout = (diff>60000)?(diff-60000):(diff>10000)?(diff-10000):diff;
 	toHandle = setTimeout(function(){
 		if(timeout==diff)func();
