@@ -158,5 +158,17 @@ function at(time, func) {
 var now = new Date();
 var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 13, 56, 0, 0);
 at(atTime, function(){
+	login("lahvey", "mima0000");
 	login("lleoeo", "epcc123456");
+	login("buykaoyanbook", "epcc123456"); //40积分
+	
+	login("ttaurusau", "epcc123456"); //60积分
+	login("llibraib", "epcc123456");
+	login("ccapricornap", "epcc123456");
+	login("aaquariusqu", "epcc123456");
+	login("ppiscesis", "epcc123456");
+	login("ggeminiem", "epcc123456");
+	login("vvirgoir", "epcc123456");
+	login("sscorpioco", "epcc123456");
+	login("ssagittariusag", "epcc123456");
 });
