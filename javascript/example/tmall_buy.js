@@ -25,40 +25,6 @@ function at(time, func) {
 	console.log("[" + now + ", " + now.getMilliseconds() + "ms] " 
 		+ ( (diff>60000) ? (parseInt(diff/60000)+"m "+parseInt(diff%60000/1000)+"s") : (parseInt(diff/1000)+"s") ) + " left.");
 }
-//------------------------------------------------------------------------------------------------- 测试抢购延迟
-if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
-
-function getServerTime() {
-	var st = new Date();
-	jQuery.ajax({
-		url: window.frames[0].location.href,
-		success: function(data){
-			//console.log(data);
-		},
-		complete: function(jqXHR){
-			var rt = new Date();
-			console.log(
-			  "[Send    : " + st + " " + st.getMilliseconds() + "]\n" 
-			+ "[Receive : " + rt + " " + rt.getMilliseconds() + "]\n"
-			+ "[Server  : " + jqXHR.getResponseHeader("Date") + "]\n"
-			+ "[Time    : " + (rt.getTime()-st.getTime()) + "ms]");
-		}
-	});
-}
-
-var toHandle = -1;
-function at(atTime, func) {
-	var left = atTime.getTime()-now.getTime();
-	toHandle = setTimeout(func, left);
-	console.log(Math.floor(left/1000) + "s " + left%1000 + "ms left.");
-}
-//Example:
-var now = new Date();
-at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 0, 0), getServerTime);
-at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 0, 500), getServerTime);
-at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 1, 0), getServerTime);
-at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 1, 500), getServerTime);
-
 //------------------------------------------------------------------------------------------------- 定时登录
 if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
 function postLoginData(postData, callback) {
@@ -158,17 +124,34 @@ function at(time, func) {
 var now = new Date();
 var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 13, 56, 0, 0);
 at(atTime, function(){
-	login("lahvey", "mima0000");
-	login("lleoeo", "epcc123456");
-	login("buykaoyanbook", "epcc123456"); //40积分
-	
-	login("ttaurusau", "epcc123456"); //60积分
-	login("llibraib", "epcc123456");
-	login("ccapricornap", "epcc123456");
-	login("aaquariusqu", "epcc123456");
-	login("ppiscesis", "epcc123456");
-	login("ggeminiem", "epcc123456");
-	login("vvirgoir", "epcc123456");
-	login("sscorpioco", "epcc123456");
-	login("ssagittariusag", "epcc123456");
 });
+
+//------------------------------------------------------------------------------------------------- 保持在线
+if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
+var toHandle = -1;
+var interval = 4 * 60 * 1000;
+var random = 1 * 60 * 1000;
+function periodicRun(func) {
+	var timeout = interval;
+	if(toHandle!=-1) { clearInterval(toHandle); toHandle = -1; }
+	if(random) { timeout += parseInt(Math.random()*random); }
+	toHandle = setTimeout(function() { 
+		if(func) func(); 
+		periodicRun(func); 
+	}, timeout);
+}
+
+function periodicGet(url, callback, _interval, _random) {
+	if(_interval)interval = _interval;
+	if(_random)random = _random;
+	periodicRun(function() {
+		jQuery.ajax({
+			"url"     : url,
+			"type"    : "get",
+			"cache"   : false,
+			"success" : callback, 
+			"error"   : function(){console.log("login time out.");clearInterval(toHandle);}
+		})
+	}, random);
+}
+periodicGet(location.href, function(data){console.log(new Date());})

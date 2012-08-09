@@ -1,4 +1,4 @@
-//=============================================================================
+//============================================================================= 服务器时间校对
 // Get server time and time diff between local and server
 if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
 
@@ -26,9 +26,9 @@ function getServerTime() {
 }
 
 //futureRun(getServerTime, 500);
-//=============================================================================
+//============================================================================= 周期性执行
 // Periodically ajax
-if(!($ && $.ajax)) {console.error("jQuery not loaded.");}
+if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
 var toHandle = -1;
 var interval = 5000;
 var random = undefined;
@@ -36,18 +36,21 @@ function periodicRun(func) {
 	var timeout = interval;
 	if(toHandle!=-1) { clearInterval(toHandle); toHandle = -1; }
 	if(random) { timeout += parseInt(Math.random()*random); }
-	toHandle = setTimeout(function() { func(); periodicRun(func); }, timeout);
+	toHandle = setTimeout(function() { 
+		if(func) func(); 
+		periodicRun(func); 
+	}, timeout);
 }
 
 function periodicGet(url, callback, _interval, _random) {
 	if(_interval)interval = _interval;
 	if(_random)random = _random;
 	periodicRun(function() {
-		$.ajax({
+		jQuery.ajax({
 			"url"     : url,
 			"type"    : "get",
 			"cache"   : false,
-			"success" : callback
+			"success" : callback //, "error" : function(){console.log("login time out.");clearInterval(toHandle);}
 		})
 	}, random);
 }
@@ -56,7 +59,7 @@ function periodicPost(url, data, callback, _interval, _random) {
 	if(_interval)interval = _interval;
 	if(_random)random = _random;
 	periodicRun(function() {
-		$.ajax({
+		jQuery.ajax({
 			"url"     : url,
 			"type"    : "post",
 			"data"    : data,
