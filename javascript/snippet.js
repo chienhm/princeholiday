@@ -7,9 +7,10 @@ document.getElementById('J_hb').dispatchEvent(evt);
 //-------------------------------------
 // 2. Time interval
 function _click() {
-	document.getElementById('J_hb').click();//for IE
+	document.getElementById('J_hb').click();
 }
 var toHandle = setInterval(_click, 1000, null);
+//clearInterval(toHandle);
 //-------------------------------------
 // 3. Periodically run function
 var toHandle = -1;

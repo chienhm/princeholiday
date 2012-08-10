@@ -12,7 +12,7 @@ at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	window.frames[0].location.reload();
 });
-//clearTimeout(toHandle);
+//clearTimeout(toHandle);//--------------------------------------------------------------
 function at(time, func) {
 	var now = new Date();
 	var diff = time.getTime() - now.getTime(); 
@@ -25,6 +25,12 @@ function at(time, func) {
 	console.log("[" + now + ", " + now.getMilliseconds() + "ms] " 
 		+ ( (diff>60000) ? (parseInt(diff/60000)+"m "+parseInt(diff%60000/1000)+"s") : (parseInt(diff/1000)+"s") ) + " left.");
 }
+var now = new Date();
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 8, 59, 58, 0);
+at(atTime, function(){
+	var date = new Date(); console.log(date + date.getMilliseconds());
+	window.frames[0].location.reload();
+});
 //------------------------------------------------------------------------------------------------- ¶¨Ê±µÇÂ¼
 if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
 function postLoginData(postData, callback) {

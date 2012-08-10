@@ -39,7 +39,7 @@ at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 1, 500), getS
 if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
 var toHandle = -1;
 var interval = 1000;
-var random = 200;
+var random = 2000;
 function periodicRun(func) {
 	var timeout = interval;
 	if(toHandle!=-1) { clearInterval(toHandle); toHandle = -1; }
@@ -75,17 +75,20 @@ function at(time, func) {
 		+ ( (diff>60000) ? (parseInt(diff/60000)+"m "+parseInt(diff%60000/1000)+"s") : (parseInt(diff/1000)+"s") ) + " left.");
 }
 
+var now = new Date();
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 9, 30, 0, 0);
+var endTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 10, 30, 0, 0).getTime();
+
 function start() {
 	periodicGet("http://ecrm.taobao.com/shopbonusapply/buyer_apply.htm?spm=3.304798.277070.1&activity_id=24714203&seller_id=725677994", function(html){
 		if(html.indexOf("很抱歉，该优惠券已经被领取完了，请选择其他优惠券")!=-1) {
 			var date = new Date(); console.log(date + date.getMilliseconds() + ": fail.");
+			if(date.getTime()>endTime) clearInterval(toHandle);
 		}
 		else clearInterval(toHandle);
 	});
 }
 
-var now = new Date();
-var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 10, 0, 0, 0);
 at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	start();
