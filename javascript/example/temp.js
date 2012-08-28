@@ -35,6 +35,169 @@ at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 0, 500), getS
 at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 1, 0), getServerTime);
 at(new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 1, 500), getServerTime);
 
+//------------------------------------------------------------------------------------------------- 齐家网登录
+function login(u, p) {
+	$("#UserName").val(u);
+	$("#UserPsw").val(p);
+	$("#loginBtn").click();
+}
+var toHandle = -1;
+function at(time, func) {
+	var now = new Date();
+	var diff = time.getTime() - now.getTime(); 
+	if(diff<0) {console.log("time expired");return;}
+	var timeout = (diff>60000)?(diff-60000):(diff>10000)?(diff-10000):diff;
+	toHandle = setTimeout(function(){
+		if(timeout==diff)func();
+		else at(time, func);
+	}, timeout);
+	console.log("[" + now + ", " + now.getMilliseconds() + "ms] " 
+		+ ( (diff>60000) ? (parseInt(diff/60000)+"m "+parseInt(diff%60000/1000)+"s") : (parseInt(diff/1000)+"s") ) + " left.");
+}
+
+var now = new Date();
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 13, 56, 0, 0);
+at(atTime, function(){
+	login("lleoeo", "epcc..."); 
+});
+//------------------------------------------------------------------------------------------------- 齐家网自动订单
+function getFormValue(html, name) {
+	var regExp = new RegExp("name=\""+name+"\"[^><]+value=\"(.*?)\"", "ig");
+	var r = regExp.exec(html);
+	if(r!=null) {
+		return r[1];
+	}
+	return "";
+}
+
+if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
+var toHandle = -1;
+var interval = 100;
+var random = 200;
+function periodicRun(func) {
+	var timeout = interval;
+	if(toHandle!=-1) { clearInterval(toHandle); toHandle = -1; }
+	if(random) { timeout += parseInt(Math.random()*random); }
+	toHandle = setTimeout(function() { 
+		if(func) func(); 
+		periodicRun(func); 
+	}, timeout);
+}
+
+var item_id = 30288;
+var user_id = 100218274;
+var shop_id = 243;
+var r_instore_count = 188;
+var canGoCart = 1;
+var count = 1;
+
+var data = {
+	"order_item[]" : item_id,
+	"item_id"      : item_id,
+	"user_id"      : user_id,
+};
+data[item_id + "_shop_id"] = shop_id;
+data[item_id + "_r_instore_count"] = r_instore_count;
+data[item_id + "_canGoCart"] = canGoCart;
+data[item_id + "_count"] = count;
+var lastTryTime = 0;
+
+function order() {
+	var now = new Date().getTime();
+	var timeDiff = now-lastTryTime;
+	if(timeDiff<3000) {
+		console.log("Connection alive?" + timeDiff);
+		return; //too quick
+	} //timeout
+	lastTryTime = now;
+	$.ajax({
+		"type":"post", 
+		"url":"http://mall.jia.com/order/order/get_cart_order", 
+		"data":data,
+		"success":function(html){
+			//console.log(html);
+			var s, e;
+			s = html.indexOf("orderkey");
+			s = html.indexOf("value=\"", s) + 7;
+			e = html.indexOf("\"/", s);
+			var orderkey = html.substring(s, e);
+			console.log(orderkey);
+			$("input[name=orderkey]").val(orderkey);
+			
+			s = html.indexOf("totle_cash");
+			s = html.indexOf(">", s) + 1;
+			e = html.indexOf("<", s);
+			var total = parseFloat(html.substring(s, e));
+			console.log(total);
+			if(total < 500) {
+				$("#order_form_sub").click();
+			}
+		}
+	});
+}
+periodicRun(order);
+
+//------------------------------------------------------------------------------------------------- 齐家网自动预约
+if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
+var toHandle = -1;
+var interval = 100;
+var random = 200;
+function periodicRun(func) {
+	var timeout = interval;
+	if(toHandle!=-1) { clearInterval(toHandle); toHandle = -1; }
+	if(random) { timeout += parseInt(Math.random()*random); }
+	toHandle = setTimeout(function() { 
+		if(func) func(); 
+		periodicRun(func); 
+	}, timeout);
+}
+
+var data = {
+	"item_id"      : 2660,
+	"user_id"      : 100218250,
+	"shop_id"      : 258,
+	"instoreCount" : 994,
+	"qeekaPrice"   : 3840.00,
+};
+var lastTryTime = 0;
+
+function order() {
+	var now = new Date().getTime();
+	var timeDiff = now-lastTryTime;
+	if(timeDiff<3000) {
+		console.log("Connection alive?" + timeDiff);
+		return; //too quick
+	} //timeout
+	lastTryTime = now;
+	$.ajax({
+		"type"    : "post", 
+		"url"     : "http://mall.jia.com/order/order/get_c_car_order_info", 
+		"data"    : data,
+		"success" : function(html){
+			//console.log(html);
+			var s, e;
+			s = html.indexOf("orderkey");
+			s = html.indexOf("value=\"", s) + 7;
+			e = html.indexOf("\"/", s);
+			var orderkey = html.substring(s, e);
+			console.log(orderkey);
+			$("input[name=orderkey]").val(orderkey);
+			
+			s = html.indexOf("product_name");
+			s = html.indexOf("<td>", s) + 4;
+			e = html.indexOf("</td>", s);
+			var price = parseFloat(html.substring(s, e));
+			console.log(price);
+			if(price < 5000) {
+				clearInterval(toHandle);
+				$("#order_form_sub").click();
+			} else {
+				lastTryTime = 0;
+			}
+		}
+	});
+}
+periodicRun(order);
 //------------------------------------------------------------------------------------------------- 周期性领优惠券
 if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}
 var toHandle = -1;
