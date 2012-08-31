@@ -160,4 +160,4 @@ function periodicGet(url, callback, _interval, _random) {
 		})
 	}, random);
 }
-periodicGet(location.href, function(data){console.log(new Date());})
+periodicGet(location.href, function(data){console.log(new Date());});
