@@ -84,10 +84,10 @@ function periodicRun(func) {
 	}, timeout);
 }
 
-var item_id = 30288;
-var user_id = 100218274;
-var shop_id = 243;
-var r_instore_count = 188;
+var item_id = 47211;
+var user_id = 100217367;
+var shop_id = 178;
+var r_instore_count = 502;
 var canGoCart = 1;
 var count = 1;
 
@@ -103,19 +103,21 @@ data[item_id + "_count"] = count;
 var lastTryTime = 0;
 
 function order() {
-	var now = new Date().getTime();
-	var timeDiff = now-lastTryTime;
+	var now = new Date();
+	var timeDiff = now.getTime()-lastTryTime;
 	if(timeDiff<3000) {
 		console.log("Connection alive?" + timeDiff);
 		return; //too quick
 	} //timeout
-	lastTryTime = now;
+	lastTryTime = now.getTime();
+	console.log(now + now.getMilliseconds() + " send get order.");
 	$.ajax({
 		"type":"post", 
 		"url":"http://mall.jia.com/order/order/get_cart_order", 
 		"data":data,
 		"success":function(html){
 			//console.log(html);
+			var date = new Date(); console.log(date + date.getMilliseconds() + " receive get order => submit order.");
 			var s, e;
 			s = html.indexOf("orderkey");
 			s = html.indexOf("value=\"", s) + 7;
@@ -129,13 +131,32 @@ function order() {
 			e = html.indexOf("<", s);
 			var total = parseFloat(html.substring(s, e));
 			console.log(total);
-			if(total < 500) {
+			//if(total < 500) {
 				$("#order_form_sub").click();
-			}
+			//}
 		}
 	});
 }
-periodicRun(order);
+var toHandle = -1;
+function at(time, func) {
+	var now = new Date();
+	var diff = time.getTime() - now.getTime(); 
+	if(diff<0) {console.log("time expired");return;}
+	var timeout = (diff>60000)?(diff-60000):(diff>10000)?(diff-10000):diff;
+	toHandle = setTimeout(function(){
+		if(timeout==diff)func();
+		else at(time, func);
+	}, timeout);
+	console.log("[" + now + ", " + now.getMilliseconds() + "ms] " 
+		+ ( (diff>60000) ? (parseInt(diff/60000)+"m "+parseInt(diff%60000/1000)+"s") : (parseInt(diff/1000)+"s") ) + " left.");
+}
+
+var now = new Date();
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 20, 0, 0, 0);
+at(atTime, function(){
+	var date = new Date(); console.log(date + date.getMilliseconds() + " start");
+	order();
+});
 
 //------------------------------------------------------------------------------------------------- 齐家网自动预约
 if(!(jQuery && jQuery.ajax)) {console.error("jQuery not loaded.");}

@@ -130,7 +130,6 @@ function at(time, func) {
 var now = new Date();
 var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 13, 56, 0, 0);
 at(atTime, function(){
-	login("sscorpioco", "epcc..."); 
 });
 
 //------------------------------------------------------------------------------------------------- 保持在线
