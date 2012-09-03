@@ -1,30 +1,32 @@
 ﻿var index = -1;
 var interval = 0;
 var template = "";
+var running = false;
 var categories = [
 	{id:"11302000000", name:"连衣裙"},
-	{id:"11301000000", name:"时尚女裤"},
+	{id:"11301000000", name:"休闲女裤"},
 	{id:"11303000000", name:"半身裙"},
-	{id:"11304000000", name:"短裤热裤"},
-	{id:"10102000000", name:"风格T恤"},
-	{id:"10101000000", name:"夏日雪纺"},
-	{id:"10104000000", name:"时尚衬衫"},
-	{id:"10103000000", name:"底衫吊带"},
+	{id:"11304000000", name:"牛仔裤"},
+	{id:"10102000000", name:"长袖T恤"},
+	{id:"10101000000", name:"毛衣针织"},
+	{id:"10104000000", name:"风衣皮衣"},
+	{id:"10103000000", name:"卫衣外套"},
 	{id:"10301000000", name:"魅力女鞋"},
-	{id:"10302000000", name:"潮流女包"},
-	{id:"10303000000", name:"时尚配件"},
-	{id:"10201000000", name:"衬衫T恤"},
-	{id:"10204000000", name:"夏款裤装"},
-	{id:"10203000000", name:"男包配饰"},
-	{id:"10202000000", name:"休闲男鞋"},
+	{id:"10302000000", name:"时尚箱包"},
+	{id:"10304000000", name:"休闲男鞋"},
+	{id:"10303000000", name:"男女配饰"},
+	{id:"10201000000", name:"夏秋上装"},
+	{id:"10204000000", name:"夏秋裤装"},
+	{id:"10203000000", name:"毛衣针织"},
+	{id:"10202000000", name:"夹克卫衣"},
 	{id:"11102000000", name:"时尚文胸"},
 	{id:"11101000000", name:"家居睡衣"},
-	{id:"11104000000", name:"打底丝袜"},
-	{id:"11103000000", name:"舒适内裤"},
+	{id:"11103000000", name:"袜子内裤"},
 	{id:"10601000000", name:"童装孕装"},
 	{id:"10602000000", name:"玩具早教"},
 	{id:"10603000000", name:"母婴用品"},
 	{id:"10604000000", name:"童鞋配饰"},
+	{id:"10402000000", name:"床上用品"},
 	{id:"10401000000", name:"家装厨卫"},
 	{id:"10403000000", name:"居家百货"},
 	{id:"10404000000", name:"游泳户外"},
@@ -35,8 +37,7 @@ var categories = [
 	{id:"10502000000", name:"数码配件"},
 	{id:"10903000000", name:"销量千件"},
 	{id:"10901000000", name:"10元特价"},
-	{id:"10902000000", name:"3折封顶"},
-	{id:"10904000000", name:"热销精品"}
+	{id:"10902000000", name:"3折封顶"}
 ];
 
 function findLuck() {
@@ -54,15 +55,10 @@ function loopAll() {
 }
 
 function getPage(category) {
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://taojinbi.taobao.com/home/category_search_home.htm?page=1&order=1&isAsc=1&category_id="+category.id+"&tracelog=qzexcoin&discountPriceMin=&discountPriceMax=&isExchangeCoin=yes&exchangeCoinMin=&exchangeCoinMax=", true);
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4) {
-			var items = parseHtml(xhr.responseText);
-			updateArray(items);
-		}
-	}
-	xhr.send();
+	$.get("http://taojinbi.taobao.com/home/category_search_home.htm?page=1&order=1&isAsc=1&category_id="+category.id+"&tracelog=qzexcoin&discountPriceMin=&discountPriceMax=&isExchangeCoin=yes&exchangeCoinMin=&exchangeCoinMax=", function(html) {
+		var items = parseHtml(html);
+		updateArray(items);
+	});
 }
 
 function getId(url) {
@@ -150,6 +146,8 @@ function updateArray(items) {
 	}
 }
 
+//************************************************************************************************
+// UI related
 function addItem(area, item) {
 	var html = template.replace(/\$\{(.+?)\}/ig, function(match, result){return item[result];});
 	$(html).prependTo("#"+area);
@@ -176,7 +174,6 @@ function showNote(item) {
 	setTimeout(function(){notification.cancel();}, 10000);
 }
 
-var running = false;
 function start() {
 	if(running) {
 		clearInterval(interval);
@@ -191,7 +188,26 @@ function start() {
 	}
 }
 
+/*************************************************************************************************
+ * category init, update to latest version. If retrieving failed, use default data.
+ */
+function initCategory() {
+	$.get("http://taojinbi.taobao.com/record/my_coin_detail.htm", function(html){
+		var reg=/<span><a href=".+?category_id=(\d+)" >(.+?)<\/a>\s*?<\/span>/ig;
+		var result = null;
+		var _categories = new Array();
+		while((result = reg.exec(html)) != null) {
+			_categories.push({id:result[1], name:result[2]});
+			//console.log("	{id:\""+result[1]+"\", name:\""+result[2]+"\"},");
+		}
+		if(_categories.length>0) {
+			categories = _categories;
+		}
+	});
+}
+
 function init() {
+	initCategory();
 	template = $("#\\$\\{id\\}").parent().html();
 	$("#\\$\\{id\\}").hide();
 }
