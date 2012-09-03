@@ -151,16 +151,12 @@ function updateArray(items) {
 }
 
 function addItem(area, item) {
-	/*if($.template["itemTemplate"]==undefined) {
-		return;
-	}*/
 	var html = template.replace(/\$\{(.+?)\}/ig, function(match){
 		if(item[match[1]]!=undefined) {
 			return item[match[1]];
 		}
 	});
 	$(html).prependTo("#"+area);
-	//$.tmpl("itemTemplate", item).prependTo("#"+area);
 	showNote(item);
 }
 
@@ -202,17 +198,7 @@ function start() {
 function init() {
 	template = $("#\\$\\{id\\}").parent().html();
 	$("#\\$\\{id\\}").hide();
-	/*var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function () {
-		if (xhr.readyState == 4) {
-			$.template( "itemTemplate", xhr.responseText );
-			start();
-		}
-	};
-	xhr.open("GET", chrome.extension.getURL('/coin_exchange/coin_item_template.html'), true);
-	xhr.send();*/
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
 	init();	
