@@ -1,5 +1,6 @@
 ﻿var index = -1;
 var interval = 0;
+var template = "";
 var categories = [
 	{id:"11302000000", name:"连衣裙"},
 	{id:"11301000000", name:"时尚女裤"},
@@ -37,7 +38,6 @@ var categories = [
 	{id:"10902000000", name:"3折封顶"},
 	{id:"10904000000", name:"热销精品"}
 ];
-var template = "";
 
 function findLuck() {
 	index++;
@@ -151,11 +151,7 @@ function updateArray(items) {
 }
 
 function addItem(area, item) {
-	var html = template.replace(/\$\{(.+?)\}/ig, function(match){
-		if(item[match[1]]!=undefined) {
-			return item[match[1]];
-		}
-	});
+	var html = template.replace(/\$\{(.+?)\}/ig, function(match, result){return item[result];});
 	$(html).prependTo("#"+area);
 	showNote(item);
 }
