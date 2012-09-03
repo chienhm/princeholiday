@@ -1,0 +1,30 @@
+<html>
+<head>
+<style>
+div.action {
+	width: 180px;
+	display: block;
+}
+.input {
+	width: 100px;
+}
+</style>
+<script type="text/javascript" src="../jquery.min.js"></script>
+<script type="text/javascript" src="get_coin.js"></script>
+</head>
+
+<body>
+	<div id="auto">
+		<select id="userlist"><option></option></select>
+		<input type="button" id="del" name="del" value="删除" />
+		用户名：<input type="input" class="input" name="user" id="user" value="" /> 
+		密码：<input type="password" class="input" name="pass" id="pass" value="" />
+		<input type="button" id="add" name="add" value="保存" />
+	</div>
+	<input type="button" class="action" id="get_coin" name="get_coin" value="一键领取所有淘金币" />
+	<div class="action"><a href="http://taojinbi.taobao.com/record/my_coin_detail.htm" target="_blank">前往淘金币中心查看</a></div>
+	<div id="logs"></div>
+	
+	<script type="text/javascript" src="../ga.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+﻿<html>
+<head>
+<title>淘金币全额兑换</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="../jquery.min.js"></script>
+<script type="text/javascript" src="coin_exchange.js"></script>
+</head>
+<body>
+  <div class="main">
+      <div class="controller">
+		<input id="start" type="button" value="开始查找" xdisabled="true"/>
+		<ul><li id="task">当前状态</li><li id="result">查找结果</li></ul>
+		<!--<div class="search">	
+			<script type="text/javascript">
+			alimama_pid="mm_10874271_3112912_10364994";
+			alimama_type="g";
+			alimama_tks={};
+			alimama_tks.style_i=2;
+			alimama_tks.lg_i=1;
+			alimama_tks.w_i=572;
+			alimama_tks.h_i=69;
+			alimama_tks.btn_i=1;
+			alimama_tks.txt_s="淘金币";
+			alimama_tks.hot_i=1;
+			alimama_tks.hc_c="0065FF";
+			alimama_tks.cid_i=0;
+			alimama_tks.t_i=1;
+			</script>
+			<script type="text/javascript" src="http://a.alimama.cn/inf.js"></script>
+		</div>-->
+      </div>
+      <div class="type">以下宝贝可全额兑换，请立即抢购</div>
+      <div class="items" id="list">
+		<a href="${url}" target="_blank" id="${id}">
+			<img width="220" height="220" src="${image}" />
+			<p class="title">${name}(${ship})</p>
+			<p class="sales">
+				<span><del>${price}</del></span>
+				<em>${nowPrice}</em><span class="coin">${nowCoin}淘金币</span>
+				<span>已售${sales}件</span>
+			</p>
+			<p><span class="highlight">全额兑换：<b>${coin}</b>淘金币</span></p>
+		</a>
+	  </div>
+	  <div class="type">以下宝贝使用全额兑换已失效</div>
+      <div class="items" id="history"></div>
+      <!-- 
+  	  <div><iframe frameborder="0" marginheight="0" marginwidth="0" border="0" id="alimamaifrm" name="alimamaifrm" scrolling="no" height="3639px" width="100%" src="http://www.taobao.com/go/chn/tbk_channel/jkwt.php?pid=mm_10874271_3112912_10364994&eventid=102405" ></iframe></div>
+	  -->
+	  <div class="type">推荐宝贝（非淘金币兑换）</div>
+	  <iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="950" height="574" src="http://top.taobao.com/interface_v2.php?pid=mm_10874271_3112912_10364994&type=x&f=html&ie=utf8&from=taoke&unid=&name=%E7%83%AD%E9%94%80%E4%B8%87%E4%BB%B6%E6%8E%A8%E8%8D%90&trtp=1&up=false&goodsFilter=all&sw=950&sh=574&sn=10&rn=5&pn=14&ls=4&rs=4&bgc=FFFFFF&bc=D9D9D9&fc=404040&tc=404040&cat_ids=16%2CTR_HZP%2CTR_GMDXPS%2CTR_JJ%2CTR_SM%2CTR_MY%2CTR_SP%2CTR_WT%2CTR_ZH%2C1625%2C50006843%2C50006842" ></iframe>
+	</div>
+	
+	<script type="text/javascript" src="../ga.js"></script>
+</body>
+</html>
