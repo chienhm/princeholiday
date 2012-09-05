@@ -369,10 +369,12 @@
 		if(user!="" && pass!="") {
 			b.saveUser(user, pass);
 			var foundUsers = $('#userlist option').filter(function(index){return $(this).text()==user;});
-			if(foundUsers.length==0) {
-				$('#userlist').append( new Option(user, pass) );
-			} else {
-				foundUsers.val(pass);
+			if(foundUsers) {
+				if(foundUsers.length==0) {
+					$('#userlist').append( new Option(user, pass) );
+				} else {
+					foundUsers.val(pass);
+				}
 			}
 		}
 	}
@@ -385,9 +387,11 @@
 	
 	function loadUsers() {
 		var users = b.getUser();
-		$.each(users, function(n, p) {
-			$('#userlist').append( new Option(n, p) );
-		})
+		if(users) {
+			$.each(users, function(n, p) {
+				$('#userlist').append( new Option(n, p) );
+			})
+		}
 	}
 	
 	function init() {
@@ -402,7 +406,7 @@
 		
 document.addEventListener('DOMContentLoaded', function () {
 	init();
-	document.getElementById("del").addEventListener('click', del);
-	document.getElementById("add").addEventListener('click', save);
-	document.getElementById("get_coin").addEventListener('click', autoGetCoin);
+	$("#del").bind('click', del);
+	$("#add").bind('click', save);
+	$("#get_coin").bind('click', autoGetCoin);
 });
