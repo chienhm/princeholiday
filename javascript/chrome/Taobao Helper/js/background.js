@@ -10,6 +10,9 @@ function getConfig() {
 	}catch(err){
 		console.error(err);
 	}
+	if(!config || typeof config != "object") {
+		config = {};
+	}
 	return config;
 }
 
@@ -196,3 +199,40 @@ function log(str) {
  * chrome.browserAction.onClicked.addListener(function(tab) { var manager_url =
  * chrome.extension.getURL("manager.html"); focusOrCreateTab(manager_url); });
  */
+function createTabAndInject(url, cssFiles, jsFiles) {
+	chrome.tabs.create({"url":url}, function (oTab) {
+		console.log(oTab);
+		
+		function updateTab(tabId, changeInfo, tab) {
+			if(oTab.id==tabId && changeInfo.status=="complete") {
+				chrome.tabs.onUpdated.removeListener(updateTab);
+				for(var index in cssFiles) {
+					chrome.tabs.insertCSS(tabId, {file : cssFiles[index]});				
+				}
+				for(var index in jsFiles) {
+					chrome.tabs.executeScript(tabId, {file : jsFiles[index]});
+				}
+			}
+		}
+		chrome.tabs.onUpdated.addListener(updateTab);
+	});
+}
+
+chrome.extension.onRequest.addListener(
+	function(request, sender, sendResponse) {
+		if(sender.tab) {
+			console.log(request.cmd);
+			switch (request.cmd) {
+			case "GET_OPTIONS":
+				sendResponse(getConfig());
+				break;
+			case "GET_USERS":
+				sendResponse(getUser());
+				break;
+				
+			default:
+				chrome.tabs.sendRequest(sender.tab.id, request, sendResponse);
+			}
+		}
+	}
+);

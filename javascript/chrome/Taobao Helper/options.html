@@ -1,10 +1,38 @@
 ﻿<html>
-<head><title>选项</title></head>
-<script type="text/javascript" src="options.js"></script>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>淘小蜜选项</title>
+</head>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/options.js"></script>
+<link rel="stylesheet" href="css/options.css" />
 <body>
-<input type="checkbox" id="autolog" name="autolog" /> 允许保存用户密码和自动登录
-<br>
-<button>保存</button>
-<div id="status"></div>
+<div class="option">
+	<input type="checkbox" id="autolog" name="autolog" /> 允许保存用户密码和自动登录<br/>
+	<button class="btn" name="oSave" id="oSave"><strong>保存</strong></button>
+	<div id="status"></div>
+</div>
+
+<div class="userfield">
+	用户名：<input type="input" class="input" name="user" id="user" value="" /><br/>
+	密　码：<input type="password" class="input" name="pass" id="pass" value="" />
+	<button class="btn" name="add" id="add"><strong>保存</strong></button>
+</div>
+
+<table id="usertable" summary="2007 Major IT Companies' Profit">
+    <thead>
+    	<tr>
+		<th colspan="4">当前保存的用户列表</td>
+        </tr>
+    </thead>
+	<tfoot>
+	<tr>
+		<td colspan="4"><em>请注意，用户密码以明文保存，有顾虑的用户请谨慎使用。</em></td>
+	</tr>
+	</tfoot>
+    <tbody>
+    </tbody>
+</table>
+
 </body>
 </html>

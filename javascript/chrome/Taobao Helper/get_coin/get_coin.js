@@ -363,27 +363,6 @@
 	}
 
 	//==========================================================================
-	function save() {
-		var user = $('#user').val(); //$('#user').val("");
-		var pass = $('#pass').val(); $('#pass').val("");
-		if(user!="" && pass!="") {
-			b.saveUser(user, pass);
-			var foundUsers = $('#userlist option').filter(function(index){return $(this).text()==user;});
-			if(foundUsers) {
-				if(foundUsers.length==0) {
-					$('#userlist').append( new Option(user, pass) );
-				} else {
-					foundUsers.val(pass);
-				}
-			}
-		}
-	}
-	
-	function del() {
-		var selected = $("#userlist option:selected");
-		b.delUser(selected.html());
-		selected.remove();
-	}
 	
 	function loadUsers() {
 		var users = b.getUser();
@@ -396,7 +375,7 @@
 	
 	function init() {
 		var config = b.getConfig();
-		if(config!=null && config.autoGetCoinEnabled) {
+		if(config!=null && config.autoLogin) {
 			loadUsers();
 		} else {
 			$("#auto").hide();
@@ -406,7 +385,5 @@
 		
 document.addEventListener('DOMContentLoaded', function () {
 	init();
-	$("#del").bind('click', del);
-	$("#add").bind('click', save);
 	$("#get_coin").bind('click', autoGetCoin);
 });
