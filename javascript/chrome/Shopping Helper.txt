@@ -1,0 +1,16 @@
+(1) Ajax版
+-10m 	进入商品页面
+
+-60s	进入checkout页面
+-20s 	Ajax读取商品信息（历史最长耗时10s）
+-10s 	Ajax获取商品订单（历史最长耗时5s或超时失败）
+0s 	提交订单
+
+(2) 升级简化版：
+提交到框架，新窗口可能会被阻拦
+-10m 	进入商品页面，获取商品促销价格信息
+-60s	进入checkout页面，添加促销优惠信息并选中，添加框架元素，设置表单目标至框架
+0s	$('#fromSubmit').submit();提交订单
+
+$(".detail_bd").append($("<iframe id=abc name=abc width=100%/>"));
+$("#cart_form").attr("target", "abc");
