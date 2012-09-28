@@ -1,0 +1,53 @@
+﻿{
+   "manifest_version": 2,
+   "background": {
+      "page": "background.html"
+   },
+   "browser_action": {
+      "default_icon": "icon_19_19.png",
+      "default_title": "Shopping Assistant",
+	  "default_popup": "menu.html"
+   },
+   "description": "Shopping Assistant",
+   "icons": {
+      "128": "icon_128_128.png",
+      "32": "icon_32_32.png",
+      "48": "icon_48_48.png"
+   },
+   "name": "Shopping Assistant",
+   "options_page": "options.html",
+   "content_scripts": [
+	   {
+		  "matches": ["http://chaoshi.tmall.com/*", "http://login.taobao.com/*"],
+		  "all_frames": true,
+		  "js": ["script/jquery.min.js", "taobao/tmall.js"]
+	   },
+	   {
+		  "matches": ["http://ju.taobao.com/tg/home.htm*", "http://detail.tmall.com/item.htm*", "http://buy.taobao.com/auction*"],
+		  "run_at": "document_end",
+		  "js": ["script/jquery.min.js", "taobao/ju.js"]
+	   },
+	   {
+		  "matches": ["http://*.taobao.com/*", "http://*.tmall.com/*", "http://localhost:8888/*"],
+		  "run_at": "document_end",
+		  "js": ["script/jquery.min.js", "script/common.js", "taobao/buy.js"]
+	   },
+	   {
+		  "matches": ["http://www.homevv.com/*"],
+		  "run_at": "document_end",
+		  "js": ["script/jquery.min.js", "homevv/vv.js"]
+	   },
+	   //------------------------------------------------------------Temp
+	   {
+		  "matches": ["http://www.lamiu.com/*"],
+		  "js": ["script/jquery.min.js", "temp/lamiu.js"]
+	   },
+	   {
+		  "matches": ["*://*.jia.com/*"],
+		  "run_at": "document_end",
+		  "js": ["script/jquery.min.js", "script/common.js", "temp/jia.js"]
+	   }
+   ],
+   "permissions": [ "cookies", "tabs", "notifications", "*://*.taobao.com/", "*://*.tmall.com/", "*://*.yihaodian.com/" ],
+   "version": "1.0.51"
+}
