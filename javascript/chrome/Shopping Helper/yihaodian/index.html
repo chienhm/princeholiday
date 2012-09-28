@@ -1,0 +1,34 @@
+﻿<html>
+<head>
+<title>1号店</title>
+<script type="text/javascript" src="../script/jquery.min.js"></script>
+<script type="text/javascript" src="yihaodian.js"></script>
+<script type="text/javascript">
+var b = chrome.extension.getBackgroundPage();
+
+function init() {
+}
+
+function buy() {
+	yihaodian();
+}
+
+function add() {
+	var url = $("#url").val();
+	if(url!="") {
+		addProduct(url, null);
+	}
+}
+</script>
+</head>
+<body onload="init();">
+  <div class="main">
+	  <a href="http://www.yihaodian.com/cms/view.do?topicId=21516&merchant=1" target="_blank">1号店</a>
+      <div class="controller">
+	    <input id="url" type="text" />
+		<input id="add" type="button" value="加入购物车" onclick="add();"/>
+		<input id="buy" type="button" value="直接购买" onclick="buy();"/>
+	  <div>
+  </div>
+</body>
+</html>
