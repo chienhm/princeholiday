@@ -1,13 +1,4 @@
-﻿body
-{
-	line-height: 1.6em;
-}
-
-h1 {
-	text-align: center;
-}
-
-.ascii td.char {
+﻿.ascii td.char {
 	color: red;
 }
 .ascii

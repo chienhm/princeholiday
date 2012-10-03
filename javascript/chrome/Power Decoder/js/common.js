@@ -13,7 +13,7 @@ function focusOrCreateTab(url) {
 			var tabs = windows[i].tabs;
 			for ( var j in tabs) {
 				var tab = tabs[j];
-				if (tab.url == url) {
+				if (tab.url == chrome.extension.getURL(url)) {
 					existing_tab = tab;
 					break;
 				}

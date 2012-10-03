@@ -19,5 +19,5 @@
 	"name": "Power Decoder",
 	"permissions": [ "cookies", "tabs", "notifications", "contextMenus" ],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.0.3"
+	"version": "1.1.0"
 }

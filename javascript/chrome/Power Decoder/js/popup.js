@@ -1,5 +1,5 @@
 ﻿$(function() {
-	$("h1").dblclick(function(){
+	$("#go").click(function(){
 		focusOrCreateTab("index.html");
 	});
 });
