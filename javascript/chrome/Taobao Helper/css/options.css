@@ -1,0 +1,92 @@
+﻿body{
+	background-color:#eef;
+	color:#000;
+	font-family:arial,sans-serif;
+	font-size:13px
+}
+a{
+	color:#11c;
+	text-decoration:none
+}
+a:hover{
+	text-decoration:underline
+}
+
+#status {
+	display: inline;
+}
+.option, .userfield {
+	margin: 5px;
+	font: 12px/1.5 Tahoma, 'Microsoft Yahei', 'Simsun';
+	font-size: 14px;
+	font-weight: 700;
+	color: #369;
+}
+.userfield input {
+	width: 120px;
+	height: 20px;
+	padding: 2px 4px;
+	border: 1px solid;
+	border-color: #848484 #E0E0E0 #E0E0E0 #848484;
+	background: white;
+	vertical-align: middle;
+}
+.btn {
+	vertical-align: middle;
+	overflow: hidden;
+	margin-right: 3px;
+	padding: 0;
+	height: 23px;
+	border: 1px solid #235994;
+	background-color: #06C;
+	color: white;
+	cursor: pointer;
+	-moz-box-shadow: 0 1px 0 #E5E5E5;
+	-webkit-box-shadow: 0 1px 0 #E5E5E5;
+	box-shadow: 0 1px 0 #E5E5E5;
+}
+.btn strong {
+	padding: 0 10px;
+	line-height: 21px;
+}
+.error {
+	border-color: #F66 #FFBDB9 #FFBDB9 #F66;
+	background-color: #FDF4F4;
+}
+#usertable
+{
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+	margin: 5px;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #69c;
+}
+#usertable th
+{
+	padding: 15px 10px 10px 10px;
+	font-weight: normal;
+	font-size: 14px;
+	font-weight: 700;
+	color: #039;
+}
+#usertable tbody
+{
+	background: #e8edff;
+}
+#usertable td
+{
+	padding: 10px;
+	color: #669;
+	border-top: 1px dashed #fff;
+}
+#usertable tbody tr:hover td
+{
+	color: #339;
+	background: #d0dafd;
+}
+.footer{
+	margin-top:10px;
+	text-align:center
+}

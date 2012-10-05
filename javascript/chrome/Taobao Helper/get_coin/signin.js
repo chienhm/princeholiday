@@ -1,0 +1,1 @@
+$.getJSON("http://jf.etao.com/ajax/getCreditForSrp.htm?&callback=?", function(data){console.log(data);});

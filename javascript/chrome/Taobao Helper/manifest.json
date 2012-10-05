@@ -1,0 +1,36 @@
+﻿{
+	"manifest_version": 2,
+	"background": {
+		"page": "background.html"
+	},
+	"browser_action": {
+		"default_icon"  : "logo_18_18.png",
+		"default_title" : "淘小蜜",
+		"default_popup" : "menu.html"
+	},
+	"description": "淘宝得力助手，一键登录，一键评价，一键领取所有淘金币，自动查询淘金币全额兑换，每日登录积分等等。",
+	"icons": {
+		"128" : "logo_128_128.png",
+		"32"  : "logo_32_32.png",
+		"48"  : "logo_48_48.png",
+		"16"  : "logo_16_16.png"
+	},
+	"content_scripts": [
+		{
+			"matches" : ["*://*.taobao.com/*"],
+			"js"      : ["js/jquery.min.js"]
+		}
+	],
+	"web_accessible_resources": ["logo.png"],
+	"name": "淘小蜜",
+	"options_page": "options.html",
+	"permissions": [
+		"cookies", 
+		"tabs", 
+		"notifications", 
+		"*://*.taobao.com/*", 
+		"*://*.etao.com/"
+	],
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+	"version": "1.3.0"
+}
