@@ -9,8 +9,8 @@ document.getElementById('J_hb').dispatchEvent(evt);
 function _click() {
 	document.getElementById('J_hb').click();
 }
-var toHandle = setInterval(_click, 1000, null);
-//clearInterval(toHandle);
+var itHandle = setInterval(_click, 1000, null);
+//clearInterval(itHandle);
 //-------------------------------------
 // 3. Periodically run function
 var toHandle = -1;
@@ -18,7 +18,7 @@ var interval = 5000;
 var random = undefined;
 function periodicRun(func) {
 	var timeout = interval;
-	if(toHandle!=-1) { clearInterval(toHandle); toHandle = -1; }
+	if(toHandle!=-1) { clearTimeout(toHandle); toHandle = -1; }
 	if(random) { timeout += parseInt(Math.random()*random); }
 	toHandle = setTimeout(function() { func(); periodicRun(func); }, timeout);
 }
@@ -123,3 +123,18 @@ function log(string) {
 	var fTime = "["+date.getFullYear()+"."+date.getFullMonth()+"."+date.getFullDate()+" "+date.getFullHours()+":"+date.getFullMinutes()+":"+date.getFullSeconds()+"."+date.getFullMilliseconds()+"] ";
 	console.log(fTime + string);
 }
+//------------------------------------------------------------------------------------------------- (6)
+// Form hijack
+//-------------------------------------------------------------------------------------------------
+var form = $("#J_FrmBid")[0];
+var submit = form.submit;
+form.submit = function(){
+	var data = {};
+	for (var i = 0; i<this.elements.length; i++) {
+		data[this.elements[i].name] = this.elements[i].value;
+	}
+	console.log(data);
+	console.log(this.action);
+	//$.post(this.action, data, function(html){console.log(html);});
+	submit.apply(this);
+};
