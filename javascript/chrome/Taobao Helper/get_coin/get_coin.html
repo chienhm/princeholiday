@@ -3,11 +3,28 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style>
 div.action {
-	width: 180px;
 	display: block;
 }
 .input {
 	width: 100px;
+}
+ol, ul {
+	list-style: none;
+	height: 80px;
+}
+.task {
+	width: 120px;
+	height: 70px;
+	margin: 5px;
+	float: left;
+	background-color: whiteSmoke;
+	text-align: center;
+	line-height: 70px;
+	font-family: "微软雅黑",Microsoft Yahei;
+}
+.footer{
+	margin-top:10px;
+	text-align:center
 }
 </style>
 <script type="text/javascript" src="../js/jquery.min.js"></script>
@@ -19,10 +36,21 @@ div.action {
 	<div id="auto">
 		<select id="userlist"><option></option></select>
 	</div>
-	<input type="button" class="action" id="get_coin" name="get_coin" value="一键领取淘金币并签到" />
-	<div class="action"><a href="http://taojinbi.taobao.com/record/my_coin_detail.htm" target="_blank">前往淘金币中心</a></div>
+	<div class="action">
+		<input type="button" class="action" id="get_coin" name="get_coin" value="一键完成所有任务" />
+		<a href="http://taojinbi.taobao.com/record/my_coin_detail.htm" target="_blank">淘金币中心</a>
+		<a href="https://jfb.alipay.com/activity/earn.htm" target="_blank">赚取积分宝</a>
+	</div>
+	<div>
+		<ul id="tasks">
+		</ul>
+	</div>
 	<div id="logs"></div>
 	
 	<script type="text/javascript" src="../js/ga.js"></script>
+	<div class="footer">
+		&copy;2012 
+		<a href="http://www.morntea.com">早茶一品</a>
+	</div>
 </body>
 </html>
