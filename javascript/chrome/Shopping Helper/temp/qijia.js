@@ -95,6 +95,16 @@ function getItem(item_id, callback) {
 		}
 		//**********************************
 		var shop_id = getFormValue(html, "shop_id");
+		/*
+		buy_num:1
+		instoreCount:3
+		item_id:50151
+		user_id:100231708
+		promotion_id:19624
+		shop_id:363
+		qeekaPrice:54.50
+		jifen:54
+		*/
 		var data = {
 			"buy_num"      : 1,
 			"instoreCount" : getFormValue(html, "instoreCount"),
@@ -215,6 +225,31 @@ function submitOrder(orderkey, promotion_string, promotion_start) {
 	console.log(orderData);
 	
 	$("input[name=orderkey]").val(orderkey);
+
+	/*
+	address_id:86823
+	user_name:
+	province:0
+	address:
+	zipcode:
+	mobile:
+	area_no:
+	phone_no:
+	sub_no:
+	deliveryType:2
+	shop_id[]:16
+	item_16[]:20085
+	promotion_20085:19528_1999.00
+	aDoubleCredits_20085:1
+	account_20085:1
+	hasPreOrder_20085:0
+	shop_fee_16:2_50.00
+	sendtype_16:2
+	comment_16:
+	integral_16:
+	allprice:3998.00
+	orderkey:5518eaff63fe36d5595ea9e8dd9e0721
+	*/
 						
 	//$('#fromSubmit').submit();//$("#order_form_sub").click();
 	function postOrder() {		
@@ -373,6 +408,7 @@ function buy(item_id) {
  * For login and lucky draw 
  ******************************************************************/
 var users = [
+
 ];
 if(inPage("passport.jia.com", "/cas/login")) {
 	$("#UserPsw").parent().after($("<p class=\"item\"><label for=\"AutoUser\">账&nbsp;&nbsp;&nbsp;户：</label><select id=\"AutoUser\" name=\"AutoUser\" class=\"form_text\"><option/></select></p>"));
