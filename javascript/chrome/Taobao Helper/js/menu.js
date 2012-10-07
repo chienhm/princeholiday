@@ -8,10 +8,11 @@ function openHelper(url) {
 function rate() {
 	chrome.tabs.query({currentWindow : true, highlighted : true}, function (tabs) {
 		var rateUrl = "http://rate.taobao.com/remark_seller.jhtml";
+		var rateSuccess = "http://trade.taobao.com/trade/trade_success.htm";
 		if(tabs.length>0){
 			var tab = tabs[0];
-			if(tab.url.indexOf(rateUrl)==0) {
-				chrome.tabs.executeScript(tab.id, {file:"res/rate.js"});
+			if(tab.url.indexOf(rateUrl)==0 || tab.url.indexOf(rateSuccess)==0) {
+				chrome.tabs.executeScript(tab.id, {file:"res/rate.js", allFrames:true});
 			} else {
 				showMsg("请进入宝贝评价页面。");
 			}
