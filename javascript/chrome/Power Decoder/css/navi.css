@@ -1,4 +1,9 @@
-﻿
+﻿#nav {
+	position: relative; 
+	top: 0px; 
+	left: 0px;
+}
+
 .nav {
 	position: fixed;
 	top: 0px;
@@ -21,7 +26,7 @@
 	float: left;
 }
 
-.navblock .center {
+.navblock .navCenter {
 	height: 35px;
 }
 
@@ -63,9 +68,4 @@
 	position: relative;
 	width: 960px;
 	margin: 0 auto;
-}
-
-.center {
-	margin: 0 auto;
-	width: 960px;
 }
