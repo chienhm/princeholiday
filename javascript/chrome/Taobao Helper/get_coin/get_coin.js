@@ -1,17 +1,23 @@
 ﻿var b = chrome.extension.getBackgroundPage();
 var tasks = [];
 
-function Task(id, name, func, tips, timeout) {
+function Task(id, name, func, option) {
 	this.name = name;
 	this.id = id;
 	this.func = func;
 	this.tips = name;
 	this.timeout = 2000;
-	if(tips) {
-		this.tips = tips;
-	}
-	if(timeout) {
-		this.timeout = timeout;
+	this.url = null;
+	if(option) {
+		if(option.tips) {
+			this.tips = option.tips;
+		}
+		if(option.url) {
+			this.url = option.url;
+		}
+		if(option.timeout) {
+			this.timeout = option.timeout;
+		}
 	}
 	
 	this.count = 0;
@@ -23,20 +29,46 @@ function Task(id, name, func, tips, timeout) {
 
 function initTask() {
 	tasks = [
-		new Task("everyday", 	"领取当日淘金币", 	getEveryDayCoins, "每天5枚，连续7天以上每天40枚，如中断则又会从5开始"),
-		new Task("friend", 		"帮好友领淘金币", 	helpGetCoins, "每帮领一个好友，即可得5个奖励！（15个封顶）", 3000),
-		new Task("task", 		"任务盒子", 		taskBoxCoins, "做任务领取淘金币，部分任务需您亲自完成", 3000),
-		new Task("ju", 			"聚划算签到", 		signeJu),
-		new Task("alipay", 		"支付宝签到", 		signAlipay),
-		new Task("try", 		"试用中心签到", 	signTryCenter),
-		new Task("etao", 		"一淘签到", 		signeTao, "签到5秒钟之后才能进行下一个签到", 5000),
-		new Task("aiguangjie", 	"爱逛街签到", 		signAiGuangJie, "签到5秒钟之后才能进行下一个签到", 5000),
-		new Task("wangwang", 	"旺旺签到", 		signWangWang, "签到5秒钟之后才能进行下一个签到")
+		new Task("everyday", 	"领取当日淘金币", 	getEveryDayCoins, 
+				{tips:"每天5枚，连续7天以上每天40枚，如中断则又会从5开始", 
+				 url:"http://taojinbi.taobao.com/record/my_coin_detail.htm"}),
+				 
+		new Task("friend", 		"帮好友领淘金币", 	helpGetCoins, 
+				{tips:"每帮领一个好友，即可得5个奖励！（15个封顶）", timeout:3000}),
+				
+		new Task("task", 		"任务盒子", 		taskBoxCoins, 
+				{tips:"做任务领取淘金币，部分任务需您亲自完成", timeout:3000, 
+				 url:"http://mission.jianghu.taobao.com/umission_list.htm"}),
+				 
+		new Task("ju", 			"聚划算签到", 		signeJu, 
+				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
+				
+		new Task("alipay", 		"支付宝签到", 		signAlipay,
+				{url:"https://jfb.alipay.com/activity/earn.htm"}),
+		
+		new Task("try", 		"试用中心签到", 	signTryCenter, 
+				{url:"http://try.taobao.com/item/my_try_item.htm"}),
+				
+		new Task("etao", 		"一淘签到", 		signeTao, 
+				{tips:"签到6秒钟之后才能进行下一个签到", timeout:6000,
+				 url:"http://jf.etao.com/"}),
+				
+		new Task("aiguangjie", 	"爱逛街签到", 		signAiGuangJie, 
+				{tips:"签到5秒钟之后才能进行下一个签到", timeout:5000,
+				 url:"http://love.taobao.com"}),
+				
+		new Task("wangwang", 	"旺旺签到", 		signWangWang, 
+				{tips:"签到5秒钟之后才能进行下一个签到"})
 	];
 	
 	for(var i=0; i<tasks.length; i++) {
 		var task = tasks[i];
-		var taskObj = $("<li class='task' id='"+task.id+"' title='"+task.tips+"'>"+task.name+"</li>");
+		var html = task.name;
+		if(task.url) {
+			html = "<a href='"+task.url+"' target='_blank'>"+task.name+"</a>";
+		}
+		html = "<li class='task' id='"+task.id+"' title='"+task.tips+"'>"+html+"</li>";
+		var taskObj = $(html);
 		$("#tasks").append(taskObj);
 	}
 }
@@ -55,9 +87,9 @@ function resetTask() {
 
 function startTask(task) {
 	task.sTime = new Date().getTime();
-	task.func(task);
 	$("#"+task.id).css("background-color", "lightblue");
 	log("Task [" + task.name + "] starts.");
+	task.func(task);
 	setTimeout(schedule, task.timeout);
 }
 
@@ -65,7 +97,7 @@ function finishTask(task) {
 	task.eTime = new Date().getTime();
 	task.finish = true;
 	$("#"+task.id).css("background-color", task.success ? "lightgreen" : "darkGray");
-	log("Task [" + task.name + "] finished.");
+	log("Task [" + task.name + "] finished, spend "+(task.eTime-task.sTime)+"ms.");
 	schedule();
 }
 
@@ -86,7 +118,7 @@ function schedule() {
 			}
 		} 
 		/*else {
-			if(task.sync) {
+			if(task.sync) { //already finished but need sync
 				var elapse = new Date().getTime()-task.sTime;
 				if(elapse < task.timeout) { // wait until timeout
 					break;
@@ -97,6 +129,7 @@ function schedule() {
 }
 
 function autoGetCoin() {
+	resetTask();
 	var selected = $("#userlist option:selected");
 	user = selected.html();
 	pass =  selected.val();
@@ -135,7 +168,6 @@ function getCoin() {
 		if(html=="" || html.indexOf("标准登录框")!=-1) {
 			needLogin();
 		} else {
-			resetTask();
 			schedule();
 		}
 	});
@@ -376,6 +408,7 @@ function jifenbao(task, src) {
 			/* 
 			(2) 亲，您今天已经领过了，看看自己的“战绩”吧！
 			(-4) 亲，您不是支付宝实名认证用户，无法签到！赶快去认证吧 !
+			(-6) 抢的人太多了，今天的积分发完了，明天再来吧
 			(-8) 亲，您的操作太频繁了哦！
 			*/
 			var msg = r[1].trim();
@@ -398,6 +431,8 @@ function jfb(task, src) {
 				appendLog("非实名认证用户，" + task.name + "失败。");
 			} else if (json.status==2) {
 				appendLog("今日已经完成"+task.name+"。");
+			} else if (json.status==-6) {
+				appendLog(task.name + "：抢的人太多了，今天的积分发完了，明天再来吧。");
 			} else if (json.amount) { //{"amount":1,"days":1,"status":10}
 				appendLog(task.name+"，连续签到"+json.days+"天，领取"+json.amount+"个积分宝。");
 				task.success = true;
