@@ -1,5 +1,5 @@
 ﻿function showMsg(msg) {
-	var notification = webkitNotifications.createNotification("logo.png", "淘小蜜友情提示", msg);
+	var notification = webkitNotifications.createNotification("logo/logo.png", "淘小蜜友情提示", msg);
 	notification.show();
 	setTimeout(function(){notification.cancel();}, 5000);
 }

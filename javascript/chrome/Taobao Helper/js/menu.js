@@ -28,12 +28,18 @@ function showUserList() {
 var hasUser = false;
 function initUsers() {
 	var users = b.getUser();
+	var config = b.getConfig();
+	var defaultUser = null;
+	if(config && config.defaultUser) {
+		defaultUser = config.defaultUser;
+	}
 	if(users) {
 		$.each(users, function(n, p) {
-			//$("<li/>").append($("<a/>").html(n).bind("click", function(){
-			//	login(n);
-			//})).appendTo($('#userList'));
-			$("<li><a href=\"#\">"+n+"</a></li>").bind("click", function(){
+			var name = n;
+			if(n==defaultUser) {
+				name = "<b>"+n+"</b>";
+			}
+			$("<li><a href=\"#\">"+name+"</a></li>").bind("click", function(){
 				login(n);
 			}).appendTo($('#userList'));
 			hasUser = true;

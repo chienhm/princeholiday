@@ -44,7 +44,7 @@ function initTask() {
 				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
 				
 		new Task("alipay", 		"支付宝签到", 		signAlipay,
-				{url:"https://jfb.alipay.com/activity/earn.htm"}),
+				{url:"https://jfb.alipay.com/activity/earn.htm"}), //http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
 		
 		new Task("try", 		"试用中心签到", 	signTryCenter, 
 				{url:"http://try.taobao.com/item/my_try_item.htm"}),
@@ -59,6 +59,7 @@ function initTask() {
 				
 		new Task("wangwang", 	"旺旺签到", 		signWangWang, 
 				{tips:"签到5秒钟之后才能进行下一个签到"})
+		//http://jf.etao.com/activity.htm?spm=0.0.0.71.13a90b&t&drawCredits
 	];
 	
 	for(var i=0; i<tasks.length; i++) {
@@ -409,6 +410,7 @@ function jifenbao(task, src) {
 			(2) 亲，您今天已经领过了，看看自己的“战绩”吧！
 			(-4) 亲，您不是支付宝实名认证用户，无法签到！赶快去认证吧 !
 			(-6) 抢的人太多了，今天的积分发完了，明天再来吧
+			(-7) 来晚了一步，活动已经结束啦！
 			(-8) 亲，您的操作太频繁了哦！
 			*/
 			var msg = r[1].trim();
@@ -433,6 +435,8 @@ function jfb(task, src) {
 				appendLog("今日已经完成"+task.name+"。");
 			} else if (json.status==-6) {
 				appendLog(task.name + "：抢的人太多了，今天的积分发完了，明天再来吧。");
+			} else if (json.status==-7) {
+				appendLog(task.name + "：来晚了一步，活动已经结束啦！");
 			} else if (json.amount) { //{"amount":1,"days":1,"status":10}
 				appendLog(task.name+"，连续签到"+json.days+"天，领取"+json.amount+"个积分宝。");
 				task.success = true;
