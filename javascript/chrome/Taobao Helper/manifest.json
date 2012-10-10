@@ -22,7 +22,7 @@
 			"all_frames" : true
 		}
 	],
-	"web_accessible_resources": ["logo.png"],
+	"web_accessible_resources": ["logo/logo.png"],
 	"name": "淘小蜜",
 	"options_page": "options.html",
 	"permissions": [
@@ -34,5 +34,5 @@
 		"*://*.alipay.com/"
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.5.4"
+	"version": "1.5.8"
 }
