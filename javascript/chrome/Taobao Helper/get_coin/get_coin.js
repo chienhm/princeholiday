@@ -1,4 +1,4 @@
-﻿var b = chrome.extension.getBackgroundPage();
+﻿
 var tasks = [];
 
 function Task(id, name, func, option) {
@@ -139,22 +139,22 @@ function autoGetCoin() {
 	pass =  selected.val();
 	
 	if(user!="" && pass!="") {
-		b.logout();
+		logout();
 		$.get("http://login.etao.com/logout.html?spm=1002.1.0.1.da48c5");
 		appendLog(user + "自动登录淘宝网");
-		b.login(user, pass, function(isLogin) {
+		login(user, pass, function(isLogin) {
 			if(isLogin) {
 				appendLog(user + "登录成功，开始领取淘金币");
-				b.initUser(getCoin);
+				initUser(getCoin);
 			} else {
 				appendLog(user + "登录失败");
 				needLogin();
 			}
 		});
 	} else {
-		b.checkLogin(function(isLogin) {
+		checkLogin(function(isLogin) {
 			if(isLogin) {
-				b.initUser(getCoin); //Get user info from cookie, maybe cookie is null
+				initUser(getCoin); //Get user info from cookie, maybe cookie is null
 			} else {
 				needLogin();
 			}
@@ -163,7 +163,7 @@ function autoGetCoin() {
 }
 
 function getCoin() {
-	if(b.token==null) {
+	if(token==null) {
 		needLogin();
 		return;
 	}
@@ -183,7 +183,7 @@ function getEveryDayCoins(task) {
 	var time = new Date().getTime();
 	
 	//"http://taojinbi.taobao.com//home/award_exchange_home.htm?auto_take=true&tracelog=newmytb_kelingjinbi";
-	var url = "http://taojinbi.taobao.com/home/grant_everyday_coin.htm?t="+time+"&_tb_token_="+b.token;
+	var url = "http://taojinbi.taobao.com/home/grant_everyday_coin.htm?t="+time+"&_tb_token_="+token;
 
 	time = new Date().getTime();
 	$.post(url, {enter_time:time, ran:Math.random()},
@@ -241,7 +241,7 @@ function taskBoxCoins(task) {
 		$.ajax({
 			"url": url,
 			"type": "POST",
-			"data": {"missionId":mid, "oper":"f", "_tb_token_":b.token},
+			"data": {"missionId":mid, "oper":"f", "_tb_token_":token},
 			"dataType": "json"
 		}).done(function(json) {
 			//{"result":{"con":"快打开页面看特价机票酒店吧，低至2折哦","img":"http://img01.taobaocdn.com/tps/i1/T1u9vQXataXXXBqKDv-150-120.png","msg":"假期出游贵？错峰游2折起","num":"2","oldnum":"1506","sharemsg":{"client_id":"73","comment":"我刚完成任务，做任务还能有金币拿，靠谱！","isShowFriend":"","pic":"http://img01.taobaocdn.com/tps/i1/T1u9vQXataXXXBqKDv-150-120.png","title":"分享来自任务盒子"}},"status":3,"success":true}
@@ -357,7 +357,7 @@ function helpGetCoins(task) {
 		var time = new Date().getTime();
 		var url = "http://taojinbi.taobao.com/ajax/take/coin_take.htm";
 
-		$.post(url, {takeIds:ids, _tb_token_:b.token, t:time},
+		$.post(url, {takeIds:ids, _tb_token_:token, t:time},
 			function(json){
 				//{"result": {"status":"false","failNames":"","msg":"<h4>会话过期，非法请求！</h4>重新刷新页操作。"}}
 				//{"result": {"status":"true","successNames":"张三,李四,王五","failNames":"","takeCoin":"15"}}
@@ -477,7 +477,15 @@ function signWangWang(task) {
 }
 //==========================================================================
 // 支付宝签到
+var alipayLogin = true;
 function signAlipay(task) {
+	function loginAlipay(url) {
+		log("支付宝签到登录。");
+		$.get(url, function(html) {
+			alipayLogin = false;
+			signAlipay(task);
+		});
+	}
 	var url = "https://hi.alipay.com/campaign/normal_campaign.htm?campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000";
 	$.get(url, function(html) {
 		var r = /<span class="jfb triJfb">(\d+)<\/span>/ig.exec(html);
@@ -492,17 +500,17 @@ function signAlipay(task) {
 			} else {
 				r = /window.location.href = "(.+?)"/ig.exec(html);
 				if(r) {
-					log("支付宝签到登录。");
-					$.get(r[1], function(html) {
-						signAlipay(task);
-					});
-					return;
+					if(alipayLogin) {
+						loginAlipay(r[1]);
+						return;
+					}
 				} else {
 					console.log(html);
 				}
 			}
 		}
 		//$.get("https://auth.alipay.com/login/logout.htm"); //logout Alipay
+		alipayLogin = true;
 		finishTask(task);
 	}).fail(function(e){console.error(e);});
 	//frameLoad("https://hi.alipay.com/campaign/normal_campaign.htm?campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000");
@@ -552,7 +560,7 @@ function favorite(task) {
 			if(html.indexOf("淘金币")!=-1) {
 				//console.log("10 coins.");
 				url = "http://shuo.taobao.com/microshop/shop_follow_microshop.htm?spm=a1z10.1.273.1.24ae60&starId=" + shop_ids[index];
-				$.post(url, {starId:shop_ids[index], _tb_token_:b.token}, function(html){
+				$.post(url, {starId:shop_ids[index], _tb_token_:token}, function(html){
 					if(html.indexOf("淘金币已到账")!=-1) {
 						appendLog(task.name + "获得10个淘金币。");
 						task.gain = 10;
@@ -561,6 +569,9 @@ function favorite(task) {
 						finishTask(task);
 					} else if(html.indexOf("收藏成功")!=-1) {
 						appendLog("今日已收藏店铺并领取过淘金币。");
+						finishTask(task);
+					} else if(html.indexOf("标准登录框")!=-1) {
+						log("尚未登录。");
 						finishTask(task);
 					} else {
 						log("Already have this shop in favorite.");
@@ -592,12 +603,12 @@ function appendLog(logs) {
 }
 
 function needLogin() {
-	appendLog("尚未登录，请前往淘宝<a href='http://login.taobao.com' target='_blank'>登录</a>。");
+	appendLog("尚未登录，请前往淘宝<a href='https://login.taobao.com/member/login.jhtml' target='_blank'>登录</a>。");
 	$("#userlist option[index='0']").attr("selected", true);
 }
 
 //==========================================================================
-
+var b = chrome.extension.getBackgroundPage();
 function loadUsers() {
 	var users = b.getUser();
 	if(users) {

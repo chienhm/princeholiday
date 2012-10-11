@@ -67,7 +67,7 @@ function addUser() {
 	var user = $('#user').val(); $('#user').val("");
 	var pass = $('#pass').val(); $('#pass').val("");
 	if(user!="" && pass!="") {
-		b.saveUser(user, pass);
+		b.saveUser(user, Base64.encode(pass));
 		var userRow = findRow(user);
 		if(userRow) {
 			//userRow.attr("pass", pass);

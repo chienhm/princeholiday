@@ -1,10 +1,6 @@
 ﻿
 var b = chrome.extension.getBackgroundPage();
 
-function openHelper(url) {
-	b.openHelper(url);
-}
-
 function rate() {
 	chrome.tabs.query({currentWindow : true, highlighted : true}, function (tabs) {
 		var rateUrl = "http://rate.taobao.com/remark_seller.jhtml";
@@ -67,18 +63,46 @@ function login(username) {
 		config.currentUser = null;
 		b.saveConfig(config);
 	}
-	b.createTabAndInject("http://login.taobao.com/member/logout.jhtml", [], ["res/login.js"]);//"https://login.taobao.com/member/login.jhtml"
+	checkLoginPage();
+}
+
+function checkLoginPage() {
+	chrome.tabs.query({windowId : chrome.windows.WINDOW_ID_CURRENT, highlighted : true}, function (tabs) {
+		if(tabs.length==0) {
+			console.error("Can't get current tab.");
+			return;
+		}
+		chrome.tabs.executeScript(tabs[0].id, {file : "js/base64.js", allFrames : true});
+		chrome.tabs.executeScript(tabs[0].id, {file : "res/login.js", allFrames : true}, 
+			function(r){
+				console.log(r);
+				var loginPageFound = false;
+				for(var i in r) {
+					loginPageFound = loginPageFound || r[i];
+				}
+				if(!loginPageFound) {				
+					b.createTabAndInject("http://login.taobao.com/member/logout.jhtml", [], ["js/base64.js", "res/login.js"]);//"https://login.taobao.com/member/login.jhtml"
+				}
+			}
+		);
+	});
 }
 
 $(function () {
 	initUsers();
-	$("#autoLogin").bind('click', function(){login();});
-	$("#more").bind('click', showUserList);
-	$("#goodRate").bind('click', rate);
-	$("#exchange").bind('click', function(){
+	$("#autoLogin").click(login);
+	$("#more").click(showUserList);
+	$("#goodRate").click(rate);
+	$("#exchange").click(function(){
 		openHelper('coin_exchange/coin_exchange.html');
 	});
-	$("#getCoin").bind('click', function(){
+	$("#getCoin").click(function(){
 		openHelper('get_coin/get_coin.html');
+	});
+	$("#options").click(function(){
+		openHelper('options.html');
+	});
+	$("#about").click(function(){
+		openHelper('about.html');
 	});
 });
