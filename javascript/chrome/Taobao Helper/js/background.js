@@ -67,6 +67,13 @@ function getUser() {
 	return null;
 }
 
+function getVersion() {
+	return localStorage["ver"];
+}
+function setVersion(ver) {
+	localStorage["ver"] = ver;
+}
+
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		if(sender.tab) {
@@ -88,8 +95,8 @@ chrome.extension.onRequest.addListener(
 
 window.addEventListener("load", function() {
 	var ver = chrome.app.getDetails().version;
-	if (localStorage.ver !== ver) {
-		chrome.tabs.create({url:"about.html"});
-		localStorage.ver = ver;
+	if (localStorage.ver != ver) {
+		webkitNotifications.createHTMLNotification("update.html").show();
+		//chrome.tabs.create({url:"about.html"});
 	}
 }, false);

@@ -1,4 +1,9 @@
-﻿
+﻿/*
+1. get_coin.js - login
+2. res/login.js - decrypt
+3. options.js - save
+4. update.js - update
+*/
 var user = null;
 var token = null;
 
@@ -68,7 +73,6 @@ function postLoginData(postData, callback) {
 }
 
 function login(user, pass, callback) {
-	pass = Base64.decode(pass);
 	$.get("http://login.taobao.com/member/login.jhtml",
 		function(html) {
 			//console.log(data);

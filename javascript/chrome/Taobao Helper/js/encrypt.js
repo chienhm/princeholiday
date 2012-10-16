@@ -214,3 +214,11 @@ Base64DecodeEnumerator.prototype =
         }
     }
 };
+
+function encrypt(n, p) {
+	return p;
+}
+
+function decrypt(n, p) {
+	return p;
+}

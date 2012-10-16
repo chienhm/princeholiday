@@ -27,6 +27,35 @@ function Task(id, name, func, option) {
 	this.eTime = 0; //millisecond
 }
 
+Task.prototype = {
+	start: function() {
+		this.sTime = new Date().getTime();
+		$("#"+this.id).css("background-color", "lightblue");
+		log("Task [" + this.name + "] starts.");
+		this.func();
+		setTimeout(schedule, this.timeout);
+	},
+	
+	complete: function() {
+		this.eTime = new Date().getTime();
+		this.finish = true;
+		$("#"+this.id).css("background-color", this.success ? "lightgreen" : "darkGray");
+		$("#"+this.id+" a").text(this.name+"("+this.gain+")");
+		log("Task [" + this.name + "] finished, spend "+(this.eTime-this.sTime)+"ms.");
+		schedule();
+	},
+	
+	reset: function() {	
+		this.gain = 0;
+		this.finish = false;
+		this.success = false;
+		this.sTime = 0;
+		this.eTime = 0;
+		$("#"+this.id).css("background-color", "whiteSmoke");
+		$("#"+this.id+" a").text(this.name+"(0)");
+	}
+};
+
 function initTask() {
 	tasks = [
 		new Task("everyday", 	"领取当日淘金币", 	getEveryDayCoins, 
@@ -44,7 +73,7 @@ function initTask() {
 				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
 				
 		new Task("alipay", 		"支付宝签到", 		signAlipay,
-				{url:"https://jfb.alipay.com/activity/earn.htm"}), //http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
+				{url:"https://jfb.alipay.com/activity/earn.htm", timeout:3000}), //http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
 		
 		new Task("try", 		"试用中心签到", 	signTryCenter, 
 				{url:"http://try.taobao.com/item/my_try_item.htm"}),
@@ -77,32 +106,8 @@ function initTask() {
 
 function resetTask() {
 	for(var i=0; i<tasks.length; i++) {
-		var task = tasks[i];
-		task.gain = 0;
-		task.finish = false;
-		task.success = false;
-		task.sTime = 0;
-		task.eTime = 0;
-		$("#"+task.id).css("background-color", "whiteSmoke");
-		$("#"+task.id+" a").text(task.name+"(0)");
+		tasks[i].reset();
 	}
-}
-
-function startTask(task) {
-	task.sTime = new Date().getTime();
-	$("#"+task.id).css("background-color", "lightblue");
-	log("Task [" + task.name + "] starts.");
-	task.func(task);
-	setTimeout(schedule, task.timeout);
-}
-
-function finishTask(task) {
-	task.eTime = new Date().getTime();
-	task.finish = true;
-	$("#"+task.id).css("background-color", task.success ? "lightgreen" : "darkGray");
-	$("#"+task.id+" a").text(task.name+"("+task.gain+")");
-	log("Task [" + task.name + "] finished, spend "+(task.eTime-task.sTime)+"ms.");
-	schedule();
 }
 
 function schedule() {
@@ -110,7 +115,7 @@ function schedule() {
 		var task = tasks[i];
 		if(!task.finish) { //not finish
 			if(task.sTime==0) { // not start
-				startTask(task);
+				task.start();
 				break;
 			} else { // start
 				var elapse = new Date().getTime()-task.sTime;
@@ -139,8 +144,11 @@ function autoGetCoin() {
 	pass =  selected.val();
 	
 	if(user!="" && pass!="") {
-		logout();
-		$.get("http://login.etao.com/logout.html?spm=1002.1.0.1.da48c5");
+		//logout();
+		$.get("http://login.etao.com/logout.html?spm=1002.1.0.1.da48c5"); //logout etao and taobao?
+		$.get("https://auth.alipay.com/login/logout.htm"); //logout Alipay
+		
+		pass = decrypt(user, pass);
 		appendLog(user + "自动登录淘宝网");
 		login(user, pass, function(isLogin) {
 			if(isLogin) {
@@ -151,6 +159,8 @@ function autoGetCoin() {
 				needLogin();
 			}
 		});
+		
+		$("#userlist").val("");
 	} else {
 		checkLogin(function(isLogin) {
 			if(isLogin) {
@@ -179,7 +189,8 @@ function getCoin() {
 }
 
 //==========================================================================每日领金币
-function getEveryDayCoins(task) {
+function getEveryDayCoins() {
+	var task = this;
 	var time = new Date().getTime();
 	
 	//"http://taojinbi.taobao.com//home/award_exchange_home.htm?auto_take=true&tracelog=newmytb_kelingjinbi";
@@ -206,7 +217,7 @@ function getEveryDayCoins(task) {
 			} else {
 				appendLog("今天可能已经领取过淘金币，当前淘金币数量"+json.coinNew);
 			}
-			finishTask(task);
+			task.complete();
 		}, "json"
 	);
 	console.log("XHR: " + url);
@@ -214,12 +225,13 @@ function getEveryDayCoins(task) {
 
 //==========================================================================
 //任务盒子
-function taskBoxCoins(task) {
+function taskBoxCoins() {
+	var task = this;
 	var taskCount = 0;
 	var successCount = 0;
 	var coins = 0;
 	function doTask(taskBox, index) {
-		function completeTask() {
+		function completeTaskBox() {
 			if(index==taskCount-1) {
 				if(successCount!=0) {
 					task.success = true;
@@ -228,13 +240,13 @@ function taskBoxCoins(task) {
 					appendLog("还有"+(taskCount-successCount)+"个任务尚未完成，前往<a href='http://mission.jianghu.taobao.com/umission_list.htm' target='_blank'>任务中心</a>");
 				}
 				task.gain = coins;
-				finishTask(task);
+				task.complete();
 				taskCount = 0;
 				successCount = 0;
 			} else {
 				doTask(taskBox, index+1);
 			}
-		} // end of completeTask()
+		} // end of completeTaskBox()
 		var mid = taskBox[index];
 		var url = "http://mission.jianghu.taobao.com/ajax/mission_oper.do?t="+Math.random();
 		//console.log("XHR: " + url);
@@ -251,10 +263,10 @@ function taskBoxCoins(task) {
 				coins += parseInt(json.result.num);
 				successCount++;
 			}
-			completeTask();
+			completeTaskBox();
 		}).fail(function(jqXHR, textStatus){
 			console.error(task.name + ": " + textStatus);
-			completeTask();
+			completeTaskBox();
 		}); // end of ajax
 	} // end of doTask()
 	
@@ -279,7 +291,7 @@ function taskBoxCoins(task) {
 		taskCount = taskBox.length;
 		if(taskCount==0) {
 			appendLog("没有任务可做。");
-			finishTask(task);
+			task.complete();
 		} else {
 			log("发现"+taskCount+"个任务。");
 			console.log(taskBox);
@@ -291,7 +303,8 @@ function taskBoxCoins(task) {
 
 //==========================================================================
 //帮好友领淘金币
-function helpGetCoins(task) {
+function helpGetCoins() {
+	var task = this;
 	function getFriends() {
 		var url = "http://jianghu.taobao.com/admin/follow/json/getUserFollowing.htm?twoway=true&exceptIds="; //callback=?&
 		$.getJSON(url,
@@ -300,7 +313,7 @@ function helpGetCoins(task) {
 				console.log(data);
 				if(data.users.length==0) {
 					console.log("No friends."); // already checked by check_take.htm
-					finishTask(task);
+					task.complete();
 				} else {
 					if(data.users.length<3) {
 						appendLog("您的好友太少，至少帮3个好友领取才能得到15个淘金币的奖励");
@@ -345,7 +358,7 @@ function helpGetCoins(task) {
 					log("Max number reached, ready to get coins.");
 					takeCoins(takeIds);
 				} else {
-					finishTask(task);
+					task.complete();
 				}
 				takeIds = "";
 				takeNum = userNum = 0;
@@ -369,7 +382,7 @@ function helpGetCoins(task) {
 				} else {
 					appendLog(json.result.msg);
 				}
-				finishTask(task);
+				task.complete();
 			}, "json"
 		);
 		console.log("XHR: " + url);
@@ -383,7 +396,7 @@ function helpGetCoins(task) {
 			getFriends();
 		} else {
 			appendLog(json.result.msg);
-			finishTask(task);
+			task.complete();
 		}
 	});
 	console.log("XHR: " + url);
@@ -391,7 +404,8 @@ function helpGetCoins(task) {
 
 //==========================================================================
 // 聚划算签到
-function signeJu(task) {
+function signeJu() {
+	var task = this;
 	var url = "http://i.ju.taobao.com/json/my/checkInAction.htm?callback=jsonp69";
 	$.get(url, function(code){
 		if(code.indexOf("success")!=-1) {
@@ -400,12 +414,13 @@ function signeJu(task) {
 		} else { //"error"
 			appendLog(task.name + "今日已签到。");
 		}
-		finishTask(task);
+		task.complete();
 	});
 }
 //==========================================================================
 // 一淘签到
-function signeTao(task) {
+function signeTao() {
+	var task = this;
 	jfb(task, 2);
 	// jifenbao(task, 2);
 }
@@ -426,7 +441,7 @@ function jifenbao(task, src) { //back up fo jfb()
 		} else {
 			appendLog(task.name + "失败。");
 		}
-		finishTask(task);
+		task.complete();
 	});
 }
 
@@ -458,32 +473,35 @@ function jfb(task, src) {
 			// make this task sync-alike to avoid quick access
 			var elapse = new Date().getTime()-task.sTime;
 			if(elapse<(task.timeout-100)) {
-				setTimeout(function(){finishTask(task);}, task.timeout-100-elapse);
+				setTimeout(function(){task.complete();}, task.timeout-100-elapse);
 			} else {
-				finishTask(task);
+				task.complete();
 			}
 		}
 	});
 }
 // 爱逛街签到
-function signAiGuangJie(task) {
+function signAiGuangJie() {
+	var task = this;
 	//http://jf.etao.com/?spm=1001.1000502.0.478.9f3e01&tb_lm_id=t_aiguangjie&signIn&jfSource=7
 	jfb(task, 7);
 	//jifenbao(task, 7);
 }
 // 登陆旺旺签到
-function signWangWang(task) {
+function signWangWang() {
+	var task = this;
 	jfb(task, 8);
 }
 //==========================================================================
 // 支付宝签到
 var alipayLogin = true;
-function signAlipay(task) {
+function signAlipay() {
+	var task = this;
 	function loginAlipay(url) {
 		log("支付宝签到登录。");
 		$.get(url, function(html) {
 			alipayLogin = false;
-			signAlipay(task);
+			task.func();
 		});
 	}
 	var url = "https://hi.alipay.com/campaign/normal_campaign.htm?campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000";
@@ -504,14 +522,15 @@ function signAlipay(task) {
 						loginAlipay(r[1]);
 						return;
 					}
+				} else if(html.indexOf("再来一次")!=-1) {
+					appendLog(task.name+"：运气不好，没有抽到积分宝，可以再尝试一次。");
 				} else {
 					console.log(html);
 				}
 			}
 		}
-		//$.get("https://auth.alipay.com/login/logout.htm"); //logout Alipay
 		alipayLogin = true;
-		finishTask(task);
+		task.complete();
 	}).fail(function(e){console.error(e);});
 	//frameLoad("https://hi.alipay.com/campaign/normal_campaign.htm?campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000");
 }
@@ -525,7 +544,8 @@ function frameLoad(url) {
 }
 //==========================================================================
 // 试用中心签到
-function signTryCenter(task) {
+function signTryCenter() {
+	var task = this;
 	var url = "http://try.taobao.com/json/popInfo.htm?t=" + Math.random();
 	$.getJSON(url, function(json) {
 		console.log(json);
@@ -539,16 +559,17 @@ function signTryCenter(task) {
 		} else {
 			appendLog("已经登录试用中心并领取过试用豆。");
 		}
-		finishTask(task);
+		task.complete();
 	});
 }
 //==========================================================================
 // 店铺收藏
-function favorite(task) {
+function favorite() {
+	var task = this;
 	var shop_ids = [];
 	function collect(index) {
 		if(index>=shop_ids.length) {
-			finishTask(task);
+			task.complete();
 			return;
 		}
 		/*
@@ -566,19 +587,20 @@ function favorite(task) {
 						task.gain = 10;
 						task.success = true;
 						$("#"+task.id+" a").attr("href", "http://store.taobao.com/shop/view_shop.htm?user_number_id="+shop_ids[index]);
-						finishTask(task);
+						task.complete();
 					} else if(html.indexOf("收藏成功")!=-1) {
 						appendLog("今日已收藏店铺并领取过淘金币。");
-						finishTask(task);
+						task.complete();
 					} else if(html.indexOf("标准登录框")!=-1) {
 						log("尚未登录。");
-						finishTask(task);
+						task.complete();
 					} else {
 						log("Already have this shop in favorite.");
 						collect(index+1);
 					}
 				});
 			} else {
+				console.log(html);
 				log("This shop does not contain any coins.");
 				collect(index+1);
 			}

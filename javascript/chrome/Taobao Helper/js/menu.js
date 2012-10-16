@@ -72,7 +72,7 @@ function checkLoginPage() {
 			console.error("Can't get current tab.");
 			return;
 		}
-		chrome.tabs.executeScript(tabs[0].id, {file : "js/base64.js", allFrames : true});
+		chrome.tabs.executeScript(tabs[0].id, {file : "js/encrypt.js", allFrames : true});
 		chrome.tabs.executeScript(tabs[0].id, {file : "res/login.js", allFrames : true}, 
 			function(r){
 				console.log(r);
@@ -81,7 +81,7 @@ function checkLoginPage() {
 					loginPageFound = loginPageFound || r[i];
 				}
 				if(!loginPageFound) {				
-					b.createTabAndInject("http://login.taobao.com/member/logout.jhtml", [], ["js/base64.js", "res/login.js"]);//"https://login.taobao.com/member/login.jhtml"
+					b.createTabAndInject("http://login.taobao.com/member/logout.jhtml", [], ["js/encrypt.js", "res/login.js"]);//"https://login.taobao.com/member/login.jhtml"
 				}
 			}
 		);
@@ -90,7 +90,7 @@ function checkLoginPage() {
 
 $(function () {
 	initUsers();
-	$("#autoLogin").click(login);
+	$("#autoLogin").click(function(){login();});
 	$("#more").click(showUserList);
 	$("#goodRate").click(rate);
 	$("#exchange").click(function(){
