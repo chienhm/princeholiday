@@ -71,9 +71,10 @@ function initTask() {
 				 
 		new Task("ju", 			"聚划算签到", 		signeJu, 
 				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
-				
+		/*
 		new Task("alipay", 		"支付宝签到", 		signAlipay,
-				{url:"https://jfb.alipay.com/activity/earn.htm", timeout:3000}), //http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
+				{url:"https://jfb.alipay.com/activity/earn.htm", timeout:3000}), //已结束//http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
+		*/
 		
 		new Task("try", 		"试用中心签到", 	signTryCenter, 
 				{url:"http://try.taobao.com/item/my_try_item.htm"}),
@@ -86,9 +87,11 @@ function initTask() {
 				{tips:"每天首次收藏新店铺领10个淘金币", timeout:2000,
 				 url:"http://dongtai.taobao.com/square.htm?guess=true&tracelog=gctjbsy"}),
 				
+		/*
 		new Task("aiguangjie", 	"爱逛街签到", 		signAiGuangJie, 
 				{tips:"签到5秒钟之后才能进行下一个签到", timeout:5000,
 				 url:"http://love.taobao.com"}),
+		*/
 				
 		new Task("wangwang", 	"旺旺签到", 		signWangWang, 
 				{tips:"签到5秒钟之后才能进行下一个签到"})

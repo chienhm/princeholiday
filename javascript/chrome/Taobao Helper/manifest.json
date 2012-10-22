@@ -28,11 +28,11 @@
 	"permissions": [
 		"cookies", 
 		"tabs", 
-		"notifications", 
+		"notifications",
 		"*://*.taobao.com/*", 
 		"*://*.etao.com/", 
 		"*://*.alipay.com/"
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.6.0"
+	"version": "1.6.1"
 }

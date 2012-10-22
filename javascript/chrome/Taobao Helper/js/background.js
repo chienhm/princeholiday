@@ -96,7 +96,8 @@ chrome.extension.onRequest.addListener(
 window.addEventListener("load", function() {
 	var ver = chrome.app.getDetails().version;
 	if (localStorage.ver != ver) {
-		webkitNotifications.createHTMLNotification("update.html").show();
-		//chrome.tabs.create({url:"about.html"});
+		var notification = webkitNotifications.createHTMLNotification("update.html");
+		notification.show();
+		setTimeout(function(){notification.cancel();}, 5000);
 	}
 }, false);
