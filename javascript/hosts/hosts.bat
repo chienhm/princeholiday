@@ -8,7 +8,7 @@ REM 设置全局变量
 set BAT_DIR=%~dp0
 set TMP=%BAT_DIR%\tmp.txt
 echo. > %TMP%
-set OFFICE_FILES=baidu.txt adv.txt adobe.txt
+set OFFICE_FILES=adv.txt adobe.txt
 set HOME_FILES=google.txt adv.txt adobe.txt
 
 cls
