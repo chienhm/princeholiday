@@ -90,7 +90,12 @@ function parseHtml(html) {
 	if(html.indexOf("没有找到")!=-1) { //html.indexOf("listmodbox")==-1
 		$("#result").html("没有找到宝贝！");
 	} else {
-		var count = html.split("=\"可用金币兑换\"").length-1;
+		var end = html.indexOf("hot-recommend");
+		if(end==-1) {
+			console.error("Tag[hot-recommend] not found.");
+			end = html.indexOf("img-boxbg");
+		}
+		var count = html.substring(0, end).split("=\"可用金币兑换\"").length-1;
 		//console.log(count);
 		var i = 0;
 		var result = null;
@@ -188,7 +193,7 @@ function showNote(item) {
 		item.name
 	);
 	notification.show();
-	setTimeout(function(){notification.cancel();}, 10000);
+	setTimeout(function(){notification.cancel();}, 5000);
 }
 
 function start() {
@@ -208,12 +213,13 @@ function start() {
  * category init, update to latest version. If retrieving failed, use default data.
  */
 function initCategory() {
-	var savedCategory = b.getConfig("category");
-	if(savedCategory.length) {
-		categories = savedCategory;
+	var config = b.getConfig("exchange");
+	if(config.category) {
+		categories = config.category;
 	} else {
 		console.log("first time to save category.");
-		b.saveConfig(categories, "category");
+		config.category = categories;
+		b.saveConfig(config, "exchange");
 	}
 	showCategory();
 	/*
@@ -236,21 +242,22 @@ function initCategory() {
 	});
 }
 
-function skip(id, bool) {
-	for(var i=0; i<categories.length; i++){
-		if(categories[i].id==id) {
-			categories[i].skip = bool;
-			$("#"+id).css("background-color", bool?"white":"#F1F1F1");
-			b.saveConfig(categories, "category");
-			break;
-		}
-	}
+function checkall() {
+	var checked = $("#allcheckbox").attr("checked")=="checked";
+	$.each(categories, function(i, e){
+		$("#"+e.id+" input").attr("checked", checked);
+		$("#"+e.id).css("background-color", checked?"#F1F1F1":"white");
+	});
+	$("#alltext").text(checked?"全部取消":"全部选择");
+	$("#all").css("background-color", checked?"#F1F1F1":"white");
 }
 
 function showCategory() {
 	$.each(categories, function(i, e){
 		var checkbox = $("<input type='checkbox' name='cat' value='"+e.id+"' "+(e.skip?"":"checked='checked'")+">" + e.name + "</input>");
-		checkbox.click(function(){skip(e.id, checkbox.attr("checked")!="checked");});
+		checkbox.click(function(){
+			$("#"+e.id).css("background-color", checkbox.attr("checked")=="checked"?"#F1F1F1":"white");
+		});
 		var box = $("<div class='category' id='"+e.id+"'></div>");
 		if(e.skip) box.css("background-color", "white");
 		box.append(checkbox);
@@ -258,22 +265,32 @@ function showCategory() {
 	});
 }
 
-function range() {
+function save() {
 	var min = -1;
 	var max = -1;
 	var _min = $("#min").val();
 	var _max = $("#max").val();
-	if(_min!="") {
-		min = parseInt(_min);
-	}
-	if(_max!="") {
-		max = parseInt(_max);
-	}
 	var config = b.getConfig("exchange");
+	
+	if(_min!="") min = parseInt(_min);
+	if(_max!="") max = parseInt(_max);
 	config.min = (max==-1)?min:(min<max?min:max);
 	config.max = (min==-1)?max:((max==-1)?-1:(min<max?max:min));
-	b.saveConfig(config, "exchange");	
+
+	// get category skip status
+	$.each(categories, function(i, e){
+		categories[i].skip = $("#"+e.id+" input").attr("checked")!="checked";
+	});
+	config.category = categories;
 	
+	// save exchange options
+	b.saveConfig(config, "exchange");
+	$("#result").html("选项及分类保存成功。");
+	setTimeout(function() {
+		$("#result").html("");
+	}, 1000);
+	
+	// filter the results
 	$.each(categories, function(i, e){
 		if(e.items) {
 			$.each(e.items, function(index, item) {
@@ -298,6 +315,7 @@ function initOption() {
 	if(config.min!=undefined && config.min!=-1) $("#min").val(config.min);
 	if(config.max!=undefined && config.max!=-1) $("#max").val(config.max);
 	$("#message").attr("checked", config.message);
+	$("#all").css("background-color", "white");
 }
 
 $(function () {
@@ -305,6 +323,7 @@ $(function () {
 	initCategory();
 	template = $("#template").text();
 	$("#start").click(start);
-	$("#range").click(range);
+	$("#save").click(save);
 	$("#message").click(message);
+	$("#allcheckbox").click(checkall);
 });
