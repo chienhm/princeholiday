@@ -3,6 +3,7 @@ var index = -1;
 var interval = 0;
 var template = "";
 var running = false;
+var lastId = null;
 var categories = [
 	{id:"11302000000", name:"连衣裙"},
 	{id:"11301000000", name:"休闲女裤"},
@@ -42,11 +43,17 @@ var categories = [
 ];
 
 function findLuck() {
-	index++;
-	if(index==categories.length) {
-		index = 0;
+	while(true) {
+		index++;
+		if(index==categories.length) {
+			index = 0;
+		}
+		if(categories[index].skip) continue;
+		break;
 	}
-	$("#task").html("正在查找 <b>" + categories[index].name + "</b> 类目全额兑换的宝贝...");
+	if(lastId) $("#"+lastId).css("background-color", "#F1F1F1");
+	lastId = categories[index].id;
+	$("#"+categories[index].id).css("background-color", "lightgreen");
 	$("#result").html("");
 	getPage(categories[index]);
 }
@@ -75,8 +82,8 @@ function getId(url) {
 	}
 	return null;
 }
-
-var itemRegExp = /<a.*?href="(.+?)" target="_blank">[^\w]+<img .+? src="(.+?)" \/>[^\w]+<p class="title" title=".+?">(.+?)<\/p>[^\w]+<p class="price"><del>(.+?)<\/del><span class="discount">\/.+?折<\/span> <span class="salescount">已成交(.+)件<\/span> <\/p>[^\w]+<p class="price qz-price"> <em>(.+?)<\/em>+(.+?)<span class="coin">淘金币<\/span> <span class="favorable">(.+?)<\/span>  <\/p>[^\w]+<p class="modes">[^\w]+<span data-tip="可用金币兑换" class="mode4 J_Mode">\((.+)淘金币\)/ig;
+/* http://regexpal.com/ http://gskinner.com/RegExr/ */
+var itemRegExp = /<a.*?href="(.+?)" target="_blank">[^\w]+<img .+? src="(.+?)" \/>[^\w]+<p class="title" title=".+?">(.+?)<\/p>[^\w]+<p class="price"><del>(.+?)<\/del><span class="discount">\/.+?折<\/span> <span class="salescount">已成交(.+)件<\/span> <\/p>[^\w]+<p class="price qz-price"> <em>(.+?)<\/em>+(.+?)<span class="coin">淘金币<\/span>\s*<span class="favorable">(.+?)<\/span>\s*<\/p>[^\w]+<p class="modes">[^\w]+<span data-tip="可用金币兑换" class="mode4 J_Mode">\((.+)淘金币\)/ig;
 
 function parseHtml(html) {
 	var items = new Array();
@@ -95,7 +102,7 @@ function parseHtml(html) {
 			if(item.id=="") {
 				console.error(item.name + " gets no item id.");
 			}
-			console.log("Item found: " + item.name);
+			console.log("[" + categories[index].name + "][" + item.coin + "金币]" + item.name);
 		}
 		if(i!=count) { //sanity check
 			console.error(count + " items found, but only " + i + " items parsed.");
@@ -105,13 +112,8 @@ function parseHtml(html) {
 	return items;
 }
 
-function updateArray(items) {	
-	if(categories[index].items == undefined) {
-		categories[index].items = items;
-		for(var j=0; j<items.length; j++) {
-			addItem("list", items[j]);
-		}
-	} else {
+function updateArray(items) {
+	if(categories[index].items) {
 		var found = false;
 		var len = categories[index].items.length;
 		for(var i=0; i<len; i++) {
@@ -144,6 +146,11 @@ function updateArray(items) {
 				addItem("list", items[j]);
 			}
 		}
+	} else {
+		categories[index].items = items;
+		for(var j=0; j<items.length; j++) {
+			addItem("list", items[j]);
+		}
 	}
 }
 
@@ -151,10 +158,16 @@ function updateArray(items) {
 // UI related
 function addItem(area, item) {
 	var html = template.replace(/\$\{(.+?)\}/ig, function(match, result){return item[result];});
-	$(html).prependTo("#"+area);
-	var config = b.getConfig();
-	if(config!=null && config.exchangeMsg) {
-		showNote(item);
+	var config = b.getConfig("exchange");
+	if(!config.min) config.min = -1;
+	if(!config.max) config.max = -1;
+	if(item.coin<config.min || (config.max!=-1&&item.coin>config.max)) {
+		$(html).hide().prependTo("#"+area);
+	} else {
+		$(html).prependTo("#"+area);
+		if(config.message) {
+			showNote(item);
+		}
 	}
 }
 
@@ -182,7 +195,6 @@ function start() {
 	if(running) {
 		clearInterval(interval);
 		$("#start").val("开始查找");
-		$("#task").html("查找完毕！");
 		$("#result").html("");
 		running = false;
 	} else {
@@ -196,6 +208,15 @@ function start() {
  * category init, update to latest version. If retrieving failed, use default data.
  */
 function initCategory() {
+	var savedCategory = b.getConfig("category");
+	if(savedCategory.length) {
+		categories = savedCategory;
+	} else {
+		console.log("first time to save category.");
+		b.saveConfig(categories, "category");
+	}
+	showCategory();
+	/*
 	$.get("http://taojinbi.taobao.com/home/award_exchange_home.htm", function(html){
 		var reg=/<span>\s*?<a href=".+?category_id=(\d+)"\s*?>(.+?)<\/a>\s*?<\/span>/ig;
 		var result = null;
@@ -209,12 +230,81 @@ function initCategory() {
 		} else {
 			console.error("Failed to get categories.");
 		}
+	});*/
+	$.each(categories, function(i, e){
+		e.items = null;
 	});
 }
 
+function skip(id, bool) {
+	for(var i=0; i<categories.length; i++){
+		if(categories[i].id==id) {
+			categories[i].skip = bool;
+			$("#"+id).css("background-color", bool?"white":"#F1F1F1");
+			b.saveConfig(categories, "category");
+			break;
+		}
+	}
+}
+
+function showCategory() {
+	$.each(categories, function(i, e){
+		var checkbox = $("<input type='checkbox' name='cat' value='"+e.id+"' "+(e.skip?"":"checked='checked'")+">" + e.name + "</input>");
+		checkbox.click(function(){skip(e.id, checkbox.attr("checked")!="checked");});
+		var box = $("<div class='category' id='"+e.id+"'></div>");
+		if(e.skip) box.css("background-color", "white");
+		box.append(checkbox);
+		$("#cat").append(box);
+	});
+}
+
+function range() {
+	var min = -1;
+	var max = -1;
+	var _min = $("#min").val();
+	var _max = $("#max").val();
+	if(_min!="") {
+		min = parseInt(_min);
+	}
+	if(_max!="") {
+		max = parseInt(_max);
+	}
+	var config = b.getConfig("exchange");
+	config.min = (max==-1)?min:(min<max?min:max);
+	config.max = (min==-1)?max:((max==-1)?-1:(min<max?max:min));
+	b.saveConfig(config, "exchange");	
+	
+	$.each(categories, function(i, e){
+		if(e.items) {
+			$.each(e.items, function(index, item) {
+				if(item.coin<config.min || (config.max!=-1&&item.coin>config.max)) {
+					$("#"+item.id).hide();
+				} else {
+					$("#"+item.id).show();
+				}
+			});
+		}
+	});
+}
+
+function message() {
+	var config = b.getConfig("exchange");
+	config.message = $("#message").attr("checked")=="checked";
+	b.saveConfig(config, "exchange");
+}
+
+function initOption() {
+	var config = b.getConfig("exchange");
+	if(config.min!=undefined && config.min!=-1) $("#min").val(config.min);
+	if(config.max!=undefined && config.max!=-1) $("#max").val(config.max);
+	$("#message").attr("checked", config.message);
+}
+
 $(function () {
+	initOption();
 	initCategory();
-	template = $("#\\$\\{id\\}").parent().html();
-	$("#\\$\\{id\\}").hide();
-	$("#start").bind('click', start);
+	template = $("#template").text();
+	$("#start").click(start);
+	$("#range").click(range);
+	$("#message").click(message);
 });
