@@ -1,0 +1,25 @@
+﻿{
+	"manifest_version": 2,
+	"background": {
+		"page": "background.html"
+	},
+	"browser_action": {
+		"default_icon": "images/logo_19.png",
+		"default_title": "__MSG_ext_name__",
+		"default_popup": "popup.html"
+	},
+	"default_locale": "zh_CN",
+	"description": "__MSG_ext_description__",
+	"icons": {
+		"128": "images/logo_128.png",
+		"16": "images/logo_16.png",
+		"32": "images/logo_32.png",
+		"48": "images/logo_48.png"
+	},
+	"name": "__MSG_ext_name__",
+	"options_page": "options.html",
+	"web_accessible_resources": ["images/logo_19.png"],
+	"permissions": [ "cookies", "tabs", "notifications", "contextMenus", "http://*/*", "https://*/*" ],
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+	"version": "1.0.1"
+}
