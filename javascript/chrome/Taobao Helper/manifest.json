@@ -30,9 +30,10 @@
 		"tabs", 
 		"notifications",
 		"*://*.taobao.com/*", 
+		"*://*.tmall.com/*",
 		"*://*.etao.com/", 
 		"*://*.alipay.com/"
 	],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.6.1"
+	"version": "1.6.3"
 }

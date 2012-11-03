@@ -8,6 +8,8 @@ function Task(id, name, func, option) {
 	this.tips = name;
 	this.timeout = 2000;
 	this.url = "http://www.morntea.com";
+	this.skip = false;
+	this.standalone = false;
 	if(option) {
 		if(option.tips) {
 			this.tips = option.tips;
@@ -17,6 +19,9 @@ function Task(id, name, func, option) {
 		}
 		if(option.timeout) {
 			this.timeout = option.timeout;
+		}
+		if(option.skip) {
+			this.skip = option.skip;
 		}
 	}
 	
@@ -33,7 +38,9 @@ Task.prototype = {
 		$("#"+this.id).css("background-color", "lightblue");
 		log("Task [" + this.name + "] starts.");
 		this.func();
-		setTimeout(schedule, this.timeout);
+		if(!this.standalone) {
+			setTimeout(schedule, this.timeout);
+		}
 	},
 	
 	complete: function() {
@@ -42,7 +49,9 @@ Task.prototype = {
 		$("#"+this.id).css("background-color", this.success ? "lightgreen" : "darkGray");
 		$("#"+this.id+" a").text(this.name+"("+this.gain+")");
 		log("Task [" + this.name + "] finished, spend "+(this.eTime-this.sTime)+"ms.");
-		schedule();
+		if(!this.standalone) {
+			schedule();
+		}
 	},
 	
 	reset: function() {	
@@ -51,6 +60,7 @@ Task.prototype = {
 		this.success = false;
 		this.sTime = 0;
 		this.eTime = 0;
+		this.standalone = false;
 		$("#"+this.id).css("background-color", "whiteSmoke");
 		$("#"+this.id+" a").text(this.name+"(0)");
 	}
@@ -71,10 +81,10 @@ function initTask() {
 				 
 		new Task("ju", 			"聚划算签到", 		signeJu, 
 				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
-		/*
+		
 		new Task("alipay", 		"支付宝签到", 		signAlipay,
-				{url:"https://jfb.alipay.com/activity/earn.htm", timeout:3000}), //已结束//http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
-		*/
+				{url:"https://jfb.alipay.com/activity/earn.htm", tips:"已结束", timeout:3000, skip:true}), //已结束//http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
+		
 		
 		new Task("try", 		"试用中心签到", 	signTryCenter, 
 				{url:"http://try.taobao.com/item/my_try_item.htm"}),
@@ -87,23 +97,38 @@ function initTask() {
 				{tips:"每天首次收藏新店铺领10个淘金币", timeout:2000,
 				 url:"http://dongtai.taobao.com/square.htm?guess=true&tracelog=gctjbsy"}),
 				
-		/*
+		
 		new Task("aiguangjie", 	"爱逛街签到", 		signAiGuangJie, 
-				{tips:"签到5秒钟之后才能进行下一个签到", timeout:5000,
-				 url:"http://love.taobao.com"}),
-		*/
+				{tips:"签到5秒钟之后才能进行下一个签到（已结束）", timeout:5000,
+				 url:"http://love.taobao.com", skip:true}),
+		
 				
 		new Task("wangwang", 	"旺旺签到", 		signWangWang, 
 				{tips:"签到5秒钟之后才能进行下一个签到"})
 		//http://jf.etao.com/activity.htm?spm=0.0.0.71.13a90b&t&drawCredits
 	];
 	
+	function enclosure(task) {
+		return function(){
+			task.standalone=true;
+			initUser(function(){task.start();}); //need to get token first
+		}
+	}
+	function enclSkip(task, checkbox) {
+		return function(){
+			task.skip = (checkbox.attr("checked")=="checked");
+		}
+	}
 	for(var i=0; i<tasks.length; i++) {
 		var task = tasks[i];
-		var html = "<a href='"+task.url+"' target='_blank'>"+task.name+"(0)</a>";
-		html = "<li class='task' id='"+task.id+"' title='"+task.tips+"'>"+html+"</li>";
-		var taskObj = $(html);
-		$("#tasks").append(taskObj);
+		var checkbox = $("<input type='checkbox' " + (task.skip?"checked":"") + ">跳过</input>");
+		checkbox.click(enclSkip(task, checkbox));
+		var button = $("<input type='button' value='单独执行'>");
+		button.click(enclosure(task));
+		var html = "<a href='"+task.url+"' target='_blank'>"+task.name+"(0)</a><br>";
+		var taskDiv = $("<div class='task' id='"+task.id+"' title='"+task.tips+"'></div>");
+		taskDiv.append(html).append(checkbox).append(button);
+		$("#tasks").append(taskDiv);
 	}
 }
 
@@ -116,6 +141,7 @@ function resetTask() {
 function schedule() {
 	for(var i=0; i<tasks.length; i++) {
 		var task = tasks[i];
+		if(task.skip) continue;
 		if(!task.finish) { //not finish
 			if(task.sTime==0) { // not start
 				task.start();
@@ -138,6 +164,14 @@ function schedule() {
 			}
 		}*/
 	}
+}
+
+function inLoginPage(html){
+	if(html.indexOf("标准登录框")!=-1) {
+		needLogin();
+		return true;
+	}
+	return false;
 }
 
 function autoGetCoin() {
@@ -198,7 +232,10 @@ function getEveryDayCoins() {
 	
 	//"http://taojinbi.taobao.com//home/award_exchange_home.htm?auto_take=true&tracelog=newmytb_kelingjinbi";
 	var url = "http://taojinbi.taobao.com/home/grant_everyday_coin.htm?t="+time+"&_tb_token_="+token;
-
+/*checkCode:okrm
+enter_time:1351642860468
+ua:249uhjHGDhYGGhIKIhoOHgIWNo=|uhiIxycrLCfa|uijHuic5iyz721snxygoxyd6m+tL+3w8J9ra|uhiIxyc8myfa|ujjHugjHCMcYSCg4xxhICHjHGEhICMeYCAjHGEhICMeIaAja2g==|uojHJyfa|upjHJyfa|uhgoxycYOFgYaEgoiGg4eAhYqAjnaAgoiEg4WHiYGDh4aJh4iCfa|uhiIxyebSyfa|uhiIxyd7yzz7J9o=|uhgIxye6KChoSAjHyicYOEhICHgomAg4OAg4zAjneBhoGGiYiCg4SChoeFg4OMonxxjaJ9o=|uhiIxyfbOyfa|uljHuicnx7pYiBjHKFhI2scIxycnx3gYaCja2g==|uhiIxye7PCfa|umjHuicnx3iYxwjHiHhoWNra|uhiIxye7PCfa|umjHuicnx3hYxwjHmAgYKNra|uhiIxye7PCfa|umjHuicnx4goxwjHmDg4ONra|uhiIxyfbDCfa|ukjHuicnx1hYGMc4OJjHGAhYWDja2g==|uhiIxyfbOyfa|uljHuicnx7pYaFjHOFiI2scoxycnxxhYWJhY2to=|uhiIxyfbOyfa|uljHuicnx7oYGDhYx1g4CNrHCMcnJ8cYeCgoeNra|uhiIxyfbDCfa|ukjHuicnx5h4aMdIeHjHGJg4GEja2g==|uhiIxyfbDCfa|ukjHuicnxyiYCMdYCDjHKAhIOEja2g==
+ran:0.13288874388672411 */
 	time = new Date().getTime();
 	$.post(url, {enter_time:time, ran:Math.random()},
 		function(json){
@@ -213,6 +250,10 @@ function getEveryDayCoins() {
 				task.success = true;
 			} else if(json.code==4) {
 				appendLog("需要输入验证码，领淘金币越来越麻烦啦！");
+				/*if($("#workaround").attr("checked")=="checked") {
+					var b = chrome.extension.getBackgroundPage();
+					b.createTabAndInject(task.url, [], ["res/coin.js"]);
+				}*/
 			} else if(json.code==5) {
 				appendLog("验证码错误！");
 			} else if(json.code==6) {
@@ -222,7 +263,10 @@ function getEveryDayCoins() {
 			}
 			task.complete();
 		}, "json"
-	);
+	).fail(function(xhr, e) {
+		inLoginPage(xhr.responseText);
+		task.complete();
+	});
 	console.log("XHR: " + url);
 }
 
@@ -275,6 +319,10 @@ function taskBoxCoins() {
 	
 	var url = "http://mission.jianghu.taobao.com/umission_list.htm?spm=a1z01.0.1000710.11.e9da7f&tracelog=Tcoin_mission"
 	$.get(url, function(html) {
+		if(inLoginPage(html)) {
+			task.complete();
+			return;
+		}
 		var regExp = /data-missionId="(\d+)"/ig;
 		var result = null;
 		var taskBox = [];
@@ -401,16 +449,22 @@ function helpGetCoins() {
 			appendLog(json.result.msg);
 			task.complete();
 		}
+	}).fail(function(xhr, e) {
+		inLoginPage(xhr.responseText);
+		task.complete();
 	});
 	console.log("XHR: " + url);
 }
-
 //==========================================================================
 // 聚划算签到
 function signeJu() {
 	var task = this;
 	var url = "http://i.ju.taobao.com/json/my/checkInAction.htm?callback=jsonp69";
 	$.get(url, function(code){
+		if(inLoginPage(code)) {
+			task.complete();
+			return;
+		}
 		if(code.indexOf("success")!=-1) {
 			appendLog(task.name + "成功。");
 			task.success = true;
@@ -434,6 +488,7 @@ function jifenbao(task, src) { //back up fo jfb()
 		if(r) {
 			/* 
 			(2) 亲，您今天已经领过了，看看自己的“战绩”吧！
+			(-2) (尚未登录)
 			(-4) 亲，您不是支付宝实名认证用户，无法签到！赶快去认证吧 !
 			(-6) 抢的人太多了，今天的积分发完了，明天再来吧
 			(-7) 来晚了一步，活动已经结束啦！
@@ -461,6 +516,10 @@ function jfb(task, src) {
 				appendLog("今日已经完成"+task.name+"。");
 			} else if (json.status==-6) {
 				appendLog(task.name + "：抢的人太多了，今天的积分发完了，明天再来吧。");
+			} else if (json.status==-2) {
+				needLogin();
+				task.complete();
+				return;
 			} else if (json.status==-7) {
 				appendLog(task.name + "：来晚了一步，活动已经结束啦！");
 			} else if (json.amount) { //{"amount":1,"days":1,"status":10}
@@ -559,8 +618,10 @@ function signTryCenter() {
 			appendLog("成功领取"+bean+"颗试用豆，共有"+total+"颗。");
 			task.gain = bean;
 			task.success = true;
+		} else if(json.login) {
+			appendLog("已经领取过试用豆。");
 		} else {
-			appendLog("已经登录试用中心并领取过试用豆。");
+			needLogin();
 		}
 		task.complete();
 	});
@@ -578,30 +639,28 @@ function favorite() {
 		/*
 		html("http://store.taobao.com/shop/view_shop.htm?user_number_id=" + shop_ids[index]).indexOf("http://shuo.taobao.com/microshop/shop_follow_microshop.htm")
 		*/
-		var url = "http://shuo.taobao.com/microshop/shop_follow_microshop.htm?spm=a1z10.1.273.1.24ae60&starId=" + shop_ids[index];
+		var url = "http://shuo.taobao.com/microshop/shop_follow_microshop.htm?starId="+shop_ids[index]+"&_tb_token_="+token;
 		log("Try to collect shop: " + url);
 		$.get(url, function(html) {
+			if(inLoginPage(html)) {
+				task.complete();
+				return;
+			}
 			if(html.indexOf("淘金币")!=-1) {
 				//console.log("10 coins.");
-				url = "http://shuo.taobao.com/microshop/shop_follow_microshop.htm?spm=a1z10.1.273.1.24ae60&starId=" + shop_ids[index];
-				$.post(url, {starId:shop_ids[index], _tb_token_:token}, function(html){
-					if(html.indexOf("淘金币已到账")!=-1) {
-						appendLog(task.name + "获得10个淘金币。");
-						task.gain = 10;
-						task.success = true;
-						$("#"+task.id+" a").attr("href", "http://store.taobao.com/shop/view_shop.htm?user_number_id="+shop_ids[index]);
-						task.complete();
-					} else if(html.indexOf("收藏成功")!=-1) {
-						appendLog("今日已收藏店铺并领取过淘金币。");
-						task.complete();
-					} else if(html.indexOf("标准登录框")!=-1) {
-						log("尚未登录。");
-						task.complete();
-					} else {
-						log("Already have this shop in favorite.");
-						collect(index+1);
-					}
-				});
+				if(html.indexOf("淘金币已到账")!=-1) {
+					appendLog(task.name + "获得10个淘金币。");
+					task.gain = 10;
+					task.success = true;
+					$("#"+task.id+" a").attr("href", "http://store.taobao.com/shop/view_shop.htm?user_number_id="+shop_ids[index]);
+					task.complete();
+				} else if(html.indexOf("收藏成功")!=-1) {
+					appendLog("今日已收藏店铺并领取过淘金币。");
+					task.complete();
+				} else {
+					log("Already have this shop in favorite.");
+					collect(index+1);
+				}
 			} else {
 				console.log(html);
 				log("This shop does not contain any coins.");
@@ -633,8 +692,8 @@ function needLogin() {
 }
 
 //==========================================================================
-var b = chrome.extension.getBackgroundPage();
 function loadUsers() {
+	var b = chrome.extension.getBackgroundPage();
 	var users = b.getUser();
 	if(users) {
 		$.each(users, function(n, p) {
@@ -644,16 +703,26 @@ function loadUsers() {
 }
 
 function init() {
+	var b = chrome.extension.getBackgroundPage();
 	var config = b.getConfig();
-	if(config!=null && config.autoLogin) {
+	if(config.autoLogin) {
 		loadUsers();
 	} else {
 		$("#auto").hide();
 	}
+	$("#workaround").attr("checked", config.workaround);
 }
-		
+
+function saveWorkaround() {
+	var b = chrome.extension.getBackgroundPage();
+	var config = b.getConfig();
+	config.workaround = $("#workaround").attr("checked")=="checked";
+	b.saveConfig(config);
+}
+
 $(function() {
 	init();
 	initTask();
-	$("#get_coin").bind('click', autoGetCoin);
+	$("#get_coin").click(autoGetCoin);
+	$("#workaround").click(saveWorkaround);
 });

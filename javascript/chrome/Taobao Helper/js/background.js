@@ -23,9 +23,11 @@ function createTabAndInject(url, cssFiles, jsFiles) {
 }
 //-----------------------------------------------------------------------------
 
-function getConfig() {
+function getConfig(cfgName) {
+	var name = "config";
 	var config = null;
-	var _config = localStorage["config"];
+	if(cfgName) name = cfgName;
+	var _config = localStorage[name];
 	try{
 		config = JSON.parse(_config);
 	}catch(err){
@@ -37,8 +39,10 @@ function getConfig() {
 	return config;
 }
 
-function saveConfig(config) {
-	localStorage["config"] = JSON.stringify(config);
+function saveConfig(config, cfgName) {
+	var name = "config";
+	if(cfgName) name = cfgName;
+	localStorage[name] = JSON.stringify(config);
 }
 
 //-----------------------------------------------------------------------------
@@ -98,6 +102,6 @@ window.addEventListener("load", function() {
 	if (localStorage.ver != ver) {
 		var notification = webkitNotifications.createHTMLNotification("update.html");
 		notification.show();
-		setTimeout(function(){notification.cancel();}, 5000);
+		setTimeout(function(){notification.cancel();}, 10000);
 	}
 }, false);

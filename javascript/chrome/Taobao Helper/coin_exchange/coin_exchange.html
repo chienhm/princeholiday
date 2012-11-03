@@ -9,12 +9,22 @@
 <body>
   <div class="main">
       <div class="controller">
-		<input id="start" type="button" value="开始查找" xdisabled="true"/>
-		<ul><li id="task">当前状态-请点击开始查找</li><li id="result">查找结果</li></ul>
+		<input id="start" type="button" value="开始查找" class="option"/>
+		<div class="option">
+			消息提示<input type="checkbox" id="message" name="message"/> 
+			金币范围：<input id="min" type="text" value="" /> - <input id="max" type="text" value="" />
+			<input id="save" type="button" value="保存选项" title="可将选项和所选分类保存下来以供下次使用" />
+			<span id="result"></span>
+		</div>
+		<div id="cat">
+			<div class="category" id="all">
+				<input type="checkbox" name="all" id="allcheckbox"><span id="alltext">全部选择</span>
+			</div>
+		</div>
       </div>
       <div class="type">以下宝贝可全额兑换，请立即抢购</div>
       <div class="items" id="list">
-		<a href="${url}" target="_blank" id="${id}">
+		<!--<a href="${url}" target="_blank" id="${id}">
 			<img width="220" height="220" src="${image}" />
 			<p class="title">${name}(${ship})</p>
 			<p class="sales">
@@ -23,7 +33,19 @@
 				<span>已售${sales}件</span>
 			</p>
 			<p><span class="highlight">全额兑换：<b>${coin}</b>淘金币</span></p>
-		</a>
+		</a>-->
+		  <textarea id="template" style="display: none;">
+		  &lt;a href=&quot;${url}&quot; target=&quot;_blank&quot; id=&quot;${id}&quot;&gt;
+					&lt;img width=&quot;220&quot; height=&quot;220&quot; src=&quot;${image}&quot; /&gt;
+					&lt;p class=&quot;title&quot;&gt;${name}(${ship})&lt;/p&gt;
+					&lt;p class=&quot;sales&quot;&gt;
+						&lt;span&gt;&lt;del&gt;${price}&lt;/del&gt;&lt;/span&gt;
+						&lt;em&gt;${nowPrice}&lt;/em&gt;&lt;span class=&quot;coin&quot;&gt;${nowCoin}淘金币&lt;/span&gt;
+						&lt;span&gt;已售${sales}件&lt;/span&gt;
+					&lt;/p&gt;
+					&lt;p&gt;&lt;span class=&quot;highlight&quot;&gt;全额兑换：&lt;b&gt;${coin}&lt;/b&gt;淘金币&lt;/span&gt;&lt;/p&gt;
+				&lt;/a&gt;
+		  </textarea>
 	  </div>
 	  <div class="type">以下宝贝使用全额兑换已失效</div>
       <div class="items" id="history"></div>

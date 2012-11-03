@@ -6,9 +6,6 @@
 	font-weight: normal;
 	line-height: 1.5;
 }
-div {
-	display: block;
-}
 .items a {
 	width: 272px;
 	height: 345px;
@@ -68,31 +65,34 @@ a, a:visited {
 	color: #DC3610;
 	cursor: pointer;
 }
-#start {
-	float: left;
-	display: inline;
-}
-#task {
-	width: 300px;	
-	overflow: hidden;
-}
-.controller {
-	height: 34px;
-}
-ul {
-	list-style: none;
-	margin-left: 50px;
-}
-li {
-	float: left;
-	display: inline;
-	padding: 0 10px;
-	height: 15px;
-	line-height: 15px;
-	border-left: 1px solid #D5D5D5;
+/*-------------------------------------------------------*/
+#result {
 	margin-top: 5px;
-	color: #333;
-	text-align: justify;
+	overflow: auto;
+}
+.option {
+	padding: 0 10px;
+	float: left;
+	overflow: auto;
+	font-size: 15px;
+}
+.option input[type="button"] {
+	font-size: 15px;
+}
+.option input[type="text"] {
+	width: 50px;
+}
+#cat {
+	float: right;
+}
+.category {
+	float: left;
+	width: 95px;
+	overflow: auto;
+	border-style: dotted;
+	border-width: 1px;
+	margin: 1px;
+	background-color: #F1F1F1;
 }
 .type {
 	width: 1076px;

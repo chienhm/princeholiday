@@ -1,5 +1,5 @@
 ﻿var b = chrome.extension.getBackgroundPage();
-var index = -1;
+var curIndex = -1;
 var interval = 0;
 var template = "";
 var running = false;
@@ -13,17 +13,17 @@ var categories = [
 	{id:"10101000000", name:"毛衣针织"},
 	{id:"10104000000", name:"风衣皮衣"},
 	{id:"10103000000", name:"卫衣外套"},
-	{id:"10301000000", name:"魅力女鞋"},
 	{id:"10302000000", name:"时尚箱包"},
 	{id:"10304000000", name:"休闲男鞋"},
 	{id:"10303000000", name:"男女配饰"},
-	{id:"10201000000", name:"夏秋上装"},
-	{id:"10204000000", name:"夏秋裤装"},
+	{id:"10201000000", name:"秋冬上装"},
+	{id:"10204000000", name:"秋冬裤装"},
 	{id:"10203000000", name:"毛衣针织"},
 	{id:"10202000000", name:"夹克卫衣"},
-	{id:"11102000000", name:"时尚文胸"},
+	{id:"11102000000", name:"文胸内裤"},
 	{id:"11101000000", name:"家居睡衣"},
-	{id:"11103000000", name:"袜子内裤"},
+	{id:"11103000000", name:"时尚袜子"},
+	{id:"11104000000", name:"保暖塑身"},
 	{id:"10601000000", name:"童装孕装"},
 	{id:"10602000000", name:"玩具早教"},
 	{id:"10603000000", name:"母婴用品"},
@@ -31,7 +31,7 @@ var categories = [
 	{id:"10402000000", name:"床上用品"},
 	{id:"10401000000", name:"家装厨卫"},
 	{id:"10403000000", name:"居家百货"},
-	{id:"10404000000", name:"游泳户外"},
+	{id:"10404000000", name:"汽车户外"},
 	{id:"10701000000", name:"美容护理"},
 	{id:"10703000000", name:"零食特产"},
 	{id:"10702000000", name:"滋补保健"},
@@ -39,23 +39,31 @@ var categories = [
 	{id:"10502000000", name:"数码配件"},
 	{id:"10903000000", name:"销量千件"},
 	{id:"10901000000", name:"10元特价"},
-	{id:"10902000000", name:"3折封顶"}
+	{id:"10902000000", name:"天猫男装"},
+	{id:"10904000000", name:"包邮专区"}
 ];
 
 function findLuck() {
+	var loop = (curIndex==-1)?(categories.length-1):curIndex;
 	while(true) {
-		index++;
-		if(index==categories.length) {
-			index = 0;
+		curIndex++;
+		if(curIndex==categories.length) {
+			curIndex = 0;
 		}
-		if(categories[index].skip) continue;
-		break;
+		if($("#"+categories[curIndex].id+" input").attr("checked")=="checked") break;
+		
+		if(loop==curIndex) {
+			console.log("No category selected.");
+			start();
+			$("#result").html("请至少选择一个类目");
+			return;
+		}
 	}
 	if(lastId) $("#"+lastId).css("background-color", "#F1F1F1");
-	lastId = categories[index].id;
-	$("#"+categories[index].id).css("background-color", "lightgreen");
+	lastId = categories[curIndex].id;
+	$("#"+categories[curIndex].id).css("background-color", "lightgreen");
 	$("#result").html("");
-	getPage(categories[index]);
+	getPage(categories[curIndex]);
 }
 
 function loopAll() {
@@ -89,13 +97,10 @@ function parseHtml(html) {
 	var items = new Array();
 	if(html.indexOf("没有找到")!=-1) { //html.indexOf("listmodbox")==-1
 		$("#result").html("没有找到宝贝！");
+	} else if(html.indexOf("出错了")!=-1) {
+		$("#result").html("系统脑抽中!");
 	} else {
-		var end = html.indexOf("hot-recommend");
-		if(end==-1) {
-			console.error("Tag[hot-recommend] not found.");
-			end = html.indexOf("img-boxbg");
-		}
-		var count = html.substring(0, end).split("=\"可用金币兑换\"").length-1;
+		var count = html.split("=\"可用金币兑换\"").length-1;
 		//console.log(count);
 		var i = 0;
 		var result = null;
@@ -107,7 +112,7 @@ function parseHtml(html) {
 			if(item.id=="") {
 				console.error(item.name + " gets no item id.");
 			}
-			console.log("[" + categories[index].name + "][" + item.coin + "金币]" + item.name);
+			console.log("[" + categories[curIndex].name + "][" + item.coin + "金币]" + item.name);
 		}
 		if(i!=count) { //sanity check
 			console.error(count + " items found, but only " + i + " items parsed.");
@@ -118,13 +123,13 @@ function parseHtml(html) {
 }
 
 function updateArray(items) {
-	if(categories[index].items) {
+	if(categories[curIndex].items) {
 		var found = false;
-		var len = categories[index].items.length;
+		var len = categories[curIndex].items.length;
 		for(var i=0; i<len; i++) {
 			found = false;
 			for(var j=0; j<items.length; j++) {
-				if(categories[index].items[i].id == items[j].id){
+				if(categories[curIndex].items[i].id == items[j].id){
 					found = true;
 					break;
 				}
@@ -132,8 +137,8 @@ function updateArray(items) {
 			if(found) {
 				continue;
 			} else { //move item from list to history
-				moveItem("history", categories[index].items[i]);
-				categories[index].items.splice(i, 1);
+				moveItem("history", categories[curIndex].items[i]);
+				categories[curIndex].items.splice(i, 1);
 				i--;
 				len--;
 			}
@@ -141,18 +146,18 @@ function updateArray(items) {
 		for(var j=0; j<items.length; j++) {
 			found = false;
 			for(var i=0; i<len; i++) {
-				if(categories[index].items[i].id == items[j].id){
+				if(categories[curIndex].items[i].id == items[j].id){
 					found = true;
 					break;
 				}
 			}
 			if(!found) {
-				categories[index].items.push(items[j]);
+				categories[curIndex].items.push(items[j]);
 				addItem("list", items[j]);
 			}
 		}
 	} else {
-		categories[index].items = items;
+		categories[curIndex].items = items;
 		for(var j=0; j<items.length; j++) {
 			addItem("list", items[j]);
 		}
@@ -217,12 +222,13 @@ function initCategory() {
 	if(config.category) {
 		categories = config.category;
 	} else {
+		// no saved category, use default(may be not latest, so update everytime)
 		console.log("first time to save category.");
 		config.category = categories;
 		b.saveConfig(config, "exchange");
 	}
 	showCategory();
-	/*
+	
 	$.get("http://taojinbi.taobao.com/home/award_exchange_home.htm", function(html){
 		var reg=/<span>\s*?<a href=".+?category_id=(\d+)"\s*?>(.+?)<\/a>\s*?<\/span>/ig;
 		var result = null;
@@ -232,11 +238,25 @@ function initCategory() {
 			console.log("	{id:\""+result[1]+"\", name:\""+result[2]+"\"},");
 		}
 		if(_categories.length>0) {
+			// update category
+			$.each(_categories, function(i, e) {
+				for(var oi=0; oi<categories.length; oi++) {
+					if(e.id==categories[oi].id){
+						var name = e.name;
+						_categories[i] = categories[oi]; //copy old item
+						_categories[i].name = name;
+						break;
+					}
+				}
+			});
 			categories = _categories;
+			config.category = categories;
+			b.saveConfig(config, "exchange");
+			showCategory();
 		} else {
 			console.error("Failed to get categories.");
 		}
-	});*/
+	});
 	$.each(categories, function(i, e){
 		e.items = null;
 	});
@@ -253,6 +273,7 @@ function checkall() {
 }
 
 function showCategory() {
+	$("#cat div:not(:first)").remove();
 	$.each(categories, function(i, e){
 		var checkbox = $("<input type='checkbox' name='cat' value='"+e.id+"' "+(e.skip?"":"checked='checked'")+">" + e.name + "</input>");
 		checkbox.click(function(){
@@ -293,7 +314,7 @@ function save() {
 	// filter the results
 	$.each(categories, function(i, e){
 		if(e.items) {
-			$.each(e.items, function(index, item) {
+			$.each(e.items, function(j, item) {
 				if(item.coin<config.min || (config.max!=-1&&item.coin>config.max)) {
 					$("#"+item.id).hide();
 				} else {

@@ -17,8 +17,13 @@ function rate() {
 }
 
 function showUserList() {
-	$("#userList").is(":hidden") ? 
-		$("#userList").show("normal") : $("#userList").hide("normal");
+	if($("#userList").is(":hidden")) {
+		$("#userList").show("normal");
+		$("#more").html("&#60;&#60;");
+	} else {
+		$("#userList").hide("normal");
+		$("#more").html("&#62;&#62;");
+	}
 }
 
 var hasUser = false;
