@@ -3,12 +3,12 @@ net user guest /active:yes
 cls
 if errorlevel 2 echo.& echo 请以管理员身份运行（右键点击本程序，选择以管理员身份运行）。& pause & exit
 net user guest /active:no
-
+REM https://smarthosts.googlecode.com/svn/trunk/hosts
 REM 设置全局变量
 set BAT_DIR=%~dp0
 set TMP=%BAT_DIR%\tmp.txt
 echo. > %TMP%
-set OFFICE_FILES=adv.txt adobe.txt
+set OFFICE_FILES=baidu.txt adv.txt adobe.txt
 set HOME_FILES=google.txt adv.txt adobe.txt
 
 cls
