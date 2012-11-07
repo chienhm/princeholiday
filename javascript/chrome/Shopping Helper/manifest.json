@@ -18,7 +18,7 @@
    "options_page": "options.html",
    "content_scripts": [
 	   {
-		  "matches": ["http://chaoshi.tmall.com/*", "http://login.taobao.com/*"],
+		  "matches": ["http://chaoshi.tmall.com/*"],
 		  "all_frames": true,
 		  "js": ["script/jquery.min.js", "taobao/tmall.js"]
 	   },
@@ -28,8 +28,7 @@
 		  "js": ["script/jquery.min.js", "taobao/ju.js"]
 	   },
 	   {
-		  "matches": ["http://*.taobao.com/*", "http://*.tmall.com/*", "http://localhost:8888/*"],
-		  "run_at": "document_end",
+		  "matches": ["*://*.taobao.com/*", "http://*.tmall.com/*", "http://localhost:8888/*"],
 		  "js": ["script/jquery.min.js", "script/common.js", "taobao/buy.js"]
 	   },
 	   {
@@ -37,7 +36,6 @@
 		  "run_at": "document_end",
 		  "js": ["script/jquery.min.js", "homevv/vv.js"]
 	   },
-	   //------------------------------------------------------------Temp
 	   {
 		  "matches": ["http://www.lamiu.com/*"],
 		  "js": ["script/jquery.min.js", "temp/lamiu.js"]
@@ -49,5 +47,5 @@
 	   }
    ],
    "permissions": [ "cookies", "tabs", "notifications", "*://*.taobao.com/", "*://*.tmall.com/", "*://*.yihaodian.com/" ],
-   "version": "1.0.51"
+   "version": "1.2.1"
 }

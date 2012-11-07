@@ -58,7 +58,25 @@ function getConfig() {
 	if(_config!=null) {
 		return JSON.parse(_config);
 	}
-	return null;
+	return {};
+}
+
+function saveOption() {
+	localStorage["option"] = JSON.stringify(options);
+}
+	
+function loadOption() { /*private*/
+	var _option = localStorage["option"];
+	var old = options;
+	if(_option) {
+		try {
+			options = JSON.parse(_option);
+		} catch(e) {
+			console.error(e);
+			options = old;
+		}
+	}
+	options.skmod = false;
 }
 
 function open(url) {
@@ -100,3 +118,5 @@ function openHelper(url) {
 	var manager_url = chrome.extension.getURL(url);
 	focusOrCreateTab(manager_url);
 }
+
+loadOption(); /* load option to memory */

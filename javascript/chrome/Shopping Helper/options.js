@@ -5,10 +5,12 @@ function save_options() {
 	b.options.limit = $("#limit").val();
 	b.options.username = $("#username").val();
 	b.options.password = $("#password").val();
+	b.options.url = $("#url").val();
 	b.options.schedule.enabled = $("#schedule").attr("checked") ? true : false;
 	$(scheduleList).each(function(i, e) {
 		b.options.schedule[e] = getTime(e);
 	});
+	b.saveOption();
 	
 	$("#status").html("Options Saved.");
 	setTimeout(function() {
@@ -21,6 +23,9 @@ function restore_options() {
 	if(b.options.username!="") {
 		$("#username").val(b.options.username);
 		$("#password").val(b.options.password);
+	}
+	if(b.options.url) {
+		$("#url").val(b.options.url);
 	}
 	$("#schedule").attr("checked", b.options.schedule.enabled);
 	showSchedule(b.options.schedule.enabled);
@@ -79,6 +84,20 @@ function getTime(className) {
 	return date.getTime();
 }
 
+function kill() {
+	var url = $("#url").val();
+	if(url) {
+		b.options.skmod = true;
+		b.setState();
+		if(url.indexOf("tmall")!=-1 || url.indexOf("taobao")!=-1) {
+			chrome.tabs.create({
+				"url" : "https://login.taobao.com/member/login.jhtml?redirectURL=" + encodeURIComponent(url),
+				"selected" : true
+			});
+		}
+	}
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 	$(scheduleList).each(function(i, e) {
 		initSchedule(e);
@@ -86,7 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	
 	restore_options();	
 		
-	document.querySelector('button').addEventListener('click', save_options);
+	$("#save").click(save_options);
+	$("#kill").click(kill);
 	$("#schedule").bind('change', function(){
 		showSchedule(this.checked);
 	});
