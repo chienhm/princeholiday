@@ -31,9 +31,10 @@
 		"notifications",
 		"*://*.taobao.com/*", 
 		"*://*.tmall.com/*",
-		"*://*.etao.com/", 
+		"*://*.etao.com/",
 		"*://*.alipay.com/"
 	],
+	"optional_permissions": [ "*://*.alimama.com/" ],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"version": "1.6.3"
 }

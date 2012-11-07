@@ -101,7 +101,9 @@ function initTask() {
 		new Task("aiguangjie", 	"爱逛街签到", 		signAiGuangJie, 
 				{tips:"签到5秒钟之后才能进行下一个签到（已结束）", timeout:5000,
 				 url:"http://love.taobao.com", skip:true}),
-		
+				 
+		new Task("etaosearch", 	"一淘搜索", 		etaoSearch, 
+				{tips:"实名认证并绑定手机用户双11期间每天通过一淘搜索可获得10个积分宝", url:"http://ok.etao.com/sale.htm?spm=0.0.0.198.HgwZEu&tb_lm_id=etao_act1111_wuzhao"}),		
 				
 		new Task("wangwang", 	"旺旺签到", 		signWangWang, 
 				{tips:"签到5秒钟之后才能进行下一个签到"})
@@ -681,6 +683,42 @@ function favorite() {
 	});
 }
 //==========================================================================
+// 一淘搜索赚积分宝，10.15-11.19期间
+function etaoSearch() {
+	var task = this;
+	function search(url, finish) {
+		$.get(url, function(html){
+			// 0.01红包 "http://huodong.etao.com/ajax/draw_prize.do?id=8&_tb_token_="+token+"&t="+new Date().getTime()
+			$.getJSON("http://huodong.etao.com/ajax/draw_prize.do?id=4&_tb_token_="+token+"&t="+new Date().getTime(), function(json){
+				//{"success":false,"errorCode":-107,"errorMsg":"用户手机认证失败"}
+				//{"success":false,"errorCode":-202,"errorMsg":"用户每场抽奖次数限制"}
+				//{"success":false,"errorCode":-207,"errorMsg":"每天用户IDCARD对某个奖项领取数目限制"}
+				//{"success":true,"errorCode":0,"result":{"status":0,"win":true,"prizeTitle":"5","recordid":1234}}
+				//console.log(json);
+				if(json.errorCode != 0) {
+					appendLog(task.name + "：" + json.errorMsg);
+				} else {
+					if(json.result.win) {
+						task.gain += parseInt(json.result.prizeTitle);
+						task.success = true;
+						appendLog(task.name + "获得" + json.result.prizeTitle + "个积分宝。");
+					} else {
+						appendLog(task.name + "获取积分宝失败。");
+					}
+				}
+				if(finish) {
+					task.complete();
+				}
+			});
+		});		
+	}
+	search("http://ok.etao.com/item.htm?tb_lm_id=t_fangshan_wuzhao&url=http%3A%2F%2Fdetail.tmall.com%2Fitem.htm%3Fid%3D18779356405&rebatepartner=182&initiative_id=etao_20121104", false);
+	setTimeout(function(){
+		search("http://ok.etao.com/item.htm?tb_lm_id=t_fangshan_wuzhao&url=http%3A%2F%2Fitem.taobao.com%2Fitem.htm%3Fid%3D9329562332&rebatepartner=182&initiative_id=setao_20121104", true);
+	}, 1000);
+}
+//==========================================================================
+
 function appendLog(logs) {
 	log(logs);
 	$("#logs").append(logs+"<br/>");
