@@ -1,0 +1,50 @@
+﻿<html>
+<head>
+<title>天猫超市</title>
+<script type="text/javascript" src="../script/jquery.min.js"></script>
+<script type="text/javascript" src="taobao.js"></script>
+<script type="text/javascript">
+function init() {
+	initUser();
+	getTpId();
+}
+
+function buy() {
+	var item_id = $("#item_id").val();
+	if(item_id!="") {
+		tmallBuy(item_id);
+	}
+}
+
+function add() {
+	var item_id = $("#item_id").val();
+	if(item_id!="") {
+		addToCart(item_id, null);
+	}
+}
+
+function show() {
+	showCart();
+}
+
+function autoLogin() {
+	login($("#user").val(), $("#pass").val(), function(){console.log("This is login callback.");});
+}
+</script>
+</head>
+<body onload="init();">
+  <div class="main">
+      <div class="controller">
+		用户名：<input type="input" class="input" name="user" id="user" value="" /> 
+		密  码：<input type="password" class="input" name="pass" id="pass" value="" />
+		<input type="button" value="登录" onclick="autoLogin();"/>
+	  </div>
+      <div class="controller">
+	    <input id="item_id" type="text" />
+		<input id="add" type="button" value="加入购物车" onclick="add();"/>
+		<input id="buy" type="button" value="直接购买" onclick="buy();"/>
+		<input id="show" type="button" value="查看购物车" onclick="show();"/>
+	  <div>
+  </div>
+</body>
+</html>
