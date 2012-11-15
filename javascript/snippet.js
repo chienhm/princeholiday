@@ -12,7 +12,7 @@ function _click() {
 var itHandle = setInterval(_click, 1000, null);
 //clearInterval(itHandle);
 //-------------------------------------
-// 3. Periodically run function
+// 3. Periodically run function, dynamicly schedule
 var toHandle = -1;
 var interval = 5000;
 var random = undefined;
@@ -49,15 +49,20 @@ function dynamicJs(src) {
 }
 dynamicJs("http://code.jquery.com/jquery-1.7.2.min.js");
 //------------------------------------------------------------------------------------------------- (2)
-// Run function at the next time slot, such as the 200th milliseconds
+// Run function at the next time slot, such as the next 200th milliseconds
 function futureRun(func, ms) {
 	var t0 = new Date();
 	setTimeout(func, 1000-t0.getMilliseconds() + ms);
 }
 // Run script at specified time
 var toHandle = -1;
-function at(atTime, func) {
+function at(atTime, func, force) {
 	var left = atTime.getTime()-now.getTime();
+	if(left<0 || left>=2147483648) {
+		if(force) func();
+		else console.log("expired.");
+		return;
+	}
 	toHandle = setTimeout(func, left);
 	console.log(Math.floor(left/1000) + "s " + left%1000 + "ms left.");
 }
@@ -104,7 +109,7 @@ function fT(date) {
 //-------------------------------------------------------------------------------------------------
 document.write("<iframe id='homevv' width='"+document.body.clientWidth+"' height='"+document.body.clientHeight+"' frameborder='0' src='"+ location.href +"'></iframe>");
 
-//------------------------------------------------------------------------------------------------- (5)
+//------------------------------------------------------------------------------------------------- (6)
 // Format Time & Log
 //-------------------------------------------------------------------------------------------------
 /* Next second
@@ -123,7 +128,7 @@ function log(string) {
 	var fTime = "["+date.getFullYear()+"."+date.getFullMonth()+"."+date.getFullDate()+" "+date.getFullHours()+":"+date.getFullMinutes()+":"+date.getFullSeconds()+"."+date.getFullMilliseconds()+"] ";
 	console.log(fTime + string);
 }
-//------------------------------------------------------------------------------------------------- (6)
+//------------------------------------------------------------------------------------------------- (7)
 // Form hijack
 //-------------------------------------------------------------------------------------------------
 var form = $("#J_FrmBid")[0];
