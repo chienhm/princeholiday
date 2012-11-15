@@ -1,3 +1,6 @@
+/*-------------------------------------------------------------------------------------------------
+  配合网速测试，服务器时间减200-300ms最佳，400ms出过一次错误
+  -------------------------------------------------------------------------------------------------*/
 var toHandle = -1;
 function at(atTime, func, force) {
 	var left = atTime.getTime()-now.getTime();
@@ -14,13 +17,13 @@ var now = new Date();
 var h = now.getHours();
 var m = now.getMinutes();
 var s = now.getSeconds();
-if(s>10) { m++; if(m==60)h++; }
+if(s>10) { m++; if(m==60)h++; } /* Work Around */
 var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), h, m, 10, 850);
 at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	document.getElementById("J_authSubmit").click();
 });
-//=================================================================================================以上在下一个11点提交付款
+//=================================================================================================以上在下一个11点提交付款，供测试
 var toHandle = -1;
 function at(atTime, func, force) {
 	var left = atTime.getTime()-now.getTime();
