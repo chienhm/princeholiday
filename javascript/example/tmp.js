@@ -16,7 +16,7 @@ at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	document.getElementsByClassName("J_RefreshStatus")[0].click();
 });
-//---------------------------------------------------------------------------点击，只用来查看问题
+//---------------------------------------------------------------------------点击查看秒杀问题 End
 
 var toHandle = -1;
 function at(atTime, func, force) {
@@ -36,29 +36,7 @@ at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	document.getElementById("J_PerformSubmit").click();
 });
-//---------------------------------------------------------------------------充值下单
-//---------------------------------------------------------------------------天猫下单 Begin
-var toHandle = -1;
-function at(atTime, func, force) {
-	var left = atTime.getTime()-now.getTime();
-	if(left<0 || left>=2147483648) {
-		if(force) func();
-		else console.log("expired.");
-		return;
-	}
-	toHandle = setTimeout(func, left);
-	console.log(Math.floor(left/1000) + "s " + left%1000 + "ms left.");
-}
-//Example:
-var now = new Date();
-var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 23, 11, 10, 950);
-at(atTime, function(){
-	var date = new Date(); console.log(date + date.getMilliseconds());
-	var btn = document.getElementById("J_Go");
-	if(btn==null) btn = document.getElementById("J_go");
-	btn.click();
-});
-//---------------------------------------------------------------------------天猫下单 End
+//---------------------------------------------------------------------------充值下单 End
 //----------------------------------------------云服务器提交
 var toHandle = -1;
 function at(atTime, func, force) {

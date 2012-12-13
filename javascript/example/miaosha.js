@@ -16,7 +16,7 @@ function kill() {
 	document.getElementsByClassName("J_Submit submit")[0].click();
 }
 var now = new Date();
-var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 21, 19, 0, 0);
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 12, 0, 0);
 at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	function fresh(){
@@ -43,7 +43,7 @@ at(atTime, function(){
 					return;
 				}
 				//------------------------------------------------四个汉字的首字母
-				if(v.length==4) {
+				/*if(v.length==4) {
 					var allchar = true;
 					for(var i=0; i<4; i++) {
 						var ch = v.charCodeAt(i);
@@ -55,7 +55,7 @@ at(atTime, function(){
 						kill();
 						return;
 					}
-				}
+				}*/
 				//------------------------------------------------反转
 				if(e.keyCode>=37 && e.keyCode<=40) {
 					console.log("反转");

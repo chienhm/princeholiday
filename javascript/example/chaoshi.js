@@ -12,7 +12,7 @@ function at(atTime, func, force) {
 }
 //Example:
 var now = new Date();
-var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 9, 0, 0, 750);
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 0, 0, 0);
 at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	window.frames[0].location.reload();
