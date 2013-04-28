@@ -1,4 +1,4 @@
-#UPDATE:21:01 2013/1/28
+#UPDATE:2013-04-02 21:56
 
 127.0.0.1	localhost
 #SmartHosts START
@@ -440,7 +440,7 @@
 203.208.46.200	mt3.googleapis.com
 203.208.46.200	redirector-bigcache.googleapis.com
 203.208.46.200	translate.googleapis.com
-203.208.46.200	www.googleapis.com
+173.194.66.95	www.googleapis.com
 
 203.208.46.200	autoproxy-gfwlist.googlecode.com
 203.208.46.200	chromium.googlecode.com
@@ -588,15 +588,6 @@
 
 
 #Flickr START
-66.94.233.186	flickr.com
-66.94.233.186	www.flickr.com
-68.142.214.43	static.flickr.com
-69.147.90.159	farm2.static.flickr.com
-76.13.18.78	farm3.static.flickr.com
-67.195.19.66	farm4.static.flickr.com
-76.13.18.79	farm5.static.flickr.com
-98.139.197.254	farm6.static.flickr.com
-98.139.102.46	farm7.static.flickr.com
 98.136.43.76	geo.yahoo.com
 68.142.250.161	l.yimg.com
 96.6.93.227	s.yimg.com
@@ -612,20 +603,30 @@
 204.0.5.34	us.js2.yimg.com
 
 #data from HostsX
-76.13.18.78	bf1.farm3.static.flickr.com
-76.13.18.78	farm3.static.flickr.com
-76.13.18.78	gq1.farm3.static.flickr.com
-76.13.18.78	sp1.farm3.static.flickr.com
-76.13.18.79	bf1.farm5.static.flickr.com
-76.13.18.79	farm5.static.flickr.com
-76.13.18.79	gq1.farm5.static.flickr.com
-98.139.102.46	bf1.farm7.static.flickr.com
-98.139.102.46	farm7.static.flickr.com
-98.139.102.46	gq1.farm7.static.flickr.com
-98.139.102.46	ne1.farm7.static.flickr.com
-98.139.197.254	bf1.farm6.static.flickr.com
-98.139.197.254	farm6.static.flickr.com
-98.139.197.254	gq1.farm6.static.flickr.com
+68.142.214.24	flickr.com
+66.196.66.157	www.flickr.com
+68.142.214.43	static.flickr.com
+77.238.160.184	static.flickr.com
+209.191.105.102	adjax.flickr.yahoo.com
+68.142.214.43	farm1.staticflickr.com
+68.142.214.43	mud.farm1.staticflickr.com
+69.147.90.159	farm2.staticflickr.com
+69.147.90.159	sp1.farm2.staticflickr.com
+77.238.160.184	farm3.staticflickr.com
+98.137.205.236	bf1.farm3.staticflickr.com
+216.39.54.34	gq1.farm3.staticflickr.com
+69.147.90.215	sp1.farm3.staticflickr.com
+76.13.18.77	farm4.staticflickr.com
+76.13.18.77	ac4.farm4.staticflickr.com
+67.195.19.62	gq1.farm4.staticflickr.com
+76.13.18.79	farm5.staticflickr.com
+67.195.19.65	gq1.farm5.staticflickr.com
+98.136.171.208	farm6.staticflickr.com
+98.139.21.45	bf1.farm6.staticflickr.com
+98.136.171.208	gq1.farm6.staticflickr.com
+98.138.250.88	farm7.staticflickr.com
+98.139.235.135	bf1.farm7.staticflickr.com
+98.138.250.88	ne1.farm7.staticflickr.com
 #Flickr END
 
 #Adobe Activation START
@@ -674,6 +675,13 @@
 207.97.227.243	www.github.com
 #GitHub END
 
+#Feedly START
+173.194.38.137	feedly-beta.appspot.com
+173.194.72.121	s3.feedly.com
+#Feedly END
+
+#Others START
 38.229.72.14 www.torproject.org
+#Others END
 
 #SmartHosts END
