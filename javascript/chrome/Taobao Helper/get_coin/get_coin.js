@@ -94,7 +94,7 @@ function initTask() {
 				 url:"http://jf.etao.com/"}),
 				 
 		new Task("favorite", 	"店铺收藏", 		favorite, 
-				{tips:"每天首次收藏新店铺领10个淘金币", timeout:2000, skip:true,
+				{tips:"每天首次收藏新店铺领5个淘金币", timeout:2000, skip:true,
 				 url:"http://dongtai.taobao.com/square.htm?guess=true&tracelog=gctjbsy"}),
 				
 		
@@ -229,23 +229,26 @@ function getEveryDayCoins() {
 	var task = this;
 	var time = new Date().getTime();
 	
-	//"http://taojinbi.taobao.com//home/award_exchange_home.htm?auto_take=true&tracelog=newmytb_kelingjinbi";
-	var url = "http://taojinbi.taobao.com/home/grant_everyday_coin.htm?t="+time+"&_tb_token_="+token;
+	//"http://taojinbi.taobao.com/home/home_new.htm?spm=a1z02.1.1000294.d1000326.9izYL4&auto_take=true&tracelog=newmytb_kelingjinbi";
+	//http://vip.taobao.com/home/grant_everyday_coin.htm?t=1367301763907&_tb_token_=3e17e033b7e65&checkCode=null&enter_time=1367301752893
+	var url = "http://vip.taobao.com/home/grant_everyday_coin.htm?t="+time+"&_tb_token_="+token+"&checkCode=null&enter_time="+(time-12345);
 /*checkCode:okrm
 enter_time:1351642860468
 ua:249uhjHGDhYGGhIKIhoOHgIWNo=|uhiIxycrLCfa|uijHuic5iyz721snxygoxyd6m+tL+3w8J9ra|uhiIxyc8myfa|ujjHugjHCMcYSCg4xxhICHjHGEhICMeYCAjHGEhICMeIaAja2g==|uojHJyfa|upjHJyfa|uhgoxycYOFgYaEgoiGg4eAhYqAjnaAgoiEg4WHiYGDh4aJh4iCfa|uhiIxyebSyfa|uhiIxyd7yzz7J9o=|uhgIxye6KChoSAjHyicYOEhICHgomAg4OAg4zAjneBhoGGiYiCg4SChoeFg4OMonxxjaJ9o=|uhiIxyfbOyfa|uljHuicnx7pYiBjHKFhI2scIxycnx3gYaCja2g==|uhiIxye7PCfa|umjHuicnx3iYxwjHiHhoWNra|uhiIxye7PCfa|umjHuicnx3hYxwjHmAgYKNra|uhiIxye7PCfa|umjHuicnx4goxwjHmDg4ONra|uhiIxyfbDCfa|ukjHuicnx1hYGMc4OJjHGAhYWDja2g==|uhiIxyfbOyfa|uljHuicnx7pYaFjHOFiI2scoxycnxxhYWJhY2to=|uhiIxyfbOyfa|uljHuicnx7oYGDhYx1g4CNrHCMcnJ8cYeCgoeNra|uhiIxyfbDCfa|ukjHuicnx5h4aMdIeHjHGJg4GEja2g==|uhiIxyfbDCfa|ukjHuicnxyiYCMdYCDjHKAhIOEja2g==
 ran:0.13288874388672411 */
 	time = new Date().getTime();
-	$.post(url, {enter_time:time, ran:Math.random()},
-		function(json){
+	$.getJSON(url, function(json){
+		/* 	{"currentLevel":"v0","nextLevel":"v4","nextMaxCoin":30,"code":1,"coinOld":1110,"coinNew":1115,"daysTomorrow":1,"coinTomorrow":"10","auth":true,"isTake":"false","takeAmount":"","friendNum":"","switcher":"true"}
+		*/
 			//{"code":1,"coinOld":4471,"coinNew":4501,"daysTomorrow":6,"coinTomorrow":"35","auth":true,"isTake":"false","takeAmount":"","friendNum":"","switcher":"true"}
 			//{"code":2,"coinOld":4501,"coinNew":4501,"daysTomorrow":1,"coinTomorrow":"10","auth":true,"isTake":"","takeAmount":"","friendNum":"0","switcher":"true"}
 			//{"code":4,"coinOld":-1,"coinNew":-1,"daysTomorrow":1,"coinTomorrow":"10","auth":true,"isTake":"","takeAmount":"","friendNum":"","switcher":"true"}
 			//{"code":6,"coinOld":1418,"coinNew":1418,"daysTomorrow":1,"coinTomorrow":"10","auth":true,"isTake":"","takeAmount":"","friendNum":"0","switcher":"true"}
 			console.log(json);
 			if(json.code==1) {
-				appendLog("成功领取"+json.coinTomorrow+"个淘金币，已连领"+json.daysTomorrow+"天，当前金币数量"+json.coinNew);
-				task.gain = json.coinTomorrow;
+				var coinGot = json.coinNew-json.coinOld;
+				appendLog("成功领取"+coinGot+"个淘金币，已连领"+json.daysTomorrow+"天，当前金币数量"+json.coinNew);
+				task.gain = coinGot;
 				task.success = true;
 			} else if(json.code==4) {
 				appendLog("需要输入验证码，领淘金币越来越麻烦啦！");
@@ -636,46 +639,46 @@ function favorite() {
 			return;
 		}
 		/*
-		html("http://store.taobao.com/shop/view_shop.htm?user_number_id=" + shop_ids[index]).indexOf("http://shuo.taobao.com/microshop/shop_follow_microshop.htm")
+		http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId=160562238&flag=true&_tb_token_=SVoccvfGyU1x
 		*/
-		var url = "http://shuo.taobao.com/microshop/shop_follow_microshop.htm?starId="+shop_ids[index]+"&_tb_token_="+token;
+		var url = "http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId="+shop_ids[index]+"&flag=true&_tb_token_="+token;
 		log("Try to collect shop: " + url);
 		$.get(url, function(html) {
 			if(inLoginPage(html)) {
 				task.complete();
 				return;
 			}
-			if(html.indexOf("淘金币")!=-1) {
-				//console.log("10 coins.");
-				if(html.indexOf("淘金币已到账")!=-1) {
-					appendLog(task.name + "获得10个淘金币。");
-					task.gain = 10;
-					task.success = true;
-					$("#"+task.id+" a").attr("href", "http://store.taobao.com/shop/view_shop.htm?user_number_id="+shop_ids[index]);
-					task.complete();
-				} else if(html.indexOf("收藏成功")!=-1) {
-					appendLog("今日已收藏店铺并领取过淘金币。");
+			if(html.indexOf("淘金币已到账")!=-1) {
+				appendLog(task.name + "获得5个淘金币。");
+				task.gain = 5;
+				task.success = true;
+				$("#"+task.id+" a").attr("href", "http://store.taobao.com/shop/view_shop.htm?user_number_id="+shop_ids[index]);
+				task.complete();
+			} else if(html.indexOf("店铺收藏成功")!=-1) {
+				appendLog("今日已收藏店铺并领取过淘金币。");
+				task.complete();
+			} else {
+				if(index>=5) {
+					appendLog("尝试收藏次数过多，收藏失败。");
 					task.complete();
 				} else {
-					log("Already have this shop in favorite.");
+					console.log(html);
+					log("This shop does not contain any coins.");
 					collect(index+1);
 				}
-			} else {
-				console.log(html);
-				log("This shop does not contain any coins.");
-				collect(index+1);
-			}
+			} /* end of favorite test */
 		});
-	}
-	var url = "http://dongtai.taobao.com/square.htm?spm=a1z01.1000834.150938.1.43caf&guess=true&tracelog=gctjbsy";
+	} /* end of collect */
+	var url = "http://dongtai.taobao.com/square.htm?spm=a310h.2192569.5711129.d4908169.PyFJMI&type=0&tracelog=dtgc_shangxin";
 	$.get(url, function(html){
-		var regExp = /user_number_id%3D(\d+)/ig;
+		var regExp = /'shopOwnerId':'(\d+)'/ig;
 		var r = null, last=null;
 		while((r=regExp.exec(html))!=null) {
 			if(last==r[1])continue;
 			last = r[1];
 			shop_ids.push(r[1]);
 		}
+		log(shop_ids);
 		collect(0);
 	});
 }
