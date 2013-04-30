@@ -70,14 +70,14 @@ function initTask() {
 	tasks = [
 		new Task("everyday", 	"领取当日淘金币", 	getEveryDayCoins, 
 				{tips:"每天5枚，连续7天以上每天40枚，如中断则又会从5开始", 
-				 url:"http://taojinbi.taobao.com/record/my_coin_detail.htm"}),
+				 url:"http://taojinbi.taobao.com/record/my_coin_detail.htm", skip:true}),
 				 
 		new Task("friend", 		"帮好友领淘金币", 	helpGetCoins, 
 				{tips:"每帮领一个好友，即可得5个奖励！（15个封顶）", timeout:3000}),
 				
 		new Task("task", 		"任务盒子", 		taskBoxCoins, 
 				{tips:"做任务领取淘金币，部分任务需您亲自完成", timeout:3000, 
-				 url:"http://mission.jianghu.taobao.com/umission_list.htm"}),
+				 url:"http://mission.jianghu.taobao.com/umission_list.htm", skip:true}),
 				 
 		new Task("ju", 			"聚划算签到", 		signeJu, 
 				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
@@ -94,7 +94,7 @@ function initTask() {
 				 url:"http://jf.etao.com/"}),
 				 
 		new Task("favorite", 	"店铺收藏", 		favorite, 
-				{tips:"每天首次收藏新店铺领10个淘金币", timeout:2000,
+				{tips:"每天首次收藏新店铺领10个淘金币", timeout:2000, skip:true,
 				 url:"http://dongtai.taobao.com/square.htm?guess=true&tracelog=gctjbsy"}),
 				
 		
@@ -102,11 +102,8 @@ function initTask() {
 				{tips:"签到5秒钟之后才能进行下一个签到（已结束）", timeout:5000,
 				 url:"http://love.taobao.com", skip:true}),
 				 
-		new Task("etaosearch", 	"一淘搜索", 		etaoSearch, 
-				{tips:"实名认证并绑定手机用户双11期间每天通过一淘搜索可获得10个积分宝", url:"http://ok.etao.com/sale.htm?spm=0.0.0.198.HgwZEu&tb_lm_id=etao_act1111_wuzhao"}),		
-				
 		new Task("wangwang", 	"旺旺签到", 		signWangWang, 
-				{tips:"签到5秒钟之后才能进行下一个签到"})
+				{tips:"签到5秒钟之后才能进行下一个签到（已结束）", skip:true})
 		//http://jf.etao.com/activity.htm?spm=0.0.0.71.13a90b&t&drawCredits
 	];
 	
@@ -297,7 +294,7 @@ function taskBoxCoins() {
 			}
 		} // end of completeTaskBox()
 		var mid = taskBox[index];
-		var url = "http://mission.jianghu.taobao.com/ajax/mission_oper.do?t="+Math.random();
+		var url = "http://mission.jianghu.taobao.com/ajax/mission_oper.do?t="+new Date().getTime();
 		//console.log("XHR: " + url);
 		$.ajax({
 			"url": url,
@@ -682,41 +679,7 @@ function favorite() {
 		collect(0);
 	});
 }
-//==========================================================================
-// 一淘搜索赚积分宝，10.15-11.19期间
-function etaoSearch() {
-	var task = this;
-	function search(url, finish) {
-		$.get(url, function(html){
-			// 0.01红包 "http://huodong.etao.com/ajax/draw_prize.do?id=8&_tb_token_="+token+"&t="+new Date().getTime()
-			$.getJSON("http://huodong.etao.com/ajax/draw_prize.do?id=4&_tb_token_="+token+"&t="+new Date().getTime(), function(json){
-				//{"success":false,"errorCode":-107,"errorMsg":"用户手机认证失败"}
-				//{"success":false,"errorCode":-202,"errorMsg":"用户每场抽奖次数限制"}
-				//{"success":false,"errorCode":-207,"errorMsg":"每天用户IDCARD对某个奖项领取数目限制"}
-				//{"success":true,"errorCode":0,"result":{"status":0,"win":true,"prizeTitle":"5","recordid":1234}}
-				//console.log(json);
-				if(json.errorCode != 0) {
-					appendLog(task.name + "：" + json.errorMsg);
-				} else {
-					if(json.result.win) {
-						task.gain += parseInt(json.result.prizeTitle);
-						task.success = true;
-						appendLog(task.name + "获得" + json.result.prizeTitle + "个积分宝。");
-					} else {
-						appendLog(task.name + "获取积分宝失败。");
-					}
-				}
-				if(finish) {
-					task.complete();
-				}
-			});
-		});		
-	}
-	search("http://ok.etao.com/item.htm?tb_lm_id=t_fangshan_wuzhao&url=http%3A%2F%2Fdetail.tmall.com%2Fitem.htm%3Fid%3D18779356405&rebatepartner=182&initiative_id=etao_20121104", false);
-	setTimeout(function(){
-		search("http://ok.etao.com/item.htm?tb_lm_id=t_fangshan_wuzhao&url=http%3A%2F%2Fitem.taobao.com%2Fitem.htm%3Fid%3D9329562332&rebatepartner=182&initiative_id=setao_20121104", true);
-	}, 1000);
-}
+
 //==========================================================================
 
 function appendLog(logs) {
