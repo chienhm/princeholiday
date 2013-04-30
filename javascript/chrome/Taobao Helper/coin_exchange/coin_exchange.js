@@ -91,7 +91,7 @@ function getId(url) {
 	return null;
 }
 /* http://regexpal.com/ http://gskinner.com/RegExr/ */
-var itemRegExp = /<a.*?href="(.+?)" target="_blank">[^\w]+<img .+? src="(.+?)" \/>[^\w]+<p class="title" title=".+?">(.+?)<\/p>[^\w]+<p class="price"><del>(.+?)<\/del><span class="discount">\/.+?折<\/span> <span class="salescount">已成交(.+)件<\/span> <\/p>[^\w]+<p class="price qz-price"> <em>(.+?)<\/em>+(.+?)<span class="coin">淘金币<\/span>\s*<span class="favorable">(.+?)<\/span>\s*<\/p>[^\w]+<p class="modes">[^\w]+<span data-tip="可用金币兑换" class="mode4 J_Mode">\((.+)淘金币\)/ig;
+var itemRegExp = /<a.*?href="(.+?)" target="_blank">[^\w]+<img .+? src="(.+?)" \/>[^\w]+<p class="title" title=".+?">(.+?)<\/p>[^\w]+<p class="price"><del>(.+?)<\/del><span class="discount">\/.+?折<\/span> <span class="salescount">已成交(.+)件<\/span> <\/p>[^\w]+<p class="price qz-price">.+?<strong>(.+?)<\/strong><\/span>+(.+?)<span class="coin">淘金币<\/span>\s*<span class="favorable">(.+?)<\/span>\s*<\/p>[^\w]+<p class="modes">[^\w]+<span data-tip="可用金币兑换" class="mode4 J_Mode">\((.+)淘金币\)/ig;
 
 function parseHtml(html) {
 	var items = new Array();

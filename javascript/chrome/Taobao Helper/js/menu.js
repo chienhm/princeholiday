@@ -99,7 +99,8 @@ $(function () {
 	$("#more").click(showUserList);
 	$("#goodRate").click(rate);
 	$("#exchange").click(function(){
-		openHelper('coin_exchange/coin_exchange.html');
+		//openHelper('coin_exchange/coin_exchange.html');
+		openHelper('http://taojinbi.taobao.com/home/full_exchange_home.htm');
 	});
 	$("#getCoin").click(function(){
 		openHelper('get_coin/get_coin.html');

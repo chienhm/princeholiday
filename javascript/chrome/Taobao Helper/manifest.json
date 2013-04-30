@@ -18,7 +18,7 @@
 	"content_scripts": [
 		{
 			"matches" : ["*://*.taobao.com/*"],
-			"js"      : ["js/jquery.min.js"],
+			"js"      : ["js/jquery.min.js", "js/helper.js"],
 			"all_frames" : true
 		}
 	],
@@ -36,5 +36,5 @@
 	],
 	"optional_permissions": [ "*://*.alimama.com/" ],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.6.3"
+	"version": "1.6.4"
 }

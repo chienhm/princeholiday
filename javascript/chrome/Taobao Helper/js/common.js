@@ -48,6 +48,9 @@ function focusOrCreateTab(url) {
 }
 
 function openHelper(url) {
-	var manager_url = chrome.extension.getURL(url);
+	var manager_url = url;
+	if(url.indexOf("http")!=0) {
+		manager_url = chrome.extension.getURL(url);
+	}
 	focusOrCreateTab(manager_url);
 }

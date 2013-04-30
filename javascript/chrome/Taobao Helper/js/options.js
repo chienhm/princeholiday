@@ -4,6 +4,7 @@ function save_options() {
 	var config = b.getConfig();
 	
 	config.autoLogin = $("#autolog").attr("checked")=="checked";
+	config.batDelete = $("#batdelete").attr("checked")=="checked";
 	
 	b.saveConfig(config);
 	
@@ -18,6 +19,7 @@ function restore_options() {
 	var config = b.getConfig();
 	if(config!=null) {
 		$("#autolog").attr("checked", config.autoLogin);
+		$("#batdelete").attr("checked", config.batDelete);
 	}
 	var users = b.getUser();
 	if(users) {

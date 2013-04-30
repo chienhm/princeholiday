@@ -22,7 +22,9 @@
 						}
 					}
 					if(user) {
-						document.getElementById("J_SafeLoginCheck").click();
+						if(document.getElementById("J_SafeLoginCheck").checked){
+							document.getElementById("J_SafeLoginCheck").click();
+						}
 						document.getElementById("TPL_username_1").value = user;
 						document.getElementById("TPL_password_1").value = decrypt(user, pass);
 						document.getElementById("J_SubmitStatic").click();
