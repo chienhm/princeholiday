@@ -70,7 +70,7 @@ function initTask() {
 	tasks = [
 		new Task("everyday", 	"领取当日淘金币", 	getEveryDayCoins, 
 				{tips:"每天5枚，连续7天以上每天40枚，如中断则又会从5开始", 
-				 url:"http://taojinbi.taobao.com/record/my_coin_detail.htm", skip:true}),
+				 url:"http://vip.taobao.com/vip_home.htm"}),
 				 
 		new Task("friend", 		"帮好友领淘金币", 	helpGetCoins, 
 				{tips:"每帮领一个好友，即可得5个奖励！（15个封顶）", timeout:3000}),
@@ -82,29 +82,12 @@ function initTask() {
 		new Task("ju", 			"聚划算签到", 		signeJu, 
 				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
 		
-		new Task("alipay", 		"支付宝签到", 		signAlipay,
-				{url:"https://jfb.alipay.com/activity/earn.htm", tips:"已结束", timeout:3000, skip:true}), //已结束//http://jf.etao.com/?tb_lm_id=t_tbvip_jf&signIn=https://hi.alipay.com/campaign/normal_campaign.htm?spm=0.0.0.100.3b33e3&campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000
-		
-		
 		new Task("try", 		"试用中心签到", 	signTryCenter, 
 				{url:"http://try.taobao.com/item/my_try_item.htm"}),
-				
-		new Task("etao", 		"一淘签到", 		signeTao, 
-				{tips:"签到5秒钟之后才能进行下一个签到", timeout:5000,
-				 url:"http://jf.etao.com/"}),
 				 
 		new Task("favorite", 	"店铺收藏", 		favorite, 
-				{tips:"每天首次收藏新店铺领5个淘金币", timeout:2000, skip:true,
-				 url:"http://dongtai.taobao.com/square.htm?guess=true&tracelog=gctjbsy"}),
-				
-		
-		new Task("aiguangjie", 	"爱逛街签到", 		signAiGuangJie, 
-				{tips:"签到5秒钟之后才能进行下一个签到（已结束）", timeout:5000,
-				 url:"http://love.taobao.com", skip:true}),
-				 
-		new Task("wangwang", 	"旺旺签到", 		signWangWang, 
-				{tips:"签到5秒钟之后才能进行下一个签到（已结束）", skip:true})
-		//http://jf.etao.com/activity.htm?spm=0.0.0.71.13a90b&t&drawCredits
+				{tips:"每天首次收藏新店铺领5个淘金币", timeout:2000,
+				 url:"http://dongtai.taobao.com/square.htm"})
 	];
 	
 	function enclosure(task) {
@@ -475,136 +458,6 @@ function signeJu() {
 		}
 		task.complete();
 	});
-}
-//==========================================================================
-// 一淘签到
-function signeTao() {
-	var task = this;
-	jfb(task, 2);
-	// jifenbao(task, 2);
-}
-
-function jifenbao(task, src) { //back up fo jfb()
-	$.get("http://jf.etao.com/getCredit.htm?jfSource="+src+"&t="+Math.random(), function(html){
-		var r = /<p class="news">([\s\S]+?)</ig.exec(html);
-		if(r) {
-			/* 
-			(2) 亲，您今天已经领过了，看看自己的“战绩”吧！
-			(-2) (尚未登录)
-			(-4) 亲，您不是支付宝实名认证用户，无法签到！赶快去认证吧 !
-			(-6) 抢的人太多了，今天的积分发完了，明天再来吧
-			(-7) 来晚了一步，活动已经结束啦！
-			(-8) 亲，您的操作太频繁了哦！
-			*/
-			var msg = r[1].trim();
-			appendLog(msg);
-		} else {
-			appendLog(task.name + "失败。");
-		}
-		task.complete();
-	});
-}
-
-function jfb(task, src) {
-	$.ajax({
-		url : "http://jf.etao.com/ajax/getCreditForSrp.htm?jfSource=" + src, 
-		dataType : "json",
-		type: "GET",
-		success : function(json){
-			console.log(json);
-			if(json.status==-4) { //{"status":-4}
-				appendLog("非实名认证用户，" + task.name + "失败。");
-			} else if (json.status==2) {
-				appendLog("今日已经完成"+task.name+"。");
-			} else if (json.status==-6) {
-				appendLog(task.name + "：抢的人太多了，今天的积分发完了，明天再来吧。");
-			} else if (json.status==-2) {
-				needLogin();
-				task.complete();
-				return;
-			} else if (json.status==-7) {
-				appendLog(task.name + "：来晚了一步，活动已经结束啦！");
-			} else if (json.amount) { //{"amount":1,"days":1,"status":10}
-				appendLog(task.name+"，连续签到"+json.days+"天，领取"+json.amount+"个积分宝。");
-				task.gain = json.amount;
-				task.success = true;
-			} else {
-				if(json.status==-8) {
-					console.error("亲，您的操作太频繁了哦！");
-				}
-				appendLog(task.name + "失败。");
-			}
-			// make this task sync-alike to avoid quick access
-			var elapse = new Date().getTime()-task.sTime;
-			if(elapse<(task.timeout-100)) {
-				setTimeout(function(){task.complete();}, task.timeout-100-elapse);
-			} else {
-				task.complete();
-			}
-		}
-	});
-}
-// 爱逛街签到
-function signAiGuangJie() {
-	var task = this;
-	//http://jf.etao.com/?spm=1001.1000502.0.478.9f3e01&tb_lm_id=t_aiguangjie&signIn&jfSource=7
-	jfb(task, 7);
-	//jifenbao(task, 7);
-}
-// 登陆旺旺签到
-function signWangWang() {
-	var task = this;
-	jfb(task, 8);
-}
-//==========================================================================
-// 支付宝签到
-var alipayLogin = true;
-function signAlipay() {
-	var task = this;
-	function loginAlipay(url) {
-		log("支付宝签到登录。");
-		$.get(url, function(html) {
-			alipayLogin = false;
-			task.func();
-		});
-	}
-	var url = "https://hi.alipay.com/campaign/normal_campaign.htm?campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000";
-	$.get(url, function(html) {
-		var r = /<span class="jfb triJfb">(\d+)<\/span>/ig.exec(html);
-		if(r) {
-			appendLog("成功签到支付宝，领取"+r[1]+"个积分宝。");
-			task.gain = r[1];
-			task.success = true;
-		} else {
-			r = /lukyLevelErr">(.+?)<\/p>/ig.exec(html);
-			if(r) {
-				appendLog(task.name+"："+r[1]);
-			} else {
-				r = /window.location.href = "(.+?)"/ig.exec(html);
-				if(r) {
-					if(alipayLogin) {
-						loginAlipay(r[1]);
-						return;
-					}
-				} else if(html.indexOf("再来一次")!=-1) {
-					appendLog(task.name+"：运气不好，没有抽到积分宝，可以再尝试一次。");
-				} else {
-					console.log(html);
-				}
-			}
-		}
-		alipayLogin = true;
-		task.complete();
-	}).fail(function(e){console.error(e);});
-	//frameLoad("https://hi.alipay.com/campaign/normal_campaign.htm?campInfo=f8TFC%2B0iCwshcQr4%2BKQCH7zMoy1VtWKh&from=jfb&sign_from=3000");
-}
-
-function frameLoad(url) {
-	if($("#frm").length>0) {
-		$("#frm").attr("src", url);
-	} else {
-		$(document.body).append("<iframe id='frm' width='"+document.body.clientWidth+"' height='"+document.body.clientHeight+"' frameborder='0' src='"+ url +"'></iframe>");
-	}
 }
 //==========================================================================
 // 试用中心签到
