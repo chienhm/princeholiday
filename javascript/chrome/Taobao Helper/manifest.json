@@ -24,7 +24,7 @@
 	],
 	"web_accessible_resources": ["logo/logo.png"],
 	"name": "淘小蜜",
-	"options_page": "options.html",
+	"options_page": "index.html",
 	"permissions": [
 		"cookies", 
 		"tabs", 

@@ -351,9 +351,6 @@ function helpGetCoins() {
 					console.log("No friends."); // already checked by check_take.htm
 					task.complete();
 				} else {
-					if(data.users.length<3) {
-						appendLog("您的好友太少，至少帮3个好友领取才能得到15个淘金币的奖励");
-					}
 					$.each(data.users, 
 						function(i, user){
 							//console.log(user.n + ", id:" + user.id);
