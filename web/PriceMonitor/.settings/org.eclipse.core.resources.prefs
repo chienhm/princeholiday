@@ -1,7 +1,10 @@
-#Fri Apr 27 20:47:47 CST 2012
+#Thu Sep 20 13:19:47 CST 2012
 eclipse.preferences.version=1
 encoding//src/com/morntea/web/pricemonitor/service/ProductService.java=GB2312
 encoding//src/com/morntea/web/pricemonitor/service/WeiweiService.java=GB2312
 encoding//src/com/morntea/web/pricemonitor/servlet/AddItemServlet.java=GB2312
 encoding//war/family/chart.jsp=UTF-8
 encoding//war/monitor.jsp=UTF-8
+encoding//war/taobao/buy_now.htm=GBK
+encoding//war/taobao/buy_now.jhtml=GBK
+encoding//war/taobao/buy_now_end.jhtml=GBK
