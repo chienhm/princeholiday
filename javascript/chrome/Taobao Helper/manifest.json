@@ -8,7 +8,7 @@
 		"default_title" : "淘小蜜",
 		"default_popup" : "menu.html"
 	},
-	"description": "淘宝得力助手，一键登录，一键评价，一键领取所有淘金币，自动查询淘金币全额兑换，每日登录积分等等。",
+	"description": "淘宝得力助手，一键登录，一键评价，一键领取所有淘金币，批量订单管理扩展等等。",
 	"icons": {
 		"128" : "logo/logo_128.png",
 		"32"  : "logo/logo_32.png",
