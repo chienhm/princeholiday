@@ -99,10 +99,10 @@ $(function () {
 	$("#more").click(showUserList);
 	$("#goodRate").click(rate);
 	$("#getCoin").click(function(){
-		openHelper('get_coin/get_coin.html');
+		openHelper('index.html#coin');
 	});
 	$("#options").click(function(){
-		openHelper('options.html');
+		openHelper('index.html');
 	});
 	$("#about").click(function(){
 		openHelper('about.html');

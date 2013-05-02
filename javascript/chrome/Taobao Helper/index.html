@@ -1,0 +1,163 @@
+﻿<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" href="css/navi.css" />
+<link rel="stylesheet" type="text/css" href="css/index.css" />
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/user.js"></script>
+<script type="text/javascript" src="js/encrypt.js"></script>
+<script type="text/javascript" src="js/coin.js"></script>
+</head>
+<body>
+<div style="height: 40px;"></div>
+<!-- navi begin -->
+<div class="nav">
+	<div id="nav" class="navblock">
+		<div class="navCenter">
+			<div class="navlinks">
+				<a href="#general"><span>通用选项</span></a> 
+				<a href="#account"><span>帐户设置</span></a>
+				<a href="#address"><span>地址设置</span> </a>
+				<a href="#coin"><span>领取金币</span></a>
+				<a href="#history"><span>更新日志</span></a>
+				<a href="#feedback"><span>反馈</span> </a>
+				<a href="#adv"><span>广告</span> </a>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- navi end -->
+<!-- body begin -->
+<div class="divBody">
+	<div class="divBodyLeft">
+		<div id="general" class="tab">
+			<div class="option">
+				<input type="checkbox" id="autolog" name="autolog" /> 允许保存用户密码和自动登录<br/>
+				<input type="checkbox" id="batdelete" name="batdelete" /> 允许批量删除订单<br/>
+				<button class="btn" name="oSave" id="oSave"><strong>保存</strong></button>
+				<div id="status"></div>
+			</div>
+		</div>
+		<div id="account" class="tab">
+			<div class="userfield">
+				用户名：<input type="input" class="input" name="user" id="user" value="" /><br/>
+				密　码：<input type="password" class="input" name="pass" id="pass" value="" />
+				<button class="btn" name="add" id="add"><strong>保存</strong></button>
+			</div>
+
+			<table id="usertable" summary="2007 Major IT Companies' Profit">
+				<thead>
+					<tr>
+					<th colspan="4">当前保存的用户列表</td>
+					</tr>
+				</thead>
+				<tfoot>
+				<tr>
+					<td colspan="4"><em>请注意，用户密码明文存储，<!--已加密，但仍有-->可能被不怀好意者获取，请不要在公共机器上保存密码，有顾虑的用户请谨慎使用。</em></td>
+				</tr>
+				</tfoot>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<div id="address" class="tab">
+			尚未实现
+		</div>
+		<div id="coin" class="tab">
+			<div id="auto">
+				<select id="userlist"><option></option></select>
+			</div>
+			<div class="action">
+				<input type="button" class="action" id="get_coin" name="get_coin" value="一键完成所有任务" />
+				<!--<input type="checkbox" id="workaround" checked="checked" />允许替代方案-->
+				帮好友领金币已过期，任务盒子尚无法实现，请手动领取。如果您有更多领取金币的渠道，请发邮件至chrome@morntea.com。
+			</div>
+			<div>
+				<ul id="tasks">
+				</ul>
+			</div>
+			<div id="logs"></div>
+		</div>
+		<div id="adv" class="tab">
+			<iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="760" height="1200" src="http://top.taobao.com/interface_v2.php?pid=mm_10874271_4014780_13048096&type=x&f=html&ie=utf8&from=taoke&unid=&name=%E7%83%AD%E9%94%80%E4%B8%87%E4%BB%B6%E5%95%86%E5%93%81&trtp=1&up=false&goodsFilter=b2c&sw=760&sh=1200&sn=16&rn=4&pn=14&ls=3&rs=3&bgc=FFFFFF&bc=D9D9D9&fc=404040&tc=404040&cat_ids=16,50006843,1625,30,50011740,50006842" ></iframe>
+		</div>
+		<div id="history" class="tab">
+			<h3>软件说明</h3>
+			<p>本软件系个人原创作品，免费分发使用，允许任何复制和修改，但烦请通知本人。欢迎美工达人以及各种有兴趣的开发者加入。也欢迎各位用户提出各种批评和建议，联系邮箱：chrome@morntea.com
+			</p>
+
+			<h3>更新历史</h3>
+			<p>
+			2013.04.31 淘小蜜1.7.0：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 重新开启每日领取淘金币；<br/>
+			2. 取消各种无法实现的签到；<br/>
+			3. 关闭全额兑换入口；<br/>
+			4. 加入订单批量删除功能。<br/>
+			</p><p>
+			2012.11.03 淘小蜜1.6.3：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 支持在天猫登录提示框进行自动登录；<br/>
+			2. 领取淘金币时可选择跳过或单独执行某个任务；<br/>
+			3. 加强淘金币兑换，可自由选择分类和金币范围；<br/>
+			4. 修复店铺收藏，默认跳过过时签到任务；<br/>
+			</p><p>
+			2012.10.12 淘小蜜1.6.0：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 优化背景数据，大幅减少插件内存占用；<br/>
+			2. 加强自动登录功能，登录提示框也可使用；<br/>
+			3. 淘金币任务加入所获得金币或积分数量；<br/>
+			4. 加入右下角更新提示。<br/>
+			</p><p>
+			2012.10.10 淘小蜜1.5.6：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 更新淘金币任务，显示领取淘金币数量；<br/>
+			2. 插件菜单默认用户粗体显示。<br/>
+			</p><p>
+			2012.10.08 淘小蜜1.5.4：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 新增店铺收藏领取淘金币；<br/>
+			2. 更新淘金币任务界面。<br/>
+			</p><p>
+			2012.10.01 淘小蜜1.5.0：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 新增一淘签到；<br/>
+			2. 新增聚划算签到；<br/>
+			3. 新增爱逛街签到；<br/>
+			4. 完善任务盒子领取淘金币。<br/>
+			</p><p>
+			2012.09.10 淘小蜜1.2.0：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 新增一键登录功能；<br/>
+			2. 新增一键好评功能。<br/>
+			</p><p>
+			2012-09-01 淘小蜜1.0.0：<br/>
+			-------------------------------------------------------------------------------<br/>
+			1. 扩展发布；<br/>
+			2. 加入淘金币全额兑换查询功能；<br/>
+			3. 加入自动领取淘金币功能。<br/>
+			</p>
+		</div>
+		<div id="feedback" class="tab">
+			尚未实现
+		</div>
+	</div>
+	<div class="divBodyRight">
+		<iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="650" height="1200" src="http://top.taobao.com/interface_v2.php?pid=mm_10874271_4012837_13050046&type=x&f=html&ie=utf8&from=taoke&unid=&name=%E4%BB%8A%E6%97%A5%E5%85%B3%E6%B3%A8%E9%A3%99%E5%8D%87&trtp=1&up=false&goodsFilter=all&sw=650&sh=1200&sn=16&rn=4&pn=1&ls=0&rs=0&bgc=FFFFFF&bc=D9D9D9&fc=404040&tc=404040&cat_ids=TR_FS,TR_SM,TR_JJ,TR_HZP,TR_MY,TR_SP,TR_WT,TR_ZH" ></iframe>
+	</div>
+</div>
+<!-- foot begin -->
+<div class="divFoot">
+	&copy;2012-2013 
+	<a href="http://www.morntea.com">早茶一品</a>			
+</div>
+<!-- foot end -->
+
+<!-- body end -->
+
+<script type="text/javascript" src="js/ga.js"></script>
+</body>
+</html>
