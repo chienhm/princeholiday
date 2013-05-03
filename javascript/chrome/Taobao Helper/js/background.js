@@ -74,6 +74,8 @@ function getUser() {
 function getVersion() {
 	return localStorage["ver"];
 }
+
+/* New version is set by update.js */
 function setVersion(ver) {
 	localStorage["ver"] = ver;
 }
@@ -100,8 +102,16 @@ chrome.extension.onRequest.addListener(
 window.addEventListener("load", function() {
 	var ver = chrome.app.getDetails().version;
 	if (localStorage.ver != ver) {
-		var notification = webkitNotifications.createHTMLNotification("update.html");
-		notification.show();
-		setTimeout(function(){notification.cancel();}, 10000);
+		var mainVer = ver.substring(0, ver.lastIndexOf("."));
+		var localMainVer = localStorage.ver.substring(0, localStorage.ver.lastIndexOf("."));
+		
+		if (localMainVer != mainVer) { /* Big change, notificate user */
+			var notification = webkitNotifications.createHTMLNotification("update.html");
+			notification.show();
+			setTimeout(function(){notification.cancel();}, 10000);
+		} else { /* Small change, update quietly */
+			
+		}
+		setVersion(ver);
 	}
 }, false);

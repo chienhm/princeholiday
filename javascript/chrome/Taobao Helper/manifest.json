@@ -8,7 +8,7 @@
 		"default_title" : "淘小蜜",
 		"default_popup" : "menu.html"
 	},
-	"description": "淘宝得力助手，一键登录，一键评价，一键领取所有淘金币，批量订单管理扩展等等。",
+	"description": "淘宝得力助手，一键登录，一键评价，一键领取所有淘金币，批量订单管理。",
 	"icons": {
 		"128" : "logo/logo_128.png",
 		"32"  : "logo/logo_32.png",
@@ -36,5 +36,5 @@
 	],
 	"optional_permissions": [ "*://*.alimama.com/" ],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.7.0"
+	"version": "1.7.1"
 }

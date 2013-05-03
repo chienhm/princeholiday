@@ -105,6 +105,6 @@ $(function () {
 		openHelper('index.html');
 	});
 	$("#about").click(function(){
-		openHelper('about.html');
+		openHelper('index.html#history');
 	});
 });

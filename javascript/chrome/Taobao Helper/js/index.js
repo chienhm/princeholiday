@@ -96,31 +96,49 @@ function setDefault(td, user) {
 /*---------------------------------------------------------------------------
  * Main
  *---------------------------------------------------------------------------*/
-var lastTab = null;
+function initTab(tab) {
+	var CONTAINER = ".navlinks";
+	var FOCUS_CLASS = "onpage";
+	var items = [
+		{name : "通用选项", tab : "general"},
+		{name : "帐户设置", tab : "account"},
+		{name : "领取金币", tab : "coin"},
+		{name : "更新日志", tab : "history"},
+		{name : "反馈", tab : "feedback"},
+		{name : "广告", tab : "adv"}
+	];
+	$.each(items, function(i, e){
+		var item = $("<a href='#"+e.tab+"'><span>"+e.name+"</span></a>");
+		var target = $("#_"+e.tab);
+		item.click(function(){
+			$.each(items, function(i, e2){
+				$("#_"+e2.tab).hide();
+			});
+			target.show();
+			$(CONTAINER+" ."+FOCUS_CLASS).removeClass(FOCUS_CLASS);
+			$(this).addClass(FOCUS_CLASS);
+		});
+		
+		$(CONTAINER).append(item);
+		target.hide();
+		if(e.tab==tab) {
+			item.addClass(FOCUS_CLASS);
+			target.show();
+		}
+	});
+}
+
 $(function () {
 	restore_options();
 	$("#oSave").click(save_options);
 	$("#add").click(addUser);
 	
-	var hash = location.hash;
-	if(!hash) {
-		hash = "#general";
+	var tab = location.hash;
+	if(tab){
+		tab = tab.replace(/^#/, "");
+	} else {
+		tab = "general";
 	}
-	$("#nav a[href='"+hash+"']").addClass("onpage");
-	lastTab = $(hash);
-	lastTab.show();
-	
-	$("#nav a").each(function(i, e){
-		$(e).click(function(){
-			var tabName = $(e).attr("href").replace(/^#/, "");
-			if(lastTab) {
-				lastTab.hide();
-				$("#nav a.onpage").removeClass("onpage");
-			}
-			lastTab = $("#"+tabName);
-			lastTab.show();
-			$(e).addClass("onpage");
-		});
-	});
+	initTab(tab);
 });
 

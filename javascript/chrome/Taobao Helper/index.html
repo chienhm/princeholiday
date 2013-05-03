@@ -4,8 +4,8 @@
 <link rel="stylesheet" type="text/css" href="css/navi.css" />
 <link rel="stylesheet" type="text/css" href="css/index.css" />
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
 <script type="text/javascript" src="js/user.js"></script>
 <script type="text/javascript" src="js/encrypt.js"></script>
 <script type="text/javascript" src="js/coin.js"></script>
@@ -17,14 +17,6 @@
 	<div id="nav" class="navblock">
 		<div class="navCenter">
 			<div class="navlinks">
-				<a href="#general"><span>通用选项</span></a> 
-				<a href="#account"><span>帐户设置</span></a>
-				<a href="#address"><span>地址设置</span> </a>
-				<a href="#coin"><span>领取金币</span></a>
-				<a href="#history"><span>更新日志</span></a>
-				<a href="#feedback"><span>反馈</span> </a>
-				<a href="#adv"><span>广告</span> </a>
-
 			</div>
 		</div>
 	</div>
@@ -33,7 +25,7 @@
 <!-- body begin -->
 <div class="divBody">
 	<div class="divBodyLeft">
-		<div id="general" class="tab">
+		<div id="_general" class="tab">
 			<div class="option">
 				<input type="checkbox" id="autolog" name="autolog" /> 允许保存用户密码和自动登录<br/>
 				<input type="checkbox" id="batdelete" name="batdelete" /> 允许批量删除订单<br/>
@@ -41,7 +33,7 @@
 				<div id="status"></div>
 			</div>
 		</div>
-		<div id="account" class="tab">
+		<div id="_account" class="tab">
 			<div class="userfield">
 				用户名：<input type="input" class="input" name="user" id="user" value="" /><br/>
 				密　码：<input type="password" class="input" name="pass" id="pass" value="" />
@@ -63,10 +55,7 @@
 				</tbody>
 			</table>
 		</div>
-		<div id="address" class="tab">
-			尚未实现
-		</div>
-		<div id="coin" class="tab">
+		<div id="_coin" class="tab">
 			<div id="auto">
 				<select id="userlist"><option></option></select>
 			</div>
@@ -81,10 +70,10 @@
 			</div>
 			<div id="logs"></div>
 		</div>
-		<div id="adv" class="tab">
+		<div id="_adv" class="tab">
 			<iframe name="alimamaifrm" frameborder="0" marginheight="0" marginwidth="0" border="0" scrolling="no" width="760" height="1200" src="http://top.taobao.com/interface_v2.php?pid=mm_10874271_4014780_13048096&type=x&f=html&ie=utf8&from=taoke&unid=&name=%E7%83%AD%E9%94%80%E4%B8%87%E4%BB%B6%E5%95%86%E5%93%81&trtp=1&up=false&goodsFilter=b2c&sw=760&sh=1200&sn=16&rn=4&pn=14&ls=3&rs=3&bgc=FFFFFF&bc=D9D9D9&fc=404040&tc=404040&cat_ids=16,50006843,1625,30,50011740,50006842" ></iframe>
 		</div>
-		<div id="history" class="tab">
+		<div id="_history" class="tab">
 			<h3>软件说明</h3>
 			<p>本软件系个人原创作品，免费分发使用，允许任何复制和修改，但烦请通知本人。欢迎美工达人以及各种有兴趣的开发者加入。也欢迎各位用户提出各种批评和建议，联系邮箱：chrome@morntea.com
 			</p>
@@ -141,8 +130,8 @@
 			3. 加入自动领取淘金币功能。<br/>
 			</p>
 		</div>
-		<div id="feedback" class="tab">
-			尚未实现
+		<div id="_feedback" class="tab">
+			email:  <a href="mailto:chrome@morntea.com">chrome@morntea.com</a>
 		</div>
 	</div>
 	<div class="divBodyRight">
