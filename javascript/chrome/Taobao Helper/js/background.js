@@ -105,7 +105,7 @@ window.addEventListener("load", function() {
 		var mainVer = ver.substring(0, ver.lastIndexOf("."));
 		var localMainVer = localStorage.ver.substring(0, localStorage.ver.lastIndexOf("."));
 		
-		if (localMainVer != mainVer) { /* Big change, notificate user */
+		if (localMainVer != mainVer) { /* Big change, notify user */
 			var notification = webkitNotifications.createHTMLNotification("update.html");
 			notification.show();
 			setTimeout(function(){notification.cancel();}, 10000);
