@@ -16,7 +16,7 @@ function kill() {
 	document.getElementsByClassName("J_Submit submit")[0].click();
 }
 var now = new Date();
-var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 14, 12, 0, 0);
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 21, 12, 0, 0);
 at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	function fresh(){

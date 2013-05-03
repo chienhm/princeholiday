@@ -36,7 +36,7 @@ function at(atTime, func, force) {
 }
 //Example:
 var now = new Date();
-var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 22, 59, 59, 550);
+var atTime = new Date(now.getFullYear(),now.getMonth(),now.getDate(), 9, 59, 59, 550);
 at(atTime, function(){
 	var date = new Date(); console.log(date + date.getMilliseconds());
 	document.getElementById("J_authSubmit").click();
