@@ -6,7 +6,8 @@ function save_options() {
 	b.options.username = $("#username").val();
 	b.options.password = $("#password").val();
 	b.options.url = $("#url").val();
-	b.options.schedule.enabled = $("#schedule").attr("checked") ? true : false;
+	b.options.autopay = $("#autopay").attr("checked")=="checked";
+	b.options.schedule.enabled = $("#schedule").attr("checked")=="checked";
 	$(scheduleList).each(function(i, e) {
 		b.options.schedule[e] = getTime(e);
 	});
@@ -27,6 +28,7 @@ function restore_options() {
 	if(b.options.url) {
 		$("#url").val(b.options.url);
 	}
+	$("#autopay").attr("checked", b.options.autopay);
 	$("#schedule").attr("checked", b.options.schedule.enabled);
 	showSchedule(b.options.schedule.enabled);
 	

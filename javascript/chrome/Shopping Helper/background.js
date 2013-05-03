@@ -13,6 +13,12 @@ var options = {
 };
 var data = null;
 
+function showMsg(msg) {
+	var notification = webkitNotifications.createNotification("logo/logo.png", "今日幸运号码", msg);
+	notification.show();
+	setTimeout(function(){notification.cancel();}, 5000);
+}
+
 //content script proxy
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
@@ -32,6 +38,15 @@ chrome.extension.onRequest.addListener(
 				break;				
 			case "RETRY":
 				retry++;
+				break;
+			case "GET_OPTION":
+				sendResponse(options);
+				break;
+			case "SHOW_MSG":
+				showMsg(request.msg);
+				break;
+			case "PLAY_AUDIO":
+				openHelper("taobao/audio.html");
 				break;
 				
 			case "SET_DATA":

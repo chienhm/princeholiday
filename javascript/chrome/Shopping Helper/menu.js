@@ -11,16 +11,18 @@ function setAuto() {
 }
 
 function init() {
-	document.getElementById("sk").innerHTML = (b.options.skmod?"关闭":"开启") + "通用抢购";
+	document.getElementById("sk").innerHTML = (b.options.skmod?"关闭":"开启") + "抢购";
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+$(function () {
 	init();
-	document.getElementById("chaoshi").addEventListener('click', function(){
-		openHelper('taobao/tmall.html');
+	$("#keepAlive").click(function(){
+		chrome.tabs.executeScript({"file" : "script/jquery.min.js"}, function(){
+			chrome.tabs.executeScript({"file" : "taobao/inject/keepAlive.js"});
+		});
 	});
-	document.getElementById("yihaodian").addEventListener('click', function(){
-		openHelper('yihaodian/index.html');
+	$("#bangpai").click(function(){
+		openHelper('taobao/bangpai.html');
 	});
-	document.getElementById("sk").addEventListener('click', setAuto);
+	$("#sk").click(setAuto);
 });

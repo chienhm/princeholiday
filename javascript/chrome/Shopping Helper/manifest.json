@@ -18,9 +18,27 @@
    "options_page": "options.html",
    "content_scripts": [
 	   {
+		  "matches": ["*://*/*"],
+		  "all_frames": true,
+		  "js": ["script/jquery.min.js"]
+	   },
+	   {
+		  "matches": ["http://bangpai.taobao.com/*"],
+		  "all_frames": true,
+		  "js": ["script/jquery.min.js", "taobao/inject/bangpai.js"]
+	   },
+	   {
+		  "matches": ["*://*.alipay.com/*"],
+		  "js": ["script/common.js", "taobao/alipay.js"]
+	   },
+	   {
 		  "matches": ["http://chaoshi.tmall.com/*"],
 		  "all_frames": true,
 		  "js": ["script/jquery.min.js", "taobao/tmall.js"]
+	   },
+	   {
+		  "matches": ["http://miao.item.taobao.com/*"],
+		  "js": ["script/jquery.min.js", "script/common.js", "taobao/miao.js"]
 	   },
 	   {
 		  "matches": ["http://ju.taobao.com/tg/home.htm*", "http://detail.tmall.com/item.htm*", "http://buy.taobao.com/auction*"],
@@ -35,6 +53,14 @@
 		  "matches": ["http://www.homevv.com/*"],
 		  "run_at": "document_end",
 		  "js": ["script/jquery.min.js", "homevv/vv.js"]
+	   },
+	   {
+		  "matches": ["http://*.51buy.com/*"],
+		  "js": ["script/jquery.min.js", "script/common.js", "temp/51buy.js"]
+	   },
+	   {
+		  "matches": ["http://*.dianping.com/*"],
+		  "js": ["script/jquery.min.js", "script/common.js", "temp/dianping.js"]
 	   },
 	   {
 		  "matches": ["http://www.lamiu.com/*"],
