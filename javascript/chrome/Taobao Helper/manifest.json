@@ -36,5 +36,5 @@
 	],
 	"optional_permissions": [ "*://*.alimama.com/" ],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.7.1"
+	"version": "1.7.2"
 }
