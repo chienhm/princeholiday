@@ -489,9 +489,11 @@ function favorite() {
 			return;
 		}
 		/*
-		http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId=160562238&flag=true&_tb_token_=SVoccvfGyU1x
+		20130503 - http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId=160562238&flag=true&_tb_token_=SVoccvfGyU1x
+		20130508 - http://dongtai.taobao.com/hub/new_arrival.htm?shopOwnerId=231920032&_tb_token_=55e9e073be56b
 		*/
 		var url = "http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId="+shop_ids[index]+"&flag=true&_tb_token_="+token;
+		/*var url = "http://dongtai.taobao.com/hub/new_arrival.htm?shopOwnerId="+shop_ids[index]+"&_tb_token_="+token;*/
 		log("Try to collect shop: " + url);
 		$.get(url, function(html) {
 			if(inLoginPage(html)) {
@@ -512,16 +514,16 @@ function favorite() {
 					appendLog("尝试收藏次数过多，收藏失败。");
 					task.complete();
 				} else {
-					console.log(html);
+					/*console.log(html);*/
 					log("This shop does not contain any coins.");
 					collect(index+1);
 				}
 			} /* end of favorite test */
 		});
 	} /* end of collect */
-	var url = "http://dongtai.taobao.com/square.htm?spm=a310h.2192569.5711129.d4908169.PyFJMI&type=0&tracelog=dtgc_shangxin";
+	var url = "http://dongtai.taobao.com/highqualityshop/high_quality_shop.htm?spm=0.0.0.0.hx2FCg";
 	$.get(url, function(html){
-		var regExp = /'shopOwnerId':'(\d+)'/ig;
+		var regExp = /"sellerId":"(\d+)"/ig;
 		var r = null, last=null;
 		while((r=regExp.exec(html))!=null) {
 			if(last==r[1])continue;
@@ -530,6 +532,9 @@ function favorite() {
 		}
 		log(shop_ids);
 		collect(0);
+	}).fail(function(){
+		appendLog("收藏失败，动态广场改版或程序错误。");
+		task.complete();
 	});
 }
 
