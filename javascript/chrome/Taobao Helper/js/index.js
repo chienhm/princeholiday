@@ -1,12 +1,19 @@
-﻿var b = chrome.extension.getBackgroundPage();
+﻿/*****************************************************************************
+ * Taobao Secretary Plugin for Google Chrome
+ * Copyright 2012 Morntea.com, All Rights Reserved.
+ * Author: chrome@morntea.com
+ *****************************************************************************/
+var b = chrome.extension.getBackgroundPage();
 
 function save_options() {
 	var config = b.getConfig();
 	
-	config.autoLogin = $("#autolog").attr("checked")=="checked";
-	config.batDelete = $("#batdelete").attr("checked")=="checked";
+	config.autoLogin = $("#cfg_autolog").attr("checked")=="checked";
+	config.batDelete = $("#cfg_batdelete").attr("checked")=="checked";
+	config.everydayCheck = $("#cfg_everyday").attr("checked")=="checked";
 	
 	b.saveConfig(config);
+	b.everydayCheck();
 	
 	var status = document.getElementById("status");
 	status.innerHTML = "Options Saved.";
@@ -18,8 +25,9 @@ function save_options() {
 function restore_options() {
 	var config = b.getConfig();
 	if(config!=null) {
-		$("#autolog").attr("checked", config.autoLogin);
-		$("#batdelete").attr("checked", config.batDelete);
+		$("#cfg_autolog").attr("checked", config.autoLogin);
+		$("#cfg_batdelete").attr("checked", config.batDelete);
+		$("#cfg_everyday").attr("checked", config.everydayCheck || config.everydayCheck==null);
 	}
 	var users = b.getUser();
 	if(users) {

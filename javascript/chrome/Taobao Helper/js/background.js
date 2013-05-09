@@ -1,7 +1,8 @@
-﻿/*
- * chrome.browserAction.onClicked.addListener(function(tab) { var manager_url =
- * chrome.extension.getURL("manager.html"); focusOrCreateTab(manager_url); });
- */
+﻿/*****************************************************************************
+ * Taobao Secretary Plugin for Google Chrome
+ * Copyright 2012 Morntea.com, All Rights Reserved.
+ * Author: chrome@morntea.com
+ *****************************************************************************/
 
 function createTabAndInject(url, cssFiles, jsFiles) {
 	chrome.tabs.create({"url":url}, function (oTab) {
@@ -99,6 +100,42 @@ chrome.extension.onRequest.addListener(
 	}
 );
 
+var timeout = -1;
+function everydayCheck() {
+	var config = getConfig();
+	if(config.everydayCheck!=null && !config.everydayCheck) {
+		console.log("Everyday get coin check disabled.");
+		chrome.browserAction.setTitle({title:""})
+		chrome.browserAction.setBadgeText({text:""});
+		return;
+	}
+
+	var lastCoinTime = 0;
+	if(localStorage["lastCoinTime"]){
+		lastCoinTime = localStorage["lastCoinTime"];
+	}
+	var now = new Date();
+	var last = new Date();
+	last.setTime(lastCoinTime);
+	if(now.getFullYear()==last.getFullYear() && now.getMonth()==last.getMonth() && now.getDate()==last.getDate()) {
+		/* today already get coins */
+		chrome.browserAction.setTitle({title:"感谢您今天通过淘小蜜领取淘金币！\n您可以通过淘小蜜选项关闭此提示。"})
+		chrome.browserAction.setBadgeText({text:""});
+	} else {
+		var days = Math.ceil((now.getTime()-lastCoinTime)/(24*60*60*1000));
+		chrome.browserAction.setTitle({title:"您已经连续"+days+"天没通过淘小蜜领金币啦。\n您可以通过淘小蜜选项关闭此提示。"})
+		chrome.browserAction.setBadgeText({text:""+days});
+	}
+	
+	/* next check time is next day */
+	if(timeout!=-1) {
+		clearTimeout(timeout);
+	}
+	var tonight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+	nextTime = tonight.getTime()-now.getTime()+1001;
+	timeout = setTimeout(everydayCheck, nextTime);
+}
+
 window.addEventListener("load", function() {
 	var ver = chrome.app.getDetails().version;
 	if (localStorage.ver != ver) {
@@ -114,4 +151,5 @@ window.addEventListener("load", function() {
 		}
 		setVersion(ver);
 	}
+	everydayCheck();
 }, false);

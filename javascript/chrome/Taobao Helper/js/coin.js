@@ -1,4 +1,8 @@
-﻿
+﻿/*****************************************************************************
+ * Taobao Secretary Plugin for Google Chrome
+ * Copyright 2012 Morntea.com, All Rights Reserved.
+ * Author: chrome@morntea.com
+ *****************************************************************************/
 var tasks = [];
 
 function Task(id, name, func, option) {
@@ -81,6 +85,10 @@ function initTask() {
 				 
 		new Task("ju", 			"聚划算签到", 		signeJu, 
 				{url:"http://i.ju.taobao.com/subscribe/keyword_items.htm"}),
+				
+		new Task("ttl", 		"太太乐",			ttl, 
+				{tips:"太太乐每天点亮5个淘金币（2013.1.1-2013.12.31）", timeout:2000,
+				 url:"http://ttl.taobao.com"}),
 		
 		new Task("try", 		"试用中心签到", 	signTryCenter, 
 				{url:"http://try.taobao.com/item/my_try_item.htm"}),
@@ -246,10 +254,12 @@ ran:0.13288874388672411 */
 			} else {
 				appendLog("今天可能已经领取过淘金币，当前淘金币数量"+json.coinNew);
 			}
+			updateCheckCoin();
 			task.complete();
 		}, "json"
 	).fail(function(xhr, e) {
 		inLoginPage(xhr.responseText);
+		updateCheckCoin();
 		task.complete();
 	});
 	console.log("XHR: " + url);
@@ -456,8 +466,10 @@ function signeJu() {
 		task.complete();
 	});
 }
-//==========================================================================
-// 试用中心签到
+
+/*****************************************************************************
+ * 试用中心签到（仅获得试用豆）
+ *****************************************************************************/
 function signTryCenter() {
 	var task = this;
 	var url = "http://try.taobao.com/json/popInfo.htm?t=" + Math.random();
@@ -478,8 +490,37 @@ function signTryCenter() {
 		task.complete();
 	});
 }
-//==========================================================================
-// 店铺收藏
+
+/*****************************************************************************
+ * 太太乐活动（2013.1.1-2013.12.31）
+ *****************************************************************************/
+function ttl() {
+	var task = this;
+	var url = "http://taojinbi.taobao.com/detail/activity_executor.htm?activity_id=2012122601&callback=jsonp19";
+	$.get(url, function(code){
+		if(inLoginPage(code)) {
+			task.complete();
+			return;
+		}
+		/* 
+		jsonp19({"success":true,"code":1,"message":"恭喜！你成功了！","error":"0","coinUserSum":5,"extra":{},"id":"0"})		jsonp19({"success":false,"code":3,"message":"发淘金币失败，你已经领取过淘金币了，不能够再领取","error":"1","coinUserSum":5,"extra":{},"id":"0"})
+		*/
+		if(code.indexOf("\"success\":true")!=-1) {
+			appendLog(task.name + "点亮成功，获得5个金币。");
+			task.gain = 5;
+			task.success = true;
+		} else { //"error"
+			var r = /"message":"(.+?)"/ig.exec(code);
+			var msg = (r!=null) ? r[1] : "点亮失败。";
+			appendLog(task.name + msg);
+		}
+		task.complete();
+	});
+}
+
+/*****************************************************************************
+ * 店铺收藏（必须先手动收藏一家店铺）
+ *****************************************************************************/
 function favorite() {
 	var task = this;
 	var shop_ids = [];
@@ -492,8 +533,8 @@ function favorite() {
 		20130503 - http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId=160562238&flag=true&_tb_token_=SVoccvfGyU1x
 		20130508 - http://dongtai.taobao.com/hub/new_arrival.htm?shopOwnerId=231920032&_tb_token_=55e9e073be56b
 		*/
-		var url = "http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId="+shop_ids[index]+"&flag=true&_tb_token_="+token;
-		/*var url = "http://dongtai.taobao.com/hub/new_arrival.htm?shopOwnerId="+shop_ids[index]+"&_tb_token_="+token;*/
+		/*var url = "http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId="+shop_ids[index]+"&flag=true&_tb_token_="+token;*/
+		var url = "http://dongtai.taobao.com/hub/new_arrival.htm?shopOwnerId="+shop_ids[index]+"&_tb_token_="+token;
 		log("Try to collect shop: " + url);
 		$.get(url, function(html) {
 			if(inLoginPage(html)) {
@@ -511,7 +552,7 @@ function favorite() {
 				task.complete();
 			} else {
 				if(index>=5) {
-					appendLog("尝试收藏次数过多，收藏失败。");
+					appendLog("尝试收藏次数过多，收藏失败。(请至少手动收藏一家店铺)");
 					task.complete();
 				} else {
 					/*console.log(html);*/
@@ -551,6 +592,12 @@ function needLogin() {
 }
 
 //==========================================================================
+function updateCheckCoin() {
+	var b = chrome.extension.getBackgroundPage();
+	b.localStorage["lastCoinTime"] = new Date().getTime();
+	b.everydayCheck();
+}
+
 function loadUsers() {
 	var b = chrome.extension.getBackgroundPage();
 	var users = b.getUser();
