@@ -22,8 +22,10 @@ function createTabAndInject(url, cssFiles, jsFiles) {
 		chrome.tabs.onUpdated.addListener(updateTab);
 	});
 }
-//-----------------------------------------------------------------------------
 
+/*****************************************************************************
+ * Get value from localStorage, return object expected.
+ *****************************************************************************/
 function getConfig(cfgName) {
 	var name = "config";
 	var config = null;
@@ -46,8 +48,9 @@ function saveConfig(config, cfgName) {
 	localStorage[name] = JSON.stringify(config);
 }
 
-//-----------------------------------------------------------------------------
-// http://www.json.org/js.html
+/*****************************************************************************
+ * User operation
+ *****************************************************************************/
 function saveUser(n, p) {
 	var _users = localStorage["users"];
 	var users = (_users==null) ? {} : JSON.parse(_users);
@@ -81,6 +84,9 @@ function setVersion(ver) {
 	localStorage["ver"] = ver;
 }
 
+/*****************************************************************************
+ * Message passing from content script
+ *****************************************************************************/
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		if(sender.tab) {
@@ -92,7 +98,7 @@ chrome.extension.onRequest.addListener(
 			case "GET_USERS":
 				sendResponse(getUser());
 				break;
-				
+
 			default:
 				chrome.tabs.sendRequest(sender.tab.id, request, sendResponse);
 			}
@@ -100,6 +106,9 @@ chrome.extension.onRequest.addListener(
 	}
 );
 
+/*****************************************************************************
+ * Everyday notification for getting coins
+ *****************************************************************************/
 var timeout = -1;
 function everydayCheck() {
 	var config = getConfig();
@@ -122,7 +131,8 @@ function everydayCheck() {
 		chrome.browserAction.setTitle({title:"感谢您今天通过淘小蜜领取淘金币！\n您可以通过淘小蜜选项关闭此提示。"})
 		chrome.browserAction.setBadgeText({text:""});
 	} else {
-		var days = Math.ceil((now.getTime()-lastCoinTime)/(24*60*60*1000));
+		last.setMilliseconds(0);last.setSeconds(0);last.setMinutes(0);last.setHours(0)
+		var days = Math.floor((now.getTime()-last.getTime())/(24*60*60*1000));
 		chrome.browserAction.setTitle({title:"您已经连续"+days+"天没通过淘小蜜领金币啦。\n您可以通过淘小蜜选项关闭此提示。"})
 		chrome.browserAction.setBadgeText({text:""+days});
 	}
@@ -136,6 +146,9 @@ function everydayCheck() {
 	timeout = setTimeout(everydayCheck, nextTime);
 }
 
+/*****************************************************************************
+ * Main()
+ *****************************************************************************/
 window.addEventListener("load", function() {
 	var ver = chrome.app.getDetails().version;
 	if (localStorage.ver != ver) {

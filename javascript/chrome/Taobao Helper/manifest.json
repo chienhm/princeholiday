@@ -17,8 +17,13 @@
 	},
 	"content_scripts": [
 		{
-			"matches" : ["*://*.taobao.com/*"],
-			"js"      : ["js/jquery.min.js", "js/helper.js"],
+			"matches" : ["http://trade.taobao.com/trade/itemlist/list_bought_items.htm*"],
+			"js"      : ["js/jquery.min.js", "js/trade.js"],
+			"all_frames" : true
+		},
+		{
+			"matches" : ["http://rate.taobao.com/remark_seller.jhtml*", "http://trade.taobao.com/trade/trade_success.htm*"],
+			"js"      : ["js/jquery.min.js", "js/rate.js"],
 			"all_frames" : true
 		}
 	],
@@ -36,5 +41,5 @@
 	],
 	"optional_permissions": [ "*://*.alimama.com/" ],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.8.0"
+	"version": "1.8.1"
 }

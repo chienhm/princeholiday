@@ -2,17 +2,32 @@
 var b = chrome.extension.getBackgroundPage();
 
 function rate() {
-	chrome.tabs.query({currentWindow : true, highlighted : true}, function (tabs) {
-		var rateUrl = "http://rate.taobao.com/remark_seller.jhtml";
-		var rateSuccess = "http://trade.taobao.com/trade/trade_success.htm";
-		if(tabs.length>0){
-			var tab = tabs[0];
-			if(tab.url.indexOf(rateUrl)==0 || tab.url.indexOf(rateSuccess)==0) {
-				chrome.tabs.executeScript(tab.id, {file:"res/rate.js", allFrames:true});
-			} else {
-				showMsg("请进入宝贝评价页面。");
+	var config = b.getConfig();
+	if(config.rate && !config.rate.enable) {
+		showMsg("一键评价功能已关闭，请至淘小蜜选项中开启。");
+		return;
+	}
+	function rateAll(tabs) {
+		if(tabs.length>1) {
+			/* maybe it's a bug, if trade and rate page opened at the same time */
+			if(!config.rate || !config.rate.batRate) {
+				showMsg("您打开了多个评价页面，批量评价功能尚未启用，请至淘小蜜选项中开启。");
+				return;
 			}
 		}
+		if(tabs.length>0){
+			for(var i=0; i<tabs.length; i++) {				
+				chrome.tabs.sendRequest(tabs[i].id, {cmd: "RATE"});
+			}
+			/*window.close();*/
+		}
+	}
+	chrome.tabs.query({currentWindow: true, url:"http://rate.taobao.com/remark_seller.jhtml*"}, function (tabs) {
+		rateAll(tabs);
+	});
+	chrome.tabs.query({currentWindow: true, url:"http://trade.taobao.com/trade/trade_success.htm*"}, function (tabs) {
+		/* will send to trade page and rate frame page */
+		rateAll(tabs);
 	});
 }
 

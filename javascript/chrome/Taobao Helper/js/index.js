@@ -12,6 +12,14 @@ function save_options() {
 	config.batDelete = $("#cfg_batdelete").attr("checked")=="checked";
 	config.everydayCheck = $("#cfg_everyday").attr("checked")=="checked";
 	
+	var rate = config.rate;
+	if(!rate) rate = {};
+	rate.enable = $("#cfg_rate").attr("checked")=="checked";
+	rate.batRate = $("#cfg_batRate").attr("checked")=="checked";
+	rate.remark = $("#cfg_remark").val();
+	rate.keyCode = 191;
+	config.rate = rate;
+	
 	b.saveConfig(config);
 	b.everydayCheck();
 	
@@ -28,6 +36,11 @@ function restore_options() {
 		$("#cfg_autolog").attr("checked", config.autoLogin);
 		$("#cfg_batdelete").attr("checked", config.batDelete);
 		$("#cfg_everyday").attr("checked", config.everydayCheck || config.everydayCheck==null);
+		var rate = config.rate;
+		if(!rate)rate = {enable:true, batRate:false, keyCode:191};
+		$("#cfg_rate").attr("checked", rate.enable);
+		$("#cfg_batRate").attr("checked", rate.batRate);
+		$("#cfg_remark").val(rate.remark);
 	}
 	var users = b.getUser();
 	if(users) {
