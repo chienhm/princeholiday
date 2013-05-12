@@ -14,10 +14,14 @@ chrome.extension.sendRequest({cmd: "GET_OPTIONS"}, function(response) {
 
 	/*************************************************************************
 	 * Rate only if user does not rate first (config.rate.remark used)
+	 * Tmall trade success page: http://trade.tmall.com/order/trade_success.htm?alipay_no=*&seller_id=*&biz_order_id=*
+	 * Tmall rate page: http://ratewrite.tmall.com/rate_detail.htm?trade_id=*
+	 * Taobao trade success page:
+	 * Taobao rate page(Include Chaoshi): http://rate.taobao.com/remark_seller.jhtml
 	 *************************************************************************/
 	function rate() {
 		/* sanity check, though legal in "http://trade.taobao.com/trade/trade_success.htm". */
-		if(document.title.indexOf("评价宝贝")==-1) {
+		if(document.title.indexOf("评价")==-1) {
 			console.debug("Rate may be send to wrong page:" + location.href);
 			return;
 		}
@@ -49,6 +53,17 @@ chrome.extension.sendRequest({cmd: "GET_OPTIONS"}, function(response) {
 				}
 			}
 		}
+		
+		/* for chaoshi.tmall.com */
+		if($(".remark-to").length>0 && $(".remark-to").html().trim()=="天猫超市") {
+			var radios = $(".rate-stars input");
+			for(var i=0; i<radios.length; i++){
+				if(radios[i].checked && radios[i].value!=5) {
+					rated = true;
+					break;
+				}
+			}
+		}		
 		
 		if(rated) {
 			if(!confirm("您已经给出了自己的评价，是否继续“一键好评”？选择“是”将修改为全5分好评。")) {

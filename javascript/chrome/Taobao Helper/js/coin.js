@@ -173,7 +173,6 @@ function autoGetCoin() {
 	if(user!="" && pass!="") {
 		//logout();
 		$.get("http://login.etao.com/logout.html?spm=1002.1.0.1.da48c5"); //logout etao and taobao?
-		$.get("https://auth.alipay.com/login/logout.htm"); //logout Alipay
 		
 		pass = decrypt(user, pass);
 		appendLog(user + "自动登录淘宝网");

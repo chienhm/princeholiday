@@ -19,16 +19,20 @@ function rate() {
 			for(var i=0; i<tabs.length; i++) {				
 				chrome.tabs.sendRequest(tabs[i].id, {cmd: "RATE"});
 			}
-			/*window.close();*/
+			window.close();
 		}
 	}
+	
 	chrome.tabs.query({currentWindow: true, url:"http://rate.taobao.com/remark_seller.jhtml*"}, function (tabs) {
 		rateAll(tabs);
 	});
+	
+	/* will send to trade page and rate frame page */
+	/* only available for rate page, ignore http://trade.taobao.com/trade/trade_success.htm 
 	chrome.tabs.query({currentWindow: true, url:"http://trade.taobao.com/trade/trade_success.htm*"}, function (tabs) {
-		/* will send to trade page and rate frame page */
 		rateAll(tabs);
 	});
+	*/
 }
 
 function showUserList() {
