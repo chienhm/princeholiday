@@ -50,9 +50,9 @@ function restore_options() {
 	}
 }
 
-/*---------------------------------------------------------------------------
- * account
- *---------------------------------------------------------------------------*/
+/*****************************************************************************
+ * User operation
+ *****************************************************************************/
 function findRow(user) {
 	var tbody = $("#usertable tbody");
 	var rows = $("tr", tbody)
@@ -90,6 +90,10 @@ function addUserItem(user) {
 function addUser() {
 	var user = $('#user').val(); $('#user').val("");
 	var pass = $('#pass').val(); $('#pass').val("");
+	insertUser(user, pass);
+}
+
+function insertUser(user, pass) {
 	if(user!="" && pass!="") {
 		b.saveUser(user, encrypt(user, pass));
 		var userRow = findRow(user);
@@ -114,9 +118,37 @@ function setDefault(td, user) {
 	});
 }
 
-/*---------------------------------------------------------------------------
+function exportUser() {
+	var users = b.getUser();
+	if(users) {
+		prompt("请复制并妥善保管以下用户数据：", Base64.encode(JSON.stringify(users)));
+	} else {
+		alert("没有保存的用户。");
+	}
+}
+
+function importUser() {
+	var str = prompt("请输入导出的用户数据（不会覆盖现有数据）：").trim();
+	if(str=="") {
+		return;
+	}
+	var json = null;
+	try {
+		json = JSON.parse(Base64.decode(str));
+	} catch (e) {
+		alert("数据错误！");
+		return;
+	}
+	if(json!=null) {
+		for(var key in json) {
+			insertUser(key, json[key]);
+		}
+	}
+}
+
+/*****************************************************************************
  * Main
- *---------------------------------------------------------------------------*/
+ *****************************************************************************/
 function initTab(tab) {
 	var CONTAINER = ".navlinks";
 	var FOCUS_CLASS = "onpage";
@@ -153,6 +185,8 @@ $(function () {
 	restore_options();
 	$("#oSave").click(save_options);
 	$("#add").click(addUser);
+	$("#import").click(importUser);
+	$("#export").click(exportUser);
 	
 	var tab = location.hash;
 	if(tab){
