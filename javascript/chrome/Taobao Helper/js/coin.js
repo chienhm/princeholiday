@@ -95,7 +95,11 @@ function initTask() {
 				 
 		new Task("favorite", 	"店铺收藏", 		favorite, 
 				{tips:"每天首次收藏新店铺领5个淘金币", timeout:2000,
-				 url:"http://dongtai.taobao.com/square.htm"})
+				 url:"http://dongtai.taobao.com/square.htm"}),
+				 
+		new Task("etao", 		"一淘签到", 		signeTao, 
+				{tips:"每天签到，0-1000个集分宝随机送，必须赶早哦",
+				 url:"http://jf.etao.com/getCredit.htm?jfSource=11"})
 	];
 	
 	function enclosure(task) {
@@ -468,9 +472,37 @@ function signeJu() {
 /*
 一键评价快捷键
 商城一键评价
-http://jf.etao.com/getCredit.htm?jfSource=11 
 http://bangpai.taobao.com/group/thread/14569742-274664841.htm
 */
+/*****************************************************************************
+ * 一淘签到送积分宝
+ *****************************************************************************/
+function signeTao() {
+	var task = this;
+	jifenbao(task, 11);
+}
+
+function jifenbao(task, src) {
+	$.get("http://jf.etao.com/getCredit.htm?jfSource="+src+"&t="+Math.random(), function(html){
+		var r = /<p class="news">([\s\S]+?)</ig.exec(html);
+		if(r) {
+			/* 
+			(2) 亲，您今天已经领过了，看看自己的“战绩”吧！
+			(-2) (尚未登录)
+			(-4) 亲，您不是支付宝实名认证用户，无法签到！赶快去认证吧 !
+			(-6) 抢的人太多了，今天的积分发完了，明天再来吧
+			(-7) 来晚了一步，活动已经结束啦！
+			(-8) 亲，您的操作太频繁了哦！
+			*/
+			var msg = r[1].trim();
+			appendLog(msg);
+		} else {
+			appendLog(task.name + "失败。");
+		}
+		task.complete();
+	});
+}
+
 /*****************************************************************************
  * 试用中心签到（仅获得试用豆）
  *****************************************************************************/

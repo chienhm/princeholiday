@@ -153,7 +153,10 @@ window.addEventListener("load", function() {
 	var ver = chrome.app.getDetails().version;
 	if (localStorage.ver != ver) {
 		var mainVer = ver.substring(0, ver.lastIndexOf("."));
-		var localMainVer = localStorage.ver.substring(0, localStorage.ver.lastIndexOf("."));
+		var localMainVer = 0;
+		if(localStorage.ver) {
+			localMainVer = localStorage.ver.substring(0, localStorage.ver.lastIndexOf("."));
+		}
 		
 		if (localMainVer != mainVer) { /* Big change, notify user */
 			var notification = webkitNotifications.createHTMLNotification("update.html");
