@@ -10,7 +10,7 @@ function log(string, time) {
 	console.log("["+formatTime(time)+"] " + string);
 }
 
-function focusOrCreateTab(url) {
+function focusOrCreateTab(url, callback) {
 	chrome.windows.getAll({
 		"populate" : true
 	}, function(windows) {
@@ -27,13 +27,13 @@ function focusOrCreateTab(url) {
 		}
 		if (existing_tab) {
 			chrome.tabs.update(existing_tab.id, {
-				"selected" : true
-			});
+				"selected" : false
+			}, callback);
 		} else {
 			chrome.tabs.create({
 				"url" : url,
-				"selected" : true
-			});
+				"selected" : false
+			}, callback);
 		}
 	});
 }

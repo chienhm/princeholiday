@@ -4,12 +4,14 @@ var menus = [
 	{id:"copy", name:"网页解禁", click:copyClick, eng:false}, 
 	{id:"image", name:"提炼图片", click:imageClick, eng:false}, 
 	{id:"frame", name:"肢解网页", click:frameClick, eng:false},  
+	{id:"https", name:"编辑网页", click:editWeb, eng:false},  
 	{id:"https", name:"安全加载", click:httpsClick, eng:true}, 
 	{id:"speed", name:"网速测试", click:speedClick, eng:true}
 ];
 
 function execJs(js) {
 	chrome.tabs.executeScript({"allFrames" : true, "file" : js});
+	window.close();
 }
 
 function execJsWorkAround(js) {
@@ -37,12 +39,20 @@ function copyClick(){
 };
 
 function imageClick(){
-	focusOrCreateTab("pic.html");
-	execJs("js/inject/image.js");
+	focusOrCreateTab("pic.html", function(tab) {
+		execJs("js/inject/image.js");
+		chrome.tabs.update(tab.id, {
+			"selected" : true
+		});
+	});
 };
 
 function frameClick(){
 	execJs("js/inject/frame.js");
+}
+
+function editWeb(){
+	execJs("js/inject/edit.js");
 }
 
 function speedClick(){
