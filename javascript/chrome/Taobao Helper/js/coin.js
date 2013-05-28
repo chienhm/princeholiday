@@ -483,21 +483,37 @@ function signeTao() {
 }
 
 function jifenbao(task, src) {
-	$.get("http://jf.etao.com/getCredit.htm?jfSource="+src+"&t="+Math.random(), function(html){
-		var r = /<p class="news">([\s\S]+?)</ig.exec(html);
-		if(r) {
-			/* 
-			(2) 亲，您今天已经领过了，看看自己的“战绩”吧！
-			(-2) (尚未登录)
-			(-4) 亲，您不是支付宝实名认证用户，无法签到！赶快去认证吧 !
-			(-6) 抢的人太多了，今天的积分发完了，明天再来吧
-			(-7) 来晚了一步，活动已经结束啦！
-			(-8) 亲，您的操作太频繁了哦！
-			*/
-			var msg = r[1].trim();
-			appendLog(msg);
+	/* 
+	If ua needed, see http://jf.etao.com/ for UA_Opt definition, and run 
+	http://uaction.aliyuncdn.com/js/ua.js
+	UA_Opt.Token = new Date().getTime() + ":" + Math.random();
+    UA_Opt.reload();
+	See http://a.tbcdn.cn/apps/e/jifen/130312/fashion.js
+	ua = "022u5ObXObBitH2MRYO9Oz0bASM1EzUrOTDGcM=|uKBnf0cvt9/Hn6fP9/+nv2U=|uZFW7MvyeVWudS4JzunBuZ5ZfgSfdD/EuISjeaM=|voZB+/M0PPvjq4O7fBR8FCzr87vz+zykrKRjezN7c7Q8VFyGXA==|vzfw1/Aq|vCTjxOM5|vaWNSm11TSW91c2VrcX99a21HRXy6oKqoupyKnI6oipCyrIqAjodxw==|sqoy9U93sMjgJz8n4MdLkpiia9KpUuucW3ymfA==|s6ujZEP5ocmxOf40EwszawObw7vzm8P74+snL8jQmNDY8KjwaPDIkIiQyOCYENr9OiL43wU=|sPjw+D838Ngfd7DY0BdvB8DY4Givl8+HQNjwKg=="
+	*/
+	var ua = "";
+	var url = "http://jf.etao.com/getCredit.htm?t=" + new Date().getTime() + "&ua=" + encodeURIComponent(ua);
+	$.get(url, function(html){
+		if(html.indexOf("恭喜你签到获得")!=-1) {
+			/* 恭喜你签到获得&nbsp;<span class="num">1</span>&nbsp;个集分宝！*/
+			task.success = true;
+			appendLog("恭喜你签到获得&nbsp;<span>1</span>&nbsp;个集分宝！");
 		} else {
-			appendLog(task.name + "失败。");
+			var r = /<p class="news">([\s\S]+?)</ig.exec(html);
+			if(r) {
+				/* 
+				(2) 亲，您今天已经领过了，看看自己的“战绩”吧！
+				(-2) (尚未登录)
+				(-4) 您没有支付宝实名认证，无法签到！
+				(-6) 抢的人太多了，今天的积分发完了，明天再来吧
+				(-7) 来晚了一步，活动已经结束啦！
+				(-8) 亲，您的操作太频繁了哦！
+				*/
+				var msg = r[1].trim();
+				appendLog(msg);
+			} else {
+				appendLog(task.name + "失败。");
+			}
 		}
 		task.complete();
 	});
