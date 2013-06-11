@@ -1,0 +1,26 @@
+﻿{
+   "manifest_version": 2,
+   "background": {
+      "page": "background.html"
+   },
+   "browser_action": {
+      "default_icon": "mesh.jpg",
+      "default_title": "Live Mesh"
+   },
+   "description": "Live Mesh",
+   "icons": {
+      "128": "mesh.jpg",
+      "32": "mesh.jpg",
+      "48": "mesh.jpg"
+   },
+   "name": "Live Mesh",
+   "content_scripts": [
+	   {
+		  "matches": ["https://*/*"],
+		  "all_frames": false,
+		  "js": ["js/jquery.min.js", "js/mesh.js"]
+	   }
+   ],
+   "permissions": [ "cookies", "tabs", "notifications", "*://*/*" ],
+   "version": "1.0.0"
+}
