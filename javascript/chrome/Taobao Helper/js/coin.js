@@ -584,9 +584,9 @@ function favorite() {
 		/*
 		20130503 - http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId=160562238&flag=true&_tb_token_=SVoccvfGyU1x
 		20130508 - http://dongtai.taobao.com/hub/new_arrival.htm?shopOwnerId=231920032&_tb_token_=55e9e073be56b
+		20100601 - http://dongtai.taobao.com/microshop/front.htm?shopOwnerId=511768438&_tb_token_=e7a7e8e4eb8b7
 		*/
-		/*var url = "http://shuo.taobao.com/microshop/shop_middle_page.htm?shopOwnerId="+shop_ids[index]+"&flag=true&_tb_token_="+token;*/
-		var url = "http://dongtai.taobao.com/hub/new_arrival.htm?shopOwnerId="+shop_ids[index]+"&_tb_token_="+token;
+		var url = "http://dongtai.taobao.com/microshop/front.htm?shopOwnerId="+shop_ids[index]+"&_tb_token_="+token;
 		log("Try to collect shop: " + url);
 		$.get(url, function(html) {
 			if(inLoginPage(html)) {
@@ -614,7 +614,8 @@ function favorite() {
 			} /* end of favorite test */
 		});
 	} /* end of collect */
-	var url = "http://dongtai.taobao.com/highqualityshop/high_quality_shop.htm?spm=0.0.0.0.hx2FCg";
+	/*var url = "http://dongtai.taobao.com/highqualityshop/high_quality_shop.htm?spm=0.0.0.0.hx2FCg";*/
+	var url = "http://dongtai.taobao.com/highqualityshop/high_quality_shop_more.htm?styleId=-1&catId=2&page=2&startPoint=0";
 	$.get(url, function(html){
 		var regExp = /"sellerId":"(\d+)"/ig;
 		var r = null, last=null;
