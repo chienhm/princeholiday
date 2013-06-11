@@ -1,20 +1,17 @@
-﻿var options = {
-	"redirect"     : ""
-};
+﻿
+var paths = [];
 
 //content script proxy
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		if(sender.tab) {
 			console.log(request.cmd);
-			var response = {"options" : options};
+			
 			switch (request.cmd) {
-			case "GET_OPTIONS":
-				sendResponse(options);
-				break;
-			case "SET_OPTIONS":
-				options = request.options;
-				sendResponse(options);
+			case "SAVE_PATH":
+				console.log(request.path);
+				paths.push(request.path);
+				sendResponse({msg : path + " saved."});
 				break;
 				
 			default:

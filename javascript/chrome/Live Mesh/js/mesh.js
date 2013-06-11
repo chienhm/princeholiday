@@ -15,19 +15,37 @@ if(url.indexOf("https://devices.live.com/Sync/Summary")==0) {
 	}
 } else if(url.indexOf("https://devices.live.com/Sync/FolderSelf")==0
 	|| url.indexOf("https://devices.live.com/Sync/BrowseFolder")==0) {
-	var files = $("#dax_brf_contents a");
-	if(files.length==1) {
-		files[0].click();
-	} else {
-		for(var i=0; i<files.length; i++) {
-			var file = $(files[i]);
-			var url = file.attr("href");
-			if(url.indexOf("https://devices.live.com/Sync/BrowseFolder")==0) {
-				console.log(url);
-				if(i==0)window.open(url);
-			} else {
-				files[i].click();
-			}
-		}
+	var navs = $(".t_lnkpi li");
+	var path = "";
+	for(var i=0; i<navs.length; i++) {
+		if(i<3)continue;
+		path += "/" + $(navs[i]).text().trim();
 	}
+	
+	var files = $("#dax_brf_contents a");
+
+	for(var i=0; i<files.length; i++) {
+		var file = $(files[i]);
+		var url = file.attr("href");
+		
+		if(url.indexOf("https://devices.live.com/Sync/BrowseFolder")==0) {/* folder */
+			console.log(url);
+		} else { /* file: https://devices.live.com/Sync/Download */
+			console.log(path + "/" + file.text().trim());
+			savePath(path + "/" + file.text().trim());
+		}
+		
+		if(i<1) /* test */
+			window.open(url);
+		
+	}
+	
+	/* close window to save memory */
+	window.close();
+}
+
+function savePath(filePath) {
+	chrome.extension.sendRequest({"cmd": "SAVE_PATH", "path" : filePath}, function(response) {
+		console.log(response.msg);
+	});
 }
