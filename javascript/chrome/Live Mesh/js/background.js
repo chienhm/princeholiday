@@ -1,17 +1,41 @@
 ﻿
-var paths = [];
+var paths = {};
+var env = null;
+
+function persist() {
+	if(env!=null) {
+		var list = getLocalObj(env.email);
+		for(var key in paths) {
+			list[key] = paths[key];
+		}
+		localStorage[env.email] = JSON.stringify(list);
+		paths = {};
+	}
+}
+
+function getLocalObj(key) {
+	var content = localStorage[key];
+	if(content!=null) {
+		return JSON.parse(content);
+	}
+	return {};
+}
 
 //content script proxy
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		if(sender.tab) {
-			console.log(request.cmd);
-			
 			switch (request.cmd) {
 			case "SAVE_PATH":
-				console.log(request.path);
-				paths.push(request.path);
-				sendResponse({msg : path + " saved."});
+				console.log(request.path.local + " => " + request.path.link);
+				paths[request.path.local] = request.path.link;
+				sendResponse({msg : request.path.local + " saved."});
+				break;
+				
+			case "SAVE_ENV":
+				env = request.env;
+				console.log("User => " + env.email);
+				sendResponse({msg : env.email + " go!"});
 				break;
 				
 			default:

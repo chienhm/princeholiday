@@ -1,7 +1,19 @@
 ﻿var url = location.href;
 console.log(url);
-if(url.indexOf("https://devices.live.com/Sync/Summary")==0) {
-	console.log("start page.");
+
+function mesh() {
+
+	var email = null;
+	var regex = /"email":"(.+?)"/ig;
+	var script = $("script:contains('email')").html();
+	var result=regex.exec(script);
+	if(result != null) {
+		email = result[1].replace("\\u0040", "@");
+	} else {
+		console.error("email account missing.");
+		return;
+	}
+
 	var tables = $(".dax_sh_folderitemtable"); //$(".dax_sh_primaryText");
 
 	for(var i=0; i<tables.length; i++) {
@@ -13,8 +25,9 @@ if(url.indexOf("https://devices.live.com/Sync/Summary")==0) {
 			window.open(url);
 		}
 	}
-} else if(url.indexOf("https://devices.live.com/Sync/FolderSelf")==0
-	|| url.indexOf("https://devices.live.com/Sync/BrowseFolder")==0) {
+}
+
+function traverse() {
 	var navs = $(".t_lnkpi li");
 	var path = "";
 	for(var i=0; i<navs.length; i++) {
@@ -30,18 +43,32 @@ if(url.indexOf("https://devices.live.com/Sync/Summary")==0) {
 		
 		if(url.indexOf("https://devices.live.com/Sync/BrowseFolder")==0) {/* folder */
 			console.log(url);
+			window.open(url);
 		} else { /* file: https://devices.live.com/Sync/Download */
 			console.log(path + "/" + file.text().trim());
-			savePath(path + "/" + file.text().trim());
+			savePath({"local" : path + "/" + file.text().trim(), "link" : url});
 		}
-		
-		if(i<1) /* test */
-			window.open(url);
-		
 	}
 	
 	/* close window to save memory */
 	window.close();
+}
+
+/*!**************************************************************/
+if(url.indexOf("https://devices.live.com/Sync/Summary")==0 ||
+	url.indexOf("https://devices.live.com/Devices/SkyDriveSyncedStorage")==0) {
+	console.log("live mesh home.");
+	mesh();
+} else if(url.indexOf("https://devices.live.com/Sync/FolderSelf")==0
+	|| url.indexOf("https://devices.live.com/Sync/BrowseFolder")==0) {
+	traverse();
+}
+
+/*!**************************************************************/
+function saveEnv(env) {
+	chrome.extension.sendRequest({"cmd": "SAVE_ENV", "env" : env}, function(response) {
+		console.log(response.msg);
+	});
 }
 
 function savePath(filePath) {
