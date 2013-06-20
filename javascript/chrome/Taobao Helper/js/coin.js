@@ -549,7 +549,7 @@ function signTryCenter() {
 function ttl() {
 	var task = this;
 	var url = "http://taojinbi.taobao.com/detail/activity_executor.htm?activity_id=2012122601&callback=jsonp19";
-	$.get(url, function(code){
+	$.ajax({"url" : url, dataType: "text", success: function(code){
 		if(inLoginPage(code)) {
 			task.complete();
 			return;
@@ -567,7 +567,7 @@ function ttl() {
 			appendLog(task.name + msg);
 		}
 		task.complete();
-	});
+	}});
 }
 
 /*****************************************************************************
