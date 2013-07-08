@@ -1,0 +1,2 @@
+127.0.0.1	www.qm.com
+127.0.0.1	www.home.com
