@@ -1,0 +1,26 @@
+﻿{
+   "manifest_version": 2,
+   "background": {
+      "page": "background.html"
+   },
+   "browser_action": {
+      "default_icon": "nm.jpg",
+      "default_title": "内蒙古高考"
+   },
+   "description": "内蒙古高考志愿辅助",
+   "icons": {
+      "128": "nm.jpg",
+      "32": "nm.jpg",
+      "48": "nm.jpg"
+   },
+   "name": "内蒙古高考",
+   "content_scripts": [
+	   {
+		  "matches": ["http://*.nm.zsks.cn/*"],
+		  "all_frames": true,
+		  "js": ["js/jquery.min.js", "js/nm.js"]
+	   }
+   ],
+   "permissions": [ "cookies", "tabs", "notifications", "*://*/*" ],
+   "version": "1.0.0"
+}
