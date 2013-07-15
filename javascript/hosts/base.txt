@@ -1,2 +1,5 @@
 127.0.0.1	www.qm.com
 127.0.0.1	www.home.com
+127.0.0.1       yingshi.laofoye.com
+127.0.0.1       dds.laofoye.com
+127.0.0.1       wordpress.laofoye.com
