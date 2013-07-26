@@ -8,9 +8,9 @@ function rate() {
 		return;
 	}
 	function rateAll(tabs) {
-		if(tabs.length>1) {
-			/* maybe it's a bug, if trade and rate page opened at the same time */
-			if(!config.rate || !config.rate.batRate) {
+		/* maybe it's a bug, if trade and rate page opened at the same time */
+		if(!config.rate || !config.rate.batRate) {
+			if(tabs.length>1) {
 				showMsg("您打开了多个评价页面，批量评价功能尚未启用，请至淘小蜜选项中开启。");
 				return;
 			}

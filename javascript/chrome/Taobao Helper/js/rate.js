@@ -92,7 +92,7 @@ chrome.extension.sendRequest({cmd: "GET_OPTIONS"}, function(response) {
 	 *************************************************************************/
 	chrome.extension.onRequest.addListener(
 		function(request, sender, sendResponse) {
-			if(sender.tab) {
+			if(sender.id) {
 				console.log(request.cmd);
 				switch (request.cmd) {
 				case "RATE":
