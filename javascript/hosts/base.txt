@@ -3,4 +3,5 @@
 127.0.0.1 yingshi.laofoye.com
 127.0.0.1 dds.laofoye.com
 127.0.0.1 cate.laofoye.com
+127.0.0.1 blog.laofoye.com
 127.0.0.1 wordpress.laofoye.com
