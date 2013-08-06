@@ -17,7 +17,7 @@
 	},
 	"content_scripts": [
 		{
-			"matches" : ["http://trade.taobao.com/trade/itemlist/list_bought_items.htm*"],
+			"matches" : ["http://trade.taobao.com/trade/itemlist/list*.htm*"],
 			"js"      : ["js/jquery.min.js", "js/trade.js"],
 			"all_frames" : true
 		},
@@ -40,5 +40,5 @@
 	],
 	"optional_permissions": [ "*://*.alimama.com/" ],
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-	"version": "1.9.3"
+	"version": "1.9.4"
 }
