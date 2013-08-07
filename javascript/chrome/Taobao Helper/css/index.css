@@ -20,12 +20,12 @@ a:hover{
 }
 .tab {
 	display: none;
-	min-height: 600px;
+	/*min-height: 600px;*/
 }
 .divBody,.divFoot {min-width: 760px;}
 .divBodyLeft {
 	float:left;
-	width: 760px;
+	width: 100%;/*760px;*/
 }
 .divBodyRight{
 	margin-left:760px;

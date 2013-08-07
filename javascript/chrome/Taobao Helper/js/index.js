@@ -156,7 +156,7 @@ function initTab(tab) {
 		{name : "通用选项", tab : "general"},
 		{name : "帐户设置", tab : "account"},
 		{name : "领取金币", tab : "coin"},
-		{name : "反馈", tab : "feedback"},
+		{name : "反馈", tab : "feedback", callback:loadFrame},
 		{name : "广告", tab : "adv"}
 	];
 	$.each(items, function(i, e){
@@ -166,7 +166,8 @@ function initTab(tab) {
 			$.each(items, function(i, e2){
 				$("#_"+e2.tab).hide();
 			});
-			target.show();
+			target.show("normal", e.callback);
+			
 			$(CONTAINER+" ."+FOCUS_CLASS).removeClass(FOCUS_CLASS);
 			$(this).addClass(FOCUS_CLASS);
 		});
@@ -175,9 +176,13 @@ function initTab(tab) {
 		target.hide();
 		if(e.tab==tab) {
 			item.addClass(FOCUS_CLASS);
-			target.show();
+			target.show("normal", e.callback);
 		}
 	});
+}
+
+function loadFrame() {
+	$("#fbIfr").attr("src", "http://blog.morntea.com/lab/taobao-secretary/#ds-sync-checkbox");
 }
 
 $(function () {
