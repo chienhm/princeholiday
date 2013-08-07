@@ -664,11 +664,11 @@ function loadUsers() {
 function init() {
 	var b = chrome.extension.getBackgroundPage();
 	var config = b.getConfig();
-	if(config.autoLogin) {
+	/*if(config.autoLogin) {
 		loadUsers();
 	} else {
-		$("#auto").hide();
-	}
+	}*/
+	$("#auto").hide();
 	$("#workaround").attr("checked", config.workaround);
 }
 
