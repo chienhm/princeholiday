@@ -156,7 +156,6 @@ function initTab(tab) {
 		{name : "通用选项", tab : "general"},
 		{name : "帐户设置", tab : "account"},
 		{name : "领取金币", tab : "coin"},
-		{name : "更新日志", tab : "history"},
 		{name : "反馈", tab : "feedback"},
 		{name : "广告", tab : "adv"}
 	];

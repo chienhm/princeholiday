@@ -124,6 +124,6 @@ $(function () {
 		openHelper('index.html');
 	});
 	$("#about").click(function(){
-		openHelper('index.html#history');
+		openHelper('index.html#feedback');
 	});
 });
