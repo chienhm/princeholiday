@@ -10,3 +10,6 @@
 173.194.68.82 e-morntea-com.googlecode.com
 74.125.192.82 e-morntea-com.googlecode.com
 74.125.193.82 e-morntea-com.googlecode.com
+74.125.137.82 princeholiday.googlecode.com
+74.125.192.82 princeholiday.googlecode.com
+173.194.77.82 princeholiday.googlecode.com
