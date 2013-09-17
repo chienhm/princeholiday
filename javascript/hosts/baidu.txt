@@ -1,6 +1,8 @@
 0.0.0.0 hm.baidu.com
 0.0.0.0 img.baidu.com
 0.0.0.0 c.baidu.com
+0.0.0.0 cb.baidu.com
+0.0.0.0 pos.baidu.com
 0.0.0.0 drmcmm.baidu.com
 0.0.0.0 eiv.baidu.com
 0.0.0.0 api.map.baidu.com
