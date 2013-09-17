@@ -9,6 +9,7 @@ function mesh() {
 	var result=regex.exec(script);
 	if(result != null) {
 		email = result[1].replace("\\u0040", "@");
+		saveEnv({"email":email});
 	} else {
 		console.error("email account missing.");
 		return;

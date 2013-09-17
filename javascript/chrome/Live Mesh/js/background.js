@@ -77,9 +77,8 @@ function open(url) {
 	var manager_url = chrome.extension.getURL(url);
 	focusOrCreateTab(manager_url);
 }
-/*
+
 chrome.browserAction.onClicked.addListener(function(tab) {
-	var manager_url = chrome.extension.getURL("index.html");
+	var manager_url = chrome.extension.getURL("view.html");
 	focusOrCreateTab(manager_url); 
 });
- */
