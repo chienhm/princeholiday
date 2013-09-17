@@ -1,16 +1,14 @@
 ﻿
 var option = {
+	user : "",
+	pass : "",
+	auto : false,
+	fillSchool : null,
+	schools : {}
 };
 
 function persist() {
-	if(env!=null) {
-		var list = getLocalObj(env.email);
-		for(var key in paths) {
-			list[key] = paths[key];
-		}
-		localStorage[env.email] = JSON.stringify(list);
-		paths = {};
-	}
+	localStorage["schools"] = JSON.stringify(option.schools);
 }
 
 function getLocalObj(key) {
@@ -30,7 +28,30 @@ chrome.extension.onRequest.addListener(
 				sendResponse(option);
 				break;
 				
-			case "SET_OPT":
+			case "SET_SCHOOL":
+				option.schools = request.schools;
+				persist();
+				sendResponse({"success":true});
+				break;
+				
+			case "SET_MAJOR":
+				setMajor(request.code, request.majors);
+				sendResponse({"success":true});
+				break;
+				
+			case "CLEAR_ALL":
+				clearAll();
+				sendResponse({"success":true});
+				break;
+				
+			case "AUTO_DISABLE":
+				option.auto = false;
+				sendResponse({"success":true});
+				break;
+				
+			case "SAVE_ORDER":
+				saveOrder(request.code, request.order);
+				sendResponse({"success":true});
 				break;
 				
 			default:
@@ -39,6 +60,36 @@ chrome.extension.onRequest.addListener(
 		}
 	}
 );
+
+function saveOrder(code, order) {
+	var orders = null;
+	if(localStorage["order"]) {
+		orders = JSON.parse(localStorage["order"]);
+	} else {
+		orders = {};
+	}
+	orders[code] = order;
+	localStorage["order"] = JSON.stringify(orders);
+}
+
+function setMajor(code, majors) {
+	var schools = option.schools;
+	for(var name in schools){
+		if(schools[name].code==code) {
+			localStorage[name] = JSON.stringify(majors);
+			console.log("[" + schools[name].code + "]" + name + " => " + majors.length + " majors");
+			break;
+		}
+	}
+}
+
+function clearAll() {
+	for(var name in localStorage){
+		if(name.length==3) {
+			delete localStorage[name];
+		}
+	}
+}
 
 function focusOrCreateTab(url) {
 	chrome.windows.getAll({

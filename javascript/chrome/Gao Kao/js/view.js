@@ -1,143 +1,197 @@
 ﻿var b = chrome.extension.getBackgroundPage();
-var email = null;
-var paths = null;
-var stuck = [];
-var files = [];
 
-function loadData() {
-	email = $("#email").val();
-	if($("#email").val()!="") {
-		paths = b.getLocalObj(email);
-	} else if(b.env!=null) {
-		email = b.env.email;
-		paths = b.paths;
+function loadSchools() {
+	if(localStorage["schools"]) {
+		return JSON.parse(localStorage["schools"]);
 	}
+	return {};
 }
 
-function filterFiles() {
-	var fileName = null;
-	for(var key in paths) {
-		fileName = key.substring(key.lastIndexOf("/")+1);
-		if($.inArray(fileName, files)==-1) {
-			console.log(key);
-		} else {
-			delete paths[key];
-		}
+function loadExpected() {
+	if(localStorage["expected"]) {
+		return JSON.parse(localStorage["expected"]);
 	}
-	listFiles();
+	return {};
 }
 
-function listFiles() {
-	if(email!="") {
-		$("#user").html(email);
-		
-		var dom = $("#content ul");
-		dom.empty();
-		var i = 0;
-		for(var key in paths) {
-			dom.append("<li>["+(i++)+"] <a href=\""+paths[key]+"\">"+key+"</a></li>");
-		}
+function loadOrders() {
+	if(localStorage["order"]) {
+		return JSON.parse(localStorage["order"]);
 	}
+	return {};
 }
 
-var index = -1; //150
-var timeHdl = -1;
-var stop = false;
-
-function saveFailure(itemIdx) {
-	stuck.push(itemIdx);
-	localStorage["stuck"] = JSON.stringify(stuck);
+function loadMajors(name) {
+	if(localStorage[name]) {
+		return JSON.parse(localStorage[name]);
+	}
+	return {};
 }
 
-function openAll() {
-	var links = $("#content ul li a");
-
-	download();
+function persist() {
+	var schools = loadSchools();
+	var schoolSelected = {};
 	
-	function download() {
-		if(stop)return;
-		index++;
-		if(index>=links.length)return;
+	for(var name in schools){
+		var school = schools[name];
+		var majors = loadMajors(name);
 		
-		var link = $(links[index]).attr("href");
-		//console.log("Download " + link);
-		//window.open(link);
-		chrome.tabs.create({"url" : link}, function(tab) {
-			tabListener(tab, index);
-		});
-	}
-	
-	function tabListener(tab, curIdx) {
-		/* monitor timeout (3 min) */
-		timeHdl = setTimeout(detectDownload(tab.id, curIdx), 3*60*1000);
+		var schoolContainer = $("#"+school.code);
+		/* This school not found, go to next */
+		if(schoolContainer.length==0) continue;
 		
-		/* file download starts */
-		chrome.tabs.onRemoved.addListener(tabClosed(curIdx));
+		var selected = $("#"+school.code+" input[name=school]").attr("checked")=="checked";
+		/* This school not selected, go to next */
+		if(!selected) continue;
 		
-		function tabClosed(itemIdx) {
-			return function(tabId, removeInfo) {
-				if(tab.id==tabId) {
-					var i = $.inArray(itemIdx, stuck);
-					console.log("["+itemIdx+"]"+tab.url + " starts, try next.");
-					if(i!=-1) {
-						console.log("["+itemIdx+"] download too late, remove from stuck list.");
-						stuck.splice(i, 1);
-					} else {
-						download();
-					}
-				}
+		var majorSelected = {};
+		for(var i=0; i<majors.length; i++) {
+			var major = majors[i];
+			var majorContainer = $("#"+school.code+"-"+major.code);
+			/* This major not found, go to next */
+			if(majorContainer.length==0)continue;
+			
+			var checked = $("#"+school.code+"-"+major.code+" input[name=major]").attr("checked")=="checked";
+			var order = $("#"+school.code+"-"+major.code+" input[name=order]").val();
+			/* This major selected, added */
+			if(checked) {
+				majorSelected[major.code] = order;
 			}
 		}
-		
-		/* enclosure function for monitor */
-		function detectDownload(tabId, itemIdx) {
-			return function() {
-				chrome.tabs.get(tabId, function (t){
-					if(!!t == true) { /* window not closed */
-						console.log("["+itemIdx+"]" + " download stuck.");
-						saveFailure(itemIdx);
-						download();
-					}
-				});
-			}
+		schoolSelected[school.code] = majorSelected;
+	}
+	localStorage["expected"] = JSON.stringify(schoolSelected);
+	console.log(schoolSelected);
+}
+
+function isExpected(expects, majorCode) {
+	if(!expects)return false;
+	for(var i=0; i<expects.length; i++) {
+		if(majorCode==expects[i].code) {
+			return true;
 		}
 	}
+	return false;
 }
 
 function init() {
-	for(var key in b.localStorage) {
-		$("#email").append("<option value=\""+key+"\">"+key+"</option>");
+	var schools = loadSchools();
+	var expected = loadExpected();
+	var savedOrders = loadOrders();
+	
+	var index = 1;
+	for(var name in schools){
+		var school = schools[name];
+		var majors = loadMajors(name);
+		var expectSchool = expected[school.code];
+		var savedOrder = savedOrders[school.code];
+		
+		var html = "<li id='"+school.code+"' style='color: red;'>["+(index++)+"]";
+		html += "<a href='"+(school.url?"http://www.nm.zsks.cn"+school.url.replace("?chrome", ""):"")+"' target='_blank'>"+name+"</a>";
+		html += "[已报"+school.realnum+"/计划"+school.expected+"/最低分"+school.score+"]";
+		html += "<input type='checkbox' name='school' value='"+school.code+"' "+(expectSchool?"checked":"")+" />";
+		html += "<input type='button' name='fill' value='"+school.code+"' />";
+		html += savedOrder?("[当前排名：<strong>" + savedOrder.paihang + "</strong>"+(savedOrder.pingxing?"(平行分人数："+savedOrder.pingxing+")":"") + "]["+savedOrder.time+"]") : "";
+		html += "</li>";
+		var list = "";
+		for(var i=0; i<majors.length; i++) {
+			var major = majors[i];
+			var order = "";
+			var checked = "";
+			if(expectSchool && expectSchool[major.code]) {
+				checked = "checked";
+				order = expectSchool[major.code];
+			}
+			
+			list += "<li id='"+school.code+"-"+major.code+"' >("+major.code+")"+major.name+"["+major.enrolled+"/"+major.plan+"/"+major.score+"]<input type='checkbox' name='major' value='"+major.code+"' "+checked+" /><input type='text' name='order' value='"+order+"' /></li>";
+		}
+		if(list!="") {
+			list = "<ul id='"+school.code+"-major'>"+list+"</ul>"
+		}
+		$("#schools").append(html + list);
 	}
 }
 
-function showFiles() {
-	loadData();
-	listFiles();
+function initEvent() {
+	var buttons = $("input[name=fill]");
+	for(var i=0; i<buttons.length; i++) {
+		var button = $(buttons[i]);
+		var schoolCode = button.val();
+		button.click(function(code) {
+			return function(){fillSchool(code);}
+		}(schoolCode));
+	}
 }
 
+function fillSchool(code) {
+	console.log("填报" + code);
+	var school = {"code":code, majors:[]};
+	var majorsContainer = $("#"+code+"-major > li");
+	for(var i=0; i<majorsContainer.length; i++) {
+		var li = $(majorsContainer[i]);
+		var majorCheckbox = $("input[name=major]", li);
+		var selected = majorCheckbox.attr("checked")=="checked";
+		if(!selected)continue;
+		var order = $("input[name=order]", li);
+		school.majors.push({"code":majorCheckbox.val(), "order":order.val()});
+	}
+	school.majors.sort(function(a,b){return a.order>b.order;});
+	console.log(school);
+	/* 暂存并开启自动 */
+	b.option.auto = true;
+	b.option.fillSchool = school;
+	chrome.tabs.query({currentWindow: true, url:"http://www1.nm.zsks.cn/kscx/*"}, function (tabs) {
+		//console.log(tabs);
+		chrome.tabs.sendRequest(tabs[0].id, {"cmd": "FILL", "school":school});
+	});
+}
+
+function showMajor(show) {
+	var schools = loadSchools();
+	for(var name in schools){
+		var school = schools[name];
+		var code = school.code;
+		if($("#"+code).is(":visible")) {
+			if(show) {
+				$("#"+code+"-major").show();
+			} else {
+				$("#"+code+"-major").hide();
+			}
+		}
+	}
+}
 $(function() {
 	init();
-	showFiles();
-	
-	$("#persist").click(function() {
-		b.persist();
+	initEvent();
+	$("#persist").click(function(){
+		persist();
+	});
+	$("#all").click(function(){
+		$("ul").show();
+		$("li").show();
+	});
+	$("#major_show").click(function(){
+		showMajor(true);
+	});
+	$("#major_hide").click(function(){
+		showMajor(false);
+	});
+	$("#stop").click(function(){
+		b.option.auto = false;
+	});
+	$("#start").click(function(){
+		b.option.auto = true;
 	});
 	
-	$("#open").click(function() {
-		if(confirm("Yes or No?")) {
-			openAll();
+	$("#part").click(function(){
+		var lists = $("#schools>li");
+		for(var i=0; i<lists.length; i++) {
+			var list = $(lists[i]);
+			if($("input[type=checkbox]", list).attr("checked")!="checked") {
+				var id = list.attr("id");
+				list.hide();
+				$("#"+id+"-major").hide();
+			}
 		}
 	});
-	
-	$("#email").change(showFiles);
 });
-
-/*
-var nodes = document.getElementsByClassName("download");
-for(var i=0; i<nodes.length; i++){
-	if(nodes[i].children[1].style.display=="none") {
-		console.log(nodes[i].children[2].children[0]);
-		nodes[i].children[2].children[1].click();
-	}
-}
-*/
