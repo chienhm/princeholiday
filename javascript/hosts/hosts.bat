@@ -9,7 +9,7 @@ set BAT_DIR=%~dp0
 set TMP=%BAT_DIR%\tmp.txt
 echo. > %TMP%
 set OFFICE_FILES=baidu.txt base.txt adv.txt adobe.txt 
-set HOME_FILES=google.txt base.txt adv.txt adobe.txt
+set HOME_FILES=google.txt base.txt adv.txt adobe.txt dropbox.txt
 
 cls
 echo ---------------------------------------------------------------------------
