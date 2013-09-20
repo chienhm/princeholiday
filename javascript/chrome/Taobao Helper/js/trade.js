@@ -16,7 +16,7 @@ chrome.extension.sendRequest({cmd: "GET_OPTIONS"}, function(response) {
 				});
 			});
 			
-			$("#J_BatchReceive").after("<a href='#' class='J_MakePoint toolbtn' id='J_BatchDelete' title='此功能由淘小蜜扩展，请至淘小蜜选项中配置。'>批量删除</a>");
+			$(".J_BatchReceive:first").after("<a href='#' class='J_MakePoint toolbtn' id='J_BatchDelete' title='此功能由淘小蜜扩展，请至淘小蜜选项中配置。'>批量删除</a>");
 			$("#J_BatchDelete").click(function(){
 				var tbdList = [];
 				$("#J_BoughtTable tbody").each(
